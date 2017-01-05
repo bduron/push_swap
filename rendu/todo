@@ -1,1 +1,13 @@
-Supprimer les targets linux du Makefile + libft.h du folder rendu/includes
+While clean :
+============
+
+Del targets linux Makefile
+Del libft.h from rendu/includes
+
+
+
+Questions :
+==========
+- Error si argc == 1 ? 
+-
+

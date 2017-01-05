@@ -11,18 +11,30 @@
 /* ************************************************************************** */
 
 #include "push_swap.h"
-//#include "libft.h"
 
 int error_arg(int argc, char **argv)
 {
 	int i;
+	int j;
 
 	i = 1;
 	while (i < argc) 
 	{
-		if (ft_atoi(argv[i]) == 0 && (*argv[i] != '0' || 
-					(*argv[i] == '-' && argv[i][1] != '0')))
-			return (1);
+		j = 0;
+		if (argv[i][j] == '-')
+			j++;
+		while (argv[i][j])
+		{
+			if (ft_isdigit(argv[i][j]) == 0)
+				return (1); 
+			j++;
+		} 	
+		if (j - (argv[i][0] == '-') > 10)
+			return (1); 
+		if (j - (argv[i][0] == '-') == 10)
+			if (ft_atoi(argv[i]) > 2147483647 
+			|| ft_atoi(argv[i]) < -2147483648)
+				return (1); 
 		i++;
 	}
 	return (0); 
@@ -34,7 +46,7 @@ int main(int argc, char **argv)
 		ft_putstr("Error\n");
 	else 
 		ft_putstr("Ok\n");
-
+	
 
 	return (0);
 }
