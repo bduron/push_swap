@@ -1,21 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.h                                        :+:      :+:    :+:   */
+/*   ft_strrev.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/01/05 14:54:52 by bduron            #+#    #+#             */
-/*   Updated: 2017/01/05 16:33:49 by bduron           ###   ########.fr       */
+/*   Created: 2016/11/15 14:30:00 by bduron            #+#    #+#             */
+/*   Updated: 2016/11/29 10:16:17 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PUSH_SWAP_H
-# define PUSH_SWAP_H
+#include "includes/libft.h"
 
-# include <stdlib.h>
-# include <unistd.h>
-# include "libft.h"
+void	ft_strrev(char *s)
+{
+	int		i;
+	int		j;
+	char	tmp;
 
-
-#endif
+	i = 0;
+	j = 0;
+	while (s[i])
+		i++;
+	i--;
+	while (i > j)
+	{
+		tmp = s[i];
+		s[i] = s[j];
+		s[j] = tmp;
+		i--;
+		j++;
+	}
+}

@@ -1,21 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.h                                        :+:      :+:    :+:   */
+/*   ft_striter.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/01/05 14:54:52 by bduron            #+#    #+#             */
-/*   Updated: 2017/01/05 16:33:49 by bduron           ###   ########.fr       */
+/*   Created: 2016/11/10 13:24:26 by bduron            #+#    #+#             */
+/*   Updated: 2016/11/14 21:35:53 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PUSH_SWAP_H
-# define PUSH_SWAP_H
-
-# include <stdlib.h>
-# include <unistd.h>
-# include "libft.h"
-
-
-#endif
+void	ft_striter(char *s, void (*f)(char *))
+{
+	if (!s || !f)
+		return ;
+	while (*s)
+		f(s++);
+}

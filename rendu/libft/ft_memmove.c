@@ -1,21 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.h                                        :+:      :+:    :+:   */
+/*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/01/05 14:54:52 by bduron            #+#    #+#             */
-/*   Updated: 2017/01/05 16:33:49 by bduron           ###   ########.fr       */
+/*   Created: 2016/11/08 15:55:16 by bduron            #+#    #+#             */
+/*   Updated: 2016/11/29 10:25:38 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PUSH_SWAP_H
-# define PUSH_SWAP_H
+#include "includes/libft.h"
 
-# include <stdlib.h>
-# include <unistd.h>
-# include "libft.h"
+void	*ft_memmove(void *dst, const void *src, size_t len)
+{
+	char		*d;
+	const char	*s;
 
-
-#endif
+	s = src;
+	d = dst;
+	if (len == 0 || src == dst)
+		return (dst);
+	if (src > dst)
+		while (len--)
+			*d++ = *s++;
+	if (src < dst)
+		while (len)
+		{
+			*(d + len - 1) = *(s + len - 1);
+			len--;
+		}
+	return (dst);
+}

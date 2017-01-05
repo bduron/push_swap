@@ -1,21 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.h                                        :+:      :+:    :+:   */
+/*   ft_strnew.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/01/05 14:54:52 by bduron            #+#    #+#             */
-/*   Updated: 2017/01/05 16:33:49 by bduron           ###   ########.fr       */
+/*   Created: 2016/11/09 11:14:05 by bduron            #+#    #+#             */
+/*   Updated: 2016/11/29 10:16:51 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PUSH_SWAP_H
-# define PUSH_SWAP_H
+#include "includes/libft.h"
 
-# include <stdlib.h>
-# include <unistd.h>
-# include "libft.h"
+char	*ft_strnew(size_t size)
+{
+	char	*s;
+	size_t	i;
 
-
-#endif
+	i = 0;
+	if (!(s = (char *)malloc(sizeof(char) * (size + 1))))
+		return (NULL);
+	while (i < size)
+		s[i++] = '\0';
+	s[i] = '\0';
+	return (s);
+}

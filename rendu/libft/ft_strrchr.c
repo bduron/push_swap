@@ -1,21 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.h                                        :+:      :+:    :+:   */
+/*   ft_strrchr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/01/05 14:54:52 by bduron            #+#    #+#             */
-/*   Updated: 2017/01/05 16:33:49 by bduron           ###   ########.fr       */
+/*   Created: 2016/11/15 09:04:06 by bduron            #+#    #+#             */
+/*   Updated: 2016/11/29 10:16:30 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PUSH_SWAP_H
-# define PUSH_SWAP_H
+#include "includes/libft.h"
 
-# include <stdlib.h>
-# include <unistd.h>
-# include "libft.h"
+char	*ft_strrchr(const char *s, int c)
+{
+	char *last_pos;
 
-
-#endif
+	last_pos = NULL;
+	while (*s)
+	{
+		if (*s == c)
+			last_pos = (char *)s;
+		s++;
+	}
+	if (*s == c)
+		return ((char *)s);
+	return (last_pos);
+}

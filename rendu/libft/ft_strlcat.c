@@ -1,21 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.h                                        :+:      :+:    :+:   */
+/*   ft_strlcat.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/01/05 14:54:52 by bduron            #+#    #+#             */
-/*   Updated: 2017/01/05 16:33:49 by bduron           ###   ########.fr       */
+/*   Created: 2016/11/11 19:31:40 by bduron            #+#    #+#             */
+/*   Updated: 2016/11/29 10:18:09 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PUSH_SWAP_H
-# define PUSH_SWAP_H
+#include "includes/libft.h"
 
-# include <stdlib.h>
-# include <unistd.h>
-# include "libft.h"
+size_t	ft_strlcat(char *dst, const char *src, size_t size)
+{
+	int			n;
+	char		*d;
+	char const	*s;
+	size_t		destlen;
 
-
-#endif
+	d = dst;
+	s = src;
+	n = size;
+	while (n-- && *d)
+		d++;
+	destlen = d - dst;
+	if (size == destlen)
+		return (destlen + ft_strlen(src));
+	while (n-- && *s)
+		*d++ = *s++;
+	*d = '\0';
+	return (destlen + ft_strlen(src));
+}
