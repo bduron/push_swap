@@ -24,6 +24,11 @@ $(NAME):
 	@gcc -o $(NAME) $(FLAGS) -L libft -lft $(SRC) $(HEADER)
 	@echo "Compiling checker... OK"
 
+linux:
+	@make -C libft
+	@gcc -o $(NAME) $(FLAGS) $(SRC) -Llibft -lft -I includes
+	@echo "Compiling checker... OK"
+
 clean:
 #	@rm -f $(OBJ)
 
@@ -34,3 +39,4 @@ fclean: clean
 
 re: fclean all
 
+rl: fclean linux 
