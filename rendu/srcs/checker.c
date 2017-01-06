@@ -81,14 +81,14 @@ void sort_rx(t_list **head)
 	
 	if ((*head)->next == NULL)
 	   return ;	
-	tmp = *head;
-	*head = tmp->next; 
-	tmp->next = NULL;
-	last = *head;	
-	while (last->next != NULL)
+	tmp = *head; 		//1
+	*head = tmp->next;  	//2
+	tmp->next = NULL;	//3
+	last = *head;		//4
+	while (last->next != NULL) //5  //6 //SEGFAULT ICI 
 		last = last->next;		
 	last->next = tmp;
-}
+}	
 
 void sort_rrx(t_list **head)
 {
@@ -109,14 +109,40 @@ void sort_rrx(t_list **head)
 	*head = last;	
 }
 
+void sort_px(t_list **head_a, t_list **head_b)
+{
+		
+
+	
+
+
+}
+
+
 
 /**************** Main **********************/
 
-int main(int argc, char **argv)
+t_list *create_stack(int argc, char **argv)
 {
 	t_list *head;
-	int val;
 	int i;
+	int val;
+	
+	i =  argc - 1;
+	val = ft_atoi(argv[i--]);	
+	head = ft_lstnew(&val, sizeof(int));
+	while (i > 0)
+	{
+		val = ft_atoi(argv[i--]);	
+		ft_lstadd(&head, ft_lstnew(&val, sizeof(int)));			
+	}
+	return (head);
+}
+
+int main(int argc, char **argv)
+{
+	t_list *stack_a;
+	t_list *stack_b;
 
 	if (argc == 1)
 		return (1);
@@ -125,22 +151,106 @@ int main(int argc, char **argv)
 	else  						// TO DEL
 		ft_putstr("Ok\n"); 		// TO DEL
 
-	i =  argc - 1;
-	while (i > 0)
+	stack_a = create_stack(argc, argv);	
+	stack_b = ft_lstnew(0, 0);
+		
+	sort_sx(&stack_a);
+	sort_sx(&stack_b);
+
+
+	while (stack_a) 				// PRINT LIST 
 	{
-		val = ft_atoi(argv[i--]);	
-		ft_lstadd(&head, ft_lstnew(&val, sizeof(int)));			
-	}
-
-	sort_rrx(&head);
-
-
-	while (head) 				// PRINT LIST 
-	{
-		printf("%d\n", *(int *)(head->content));
-		head = head->next;
+		printf("%d\n", *(int *)(stack_a->content));
+		stack_a = stack_a->next;
 	}	
 
 	return (0);
 }
 
+
+
+
+
+
+
+
+/*
+
+===============================
+	head
+         |	
+1/	 1 --> 2 --> 3 --> NULL
+	 |
+	tmp
+================================
+	      head
+               |	
+2/	 1 --> 2 --> 3 --> NULL
+	 |
+	tmp
+================================
+	             head
+                      |	
+3/	 1 -->NULL    2 --> 3 --> NULL
+	 |
+	tmp
+================================
+	             head
+                      |	
+4/	 1 -->NULL    2 --> 3 --> NULL
+	 |            |
+	tmp          last     
+================================
+	             head
+                      |	
+5/	 1 -->NULL    2 --> 3 --> NULL // Segfault 
+	 |            	    |
+	tmp                last     
+================================
+	             head
+                      |	
+6/	              2 --> 3 --> 1 --> NULL
+	              	    |     |
+	                   last  tmp   
+================================
+*/
+/*
+
+===============================
+	head
+         |	
+1/	 1 --> 2 --> 3 --> NULL
+	 |
+	tmp
+================================
+	      head
+               |	
+2/	 1 --> 2 --> 3 --> NULL
+	 |
+	tmp
+================================
+	             head
+                      |	
+3/	 1 -->NULL    2 --> 3 --> NULL
+	 |
+	tmp
+================================
+	             head
+                      |	
+4/	 1 -->NULL    2 --> 3 --> NULL
+	 |            |
+	tmp          last     
+================================
+	             head
+                      |	
+5/	 1 -->NULL    2 --> 3 --> NULL // Segfault 
+	 |            	    |
+	tmp                last     
+================================
+	             head
+                      |	
+6/	              2 --> 3 --> 1 --> NULL
+	              	    |     |
+	                   last  tmp   
+================================
+*/
