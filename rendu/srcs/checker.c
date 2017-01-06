@@ -6,7 +6,7 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/05 15:20:43 by bduron            #+#    #+#             */
-/*   Updated: 2017/01/06 16:45:15 by bduron           ###   ########.fr       */
+/*   Updated: 2017/01/06 16:46:27 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,6 @@ void sort_sx(t_list **head)
 	tmp->next = (*head)->next;
 	(*head)->next = tmp;
 }
-
 
 void sort_rx(t_list **head)
 {
