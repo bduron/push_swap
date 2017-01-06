@@ -6,17 +6,20 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/05 15:20:43 by bduron            #+#    #+#             */
-/*   Updated: 2017/01/05 16:17:50 by bduron           ###   ########.fr       */
+/*   Updated: 2017/01/06 15:08:17 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
+#include <stdio.h>
+
+/**************** Error handling ***********************/
 
 int error_duplicate(int argc, char **argv)
 {
 	int i;
 	int j;
-	
+
 	i = 1;
 	while (i < argc)
 	{
@@ -47,7 +50,7 @@ int error_arg(int argc, char **argv)
 			return (1); 
 		if (j - (argv[i][0] == '-') == 10)
 			if (ft_atoi(argv[i]) > 2147483647 
-			|| ft_atoi(argv[i]) < -2147483648)
+					|| ft_atoi(argv[i]) < -2147483648)
 				return (1); 
 		i++;
 	}
@@ -56,13 +59,53 @@ int error_arg(int argc, char **argv)
 	return (0); 
 }	
 
+
+/**************** Sorting Commands **********************/
+
+void sort_sa(t_list **head)
+{	
+	t_list *tmp;
+
+	tmp = *head;
+	*head = tmp->next;
+	tmp->next = (*head)->next;
+	(*head)->next = tmp;
+}
+
+
+
+
+
+/**************** Main **********************/
+
 int main(int argc, char **argv)
 {
+	t_list *head;
+	int val;
+	int i;
+
+	if (argc == 1)
+		return (1);
 	if (error_arg(argc, argv))
 		ft_putstr("Error\n");
-	else 
-		ft_putstr("Ok\n"); // TO DEL
-	
+	else  						// TO DEL
+		ft_putstr("Ok\n"); 		// TO DEL
+
+	i =  argc - 1;
+	while (i > 0)
+	{
+		val = ft_atoi(argv[i--]);	
+		ft_lstadd(&head, ft_lstnew(&val, sizeof(int)));			
+	}
+
+	sort_sa(&head);
+
+
+	while (head) 				// PRINT LIST 
+	{
+		printf("%d\n", *(int *)(head->content));
+		head = head->next;
+	}	
 
 	return (0);
 }

@@ -76,7 +76,7 @@ SRC= ft_atoi.c  \
 	
 OBJ= $(SRC:.c=.o)
 HEADER= includes
-FLAGS= -Wall -Wextra -Werror
+FLAGS= -g -Wall -Wextra -Werror
 
 all: $(NAME)
 
