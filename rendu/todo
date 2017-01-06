@@ -9,5 +9,9 @@ Del libft.h from rendu/includes
 Questions :
 ==========
 - Error si argc == 1 ? 
--
+- Error lower ou upper case ?
 
+
+To-do :
+======
+- error_dup - catch 0 / -0 
