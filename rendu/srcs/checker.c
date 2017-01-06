@@ -6,7 +6,7 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/05 15:20:43 by bduron            #+#    #+#             */
-/*   Updated: 2017/01/06 15:08:17 by bduron           ###   ########.fr       */
+/*   Updated: 2017/01/06 16:45:15 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,10 +62,12 @@ int error_arg(int argc, char **argv)
 
 /**************** Sorting Commands **********************/
 
-void sort_sa(t_list **head)
+void sort_sx(t_list **head)
 {	
 	t_list *tmp;
 
+	if ((*head)->next == NULL)
+	   return ;	
 	tmp = *head;
 	*head = tmp->next;
 	tmp->next = (*head)->next;
@@ -73,7 +75,40 @@ void sort_sa(t_list **head)
 }
 
 
+void sort_rx(t_list **head)
+{
+	t_list *tmp;
+	t_list *last;
+	
+	if ((*head)->next == NULL)
+	   return ;	
+	tmp = *head;
+	*head = tmp->next; 
+	tmp->next = NULL;
+	last = *head;	
+	while (last->next != NULL)
+		last = last->next;		
+	last->next = tmp;
+}
 
+void sort_rrx(t_list **head)
+{
+	t_list *tmp;
+	t_list *last;
+	
+	if ((*head)->next == NULL)
+	   return ;	
+	last = *head;	
+	while (last->next != NULL)
+	{
+		if (last->next->next == NULL)
+			tmp = last;
+		last = last->next;		
+	}
+	tmp->next = NULL;
+	last->next = *head;
+	*head = last;	
+}
 
 
 /**************** Main **********************/
@@ -98,7 +133,7 @@ int main(int argc, char **argv)
 		ft_lstadd(&head, ft_lstnew(&val, sizeof(int)));			
 	}
 
-	sort_sa(&head);
+	sort_rrx(&head);
 
 
 	while (head) 				// PRINT LIST 
