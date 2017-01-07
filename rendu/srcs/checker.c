@@ -109,14 +109,18 @@ void sort_rrx(t_list **head)
 	*head = last;	
 }
 
-//void sort_px(t_list **head_a, t_list **head_b)
-//{
-//		
-//
-//	
-//
-//
-//}
+void sort_px(t_list **head_a, t_list **head_b)
+{
+	t_list *tmp;
+
+	if (*head_b == NULL)
+		return ;
+
+	tmp = (*head_b)->next;	
+	(*head_b)->next = *head_a;
+	*head_a = *head_b;
+	*head_b = tmp;
+}
 
 
 /**************** Utils *********************/
@@ -171,7 +175,7 @@ void print_two(t_list *a, t_list *b)
 		a = a->next;
 		b = b->next;	
 	}	
-	printf(" -  -\n a  b\n");
+	printf(" -  -\n A  B\n");
 }
 
 
@@ -205,12 +209,13 @@ int main(int argc, char **argv)
 		ft_putstr("Error\n");
 
 	stack_a = create_stack(argc, argv);	
-	stack_b = create_stack(argc, argv);
+	stack_b = create_stack(argc - 3, argv);
+//	stack_b = NULL;
 		
 //	sort_sx(&stack_b);
 //	sort_rrx(&stack_b);
 //	sort_sx(&stack_b);
-//	sort_px(&stack_b);
+	sort_px(&stack_a, &stack_b);
 
 	print_two(stack_a, stack_b);
 
