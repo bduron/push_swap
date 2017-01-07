@@ -109,15 +109,70 @@ void sort_rrx(t_list **head)
 	*head = last;	
 }
 
-void sort_px(t_list **head_a, t_list **head_b)
+//void sort_px(t_list **head_a, t_list **head_b)
+//{
+//		
+//
+//	
+//
+//
+//}
+
+
+/**************** Utils *********************/
+
+size_t lstlen(t_list *list)
 {
-		
+	size_t len;
 
-	
-
-
+	len = 0;
+	while (list)
+	{
+		list = list->next;
+		len++;
+	}	
+	return (len);
 }
 
+void print_list(t_list *list)
+{
+	while (list) 	 
+	{
+		printf("%d\n", *(int *)(list->content));
+		list = list->next;
+	}	
+}
+
+
+void print_two(t_list *a, t_list *b)
+{
+	size_t len_a;
+	size_t len_b;
+	size_t len_diff;
+	char big_lst;	
+ 
+	len_a = lstlen(a);
+	len_b = lstlen(b);
+	big_lst = (len_a >= len_b) ? 'a' : 'b';
+	len_diff = (big_lst == 'a') ? len_a - len_b : len_b - len_a;	
+		
+	while (len_diff)
+	{
+		big_lst == 'a' ? printf(" %d   \n", *(int *)a->content) : printf("    %d\n", *(int *)b->content);	
+		if (big_lst == 'a')
+			a = a->next;	
+		if (big_lst == 'b')
+			b = b->next;	
+		len_diff--;
+	}	
+	while (a && b) 	 
+	{
+		printf(" %d  %d\n", *(int *)(a->content), *(int *)b->content);
+		a = a->next;
+		b = b->next;	
+	}	
+	printf(" -  -\n a  b\n");
+}
 
 
 /**************** Main **********************/
@@ -148,21 +203,16 @@ int main(int argc, char **argv)
 		return (1);
 	if (error_arg(argc, argv))
 		ft_putstr("Error\n");
-	else  						// TO DEL
-		ft_putstr("Ok\n"); 		// TO DEL
 
 	stack_a = create_stack(argc, argv);	
-	stack_b = ft_lstnew(0, 0);
+	stack_b = create_stack(argc, argv);
 		
-	sort_sx(&stack_a);
-	sort_sx(&stack_b);
+//	sort_sx(&stack_b);
+//	sort_rrx(&stack_b);
+//	sort_sx(&stack_b);
+//	sort_px(&stack_b);
 
-
-	while (stack_a) 				// PRINT LIST 
-	{
-		printf("%d\n", *(int *)(stack_a->content));
-		stack_a = stack_a->next;
-	}	
+	print_two(stack_a, stack_b);
 
 	return (0);
 }
@@ -170,50 +220,6 @@ int main(int argc, char **argv)
 
 
 
-
-
-
-
-/*
-
-===============================
-	head
-         |	
-1/	 1 --> 2 --> 3 --> NULL
-	 |
-	tmp
-================================
-	      head
-               |	
-2/	 1 --> 2 --> 3 --> NULL
-	 |
-	tmp
-================================
-	             head
-                      |	
-3/	 1 -->NULL    2 --> 3 --> NULL
-	 |
-	tmp
-================================
-	             head
-                      |	
-4/	 1 -->NULL    2 --> 3 --> NULL
-	 |            |
-	tmp          last     
-================================
-	             head
-                      |	
-5/	 1 -->NULL    2 --> 3 --> NULL // Segfault 
-	 |            	    |
-	tmp                last     
-================================
-	             head
-                      |	
-6/	              2 --> 3 --> 1 --> NULL
-	              	    |     |
-	                   last  tmp   
-================================
-*/
 /*
 
 ===============================
