@@ -122,8 +122,52 @@ void sort_px(t_list **head_a, t_list **head_b)
 	*head_b = tmp;
 }
 
+//void launch_sort(t_list **head_a, t_list **head_b, char *cmd)
+//{
+//	if (ft_strcmp(cmd, "sa") == 0)
+//		 
+//
+//
+//
+//
+//}
+
 
 /**************** Utils *********************/
+
+int array_max_min(int argc, char **argv)
+{
+	int max;
+	int min;
+	int current;
+	int i;	
+	
+	min = 0;
+	max = 0;
+	i = 0;
+	while (i < argc)
+	{
+		current = ft_atoi(argv[i++]);
+		if (current > max)
+			max = current;
+		if (current < min)
+			min = current;
+	}	
+	return (-min >= max) ? min : max;
+}
+
+int nb_digit(int n)
+{
+	int len;
+
+	len = (n < 0) ? 1 : 0;	
+	while (n)
+	{	
+		n /= 10;
+		len++;
+	}
+	return (len);
+}
 
 size_t lstlen(t_list *list)
 {
@@ -148,34 +192,33 @@ void print_list(t_list *list)
 }
 
 
-void print_two(t_list *a, t_list *b)
+void print_two(t_list *a, t_list *b, int size)
 {
 	size_t len_a;
 	size_t len_b;
 	size_t len_diff;
-	char big_lst;	
+	char big_lst;
  
 	len_a = lstlen(a);
 	len_b = lstlen(b);
 	big_lst = (len_a >= len_b) ? 'a' : 'b';
 	len_diff = (big_lst == 'a') ? len_a - len_b : len_b - len_a;	
-		
+	printf("\n");
 	while (len_diff)
 	{
-		big_lst == 'a' ? printf(" %d   \n", *(int *)a->content) : printf("    %d\n", *(int *)b->content);	
-		if (big_lst == 'a')
-			a = a->next;	
-		if (big_lst == 'b')
-			b = b->next;	
+		big_lst == 'a' ? printf(" |%*d|   \n", size, *(int *)a->content)
+			: printf("    |%*d|\n", size, *(int *)b->content);	
+		a = (big_lst == 'a') ? a->next : a;	
+		b = (big_lst == 'b') ? b->next : b;	
 		len_diff--;
 	}	
 	while (a && b) 	 
 	{
-		printf(" %d  %d\n", *(int *)(a->content), *(int *)b->content);
+		printf(" |%*d|  |%*d|\n", size, *(int *)(a->content), size, *(int *)b->content);
 		a = a->next;
 		b = b->next;	
 	}	
-	printf(" -  -\n A  B\n");
+	printf(" (%*c)  (%*c) \n", size, 'A', size, 'B');
 }
 
 
@@ -209,7 +252,7 @@ int main(int argc, char **argv)
 		ft_putstr("Error\n");
 
 	stack_a = create_stack(argc, argv);	
-	stack_b = create_stack(argc - 3, argv);
+	stack_b = create_stack(argc, argv);
 //	stack_b = NULL;
 		
 //	sort_sx(&stack_b);
@@ -217,7 +260,10 @@ int main(int argc, char **argv)
 //	sort_sx(&stack_b);
 	sort_px(&stack_a, &stack_b);
 
-	print_two(stack_a, stack_b);
+	print_two(stack_a, stack_b, nb_digit(array_max_min(argc, argv)));
+
+//	printf("\nmax = %d\n", array_max_min(argc, argv));
+//	printf("\nnb digits = %d\n", nb_digit(array_max_min(argc, argv)));
 
 	return (0);
 }
