@@ -178,7 +178,7 @@ int array_max_min(int argc, char **argv)
 		if (current < min)
 			min = current;
 	}	
-	return (-min >= max) ? min : max;
+	return (nb_digit(min) >= nb_digit(max)) ? min : max;
 }
 
 int nb_digit(int n)
@@ -223,7 +223,10 @@ void print_two(t_list *a, t_list *b, int size)
 	size_t len_b;
 	size_t len_diff;
 	char big_lst;
- 
+	
+	if (b->content == NULL)
+		return ; 	 
+	
 	len_a = lstlen(a);
 	len_b = lstlen(b);
 	big_lst = (len_a >= len_b) ? 'a' : 'b';
@@ -277,7 +280,8 @@ int main(int argc, char **argv)
 		ft_putstr("Error\n");
 
 	stack_a = create_stack(argc, argv);	
-	stack_b = create_stack(argc, argv);
+//	stack_b = create_stack(argc, argv);
+	stack_b = ft_lstnew(NULL, 0);
 //	stack_b = NULL;
 		
 //	sort_sx(&stack_b);
@@ -285,16 +289,25 @@ int main(int argc, char **argv)
 //	sort_sx(&stack_b);
 //	sort_px(&stack_a, &stack_b);
 
-	launch_sort(&stack_a, &stack_b, "pb");
-	launch_sort(&stack_a, &stack_b, "rrb");
-
 	print_two(stack_a, stack_b, nb_digit(array_max_min(argc, argv)));
+
+	launch_sort(&stack_a, &stack_b, "rra");
+	print_two(stack_a, stack_b, nb_digit(array_max_min(argc, argv)));
+	launch_sort(&stack_a, &stack_b, "pb");
+	print_two(stack_a, stack_b, nb_digit(array_max_min(argc, argv)));
+	launch_sort(&stack_a, &stack_b, "sa");
+	print_two(stack_a, stack_b, nb_digit(array_max_min(argc, argv)));
+	launch_sort(&stack_a, &stack_b, "rra");
+	print_two(stack_a, stack_b, nb_digit(array_max_min(argc, argv)));
+	launch_sort(&stack_a, &stack_b, "pa");
+	print_two(stack_a, stack_b, nb_digit(array_max_min(argc, argv)));
+
 
 //	printf("\x1B[32m");
 //	print_two(stack_a, stack_b, nb_digit(array_max_min(argc, argv)));
 //	printf("\x1B[0m");
 //	printf("\nmax = %d\n", array_max_min(argc, argv));
-//	printf("\nnb digits = %d\n", nb_digit(array_max_min(argc, argv)));
+//	printf("nb digits = %d\n", nb_digit(array_max_min(argc, argv)));
 
 	return (0);
 }

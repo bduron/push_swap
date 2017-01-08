@@ -17,5 +17,6 @@
 # include <unistd.h>
 # include "libft.h"
 
+int nb_digit(int n);
 
 #endif
