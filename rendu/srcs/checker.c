@@ -122,15 +122,40 @@ void sort_px(t_list **head_a, t_list **head_b)
 	*head_b = tmp;
 }
 
-//void launch_sort(t_list **head_a, t_list **head_b, char *cmd)
-//{
-//	if (ft_strcmp(cmd, "sa") == 0)
-//		 
-//
-//
-//
-//
-//}
+void launch_sort(t_list **head_a, t_list **head_b, char *cmd)
+{
+	if (ft_strcmp(cmd, "sa") == 0)
+		sort_sx(head_a);
+	else if (ft_strcmp(cmd, "sb") == 0)
+		sort_sx(head_b);
+	else if (ft_strcmp(cmd, "ss") == 0)
+	{
+		sort_sx(head_a);
+		sort_sx(head_b);
+	}
+	else if (ft_strcmp(cmd, "ra") == 0)
+		sort_rx(head_a);
+	else if (ft_strcmp(cmd, "rb") == 0)
+		sort_rx(head_b);
+	else if (ft_strcmp(cmd, "rr") == 0)
+	{
+		sort_rx(head_a);
+		sort_rx(head_b);
+	}
+	else if (ft_strcmp(cmd, "rra") == 0)
+		sort_rrx(head_a);
+	else if (ft_strcmp(cmd, "rrb") == 0)
+		sort_rrx(head_b);
+	else if (ft_strcmp(cmd, "rrr") == 0)
+	{
+		sort_rrx(head_a);
+		sort_rrx(head_b);
+	}
+	else if (ft_strcmp(cmd, "pa") == 0)
+		sort_px(head_a, head_b);
+	else if (ft_strcmp(cmd, "pb") == 0)
+		sort_px(head_b, head_a);
+}
 
 
 /**************** Utils *********************/
@@ -207,7 +232,7 @@ void print_two(t_list *a, t_list *b, int size)
 	while (len_diff)
 	{
 		big_lst == 'a' ? printf(" |%*d|   \n", size, *(int *)a->content)
-			: printf("    |%*d|\n", size, *(int *)b->content);	
+			: printf(" %*c%*d|\n", size + 5, '|', size, *(int *)b->content);	
 		a = (big_lst == 'a') ? a->next : a;	
 		b = (big_lst == 'b') ? b->next : b;	
 		len_diff--;
@@ -258,10 +283,16 @@ int main(int argc, char **argv)
 //	sort_sx(&stack_b);
 //	sort_rrx(&stack_b);
 //	sort_sx(&stack_b);
-	sort_px(&stack_a, &stack_b);
+//	sort_px(&stack_a, &stack_b);
+
+	launch_sort(&stack_a, &stack_b, "pb");
+	launch_sort(&stack_a, &stack_b, "rrb");
 
 	print_two(stack_a, stack_b, nb_digit(array_max_min(argc, argv)));
 
+//	printf("\x1B[32m");
+//	print_two(stack_a, stack_b, nb_digit(array_max_min(argc, argv)));
+//	printf("\x1B[0m");
 //	printf("\nmax = %d\n", array_max_min(argc, argv));
 //	printf("\nnb digits = %d\n", nb_digit(array_max_min(argc, argv)));
 
