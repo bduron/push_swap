@@ -11,7 +11,14 @@
 /* ************************************************************************** */
 
 #include "push_swap.h"
+
 #include <stdio.h>
+#include <locale.h>
+
+#define sort(x) do { printf("\n %s %C \n", #x, L'↴'); \
+			launch_sort(&stack_a, &stack_b, x); \
+			print_two(stack_a, stack_b, nb_digit(array_max_min(argc, argv)));} while (0)
+
 
 /**************** Error handling ***********************/
 
@@ -66,7 +73,7 @@ void sort_sx(t_list **head)
 {	
 	t_list *tmp;
 
-	if ((*head)->next == NULL)
+	if (!*head || (*head)->next == NULL)
 	   return ;	
 	tmp = *head;
 	*head = tmp->next;
@@ -79,7 +86,7 @@ void sort_rx(t_list **head)
 	t_list *tmp;
 	t_list *last;
 	
-	if ((*head)->next == NULL)
+	if (!*head || (*head)->next == NULL)
 	   return ;	
 	tmp = *head; 		//1
 	*head = tmp->next;  	//2
@@ -95,7 +102,7 @@ void sort_rrx(t_list **head)
 	t_list *tmp;
 	t_list *last;
 	
-	if ((*head)->next == NULL)
+	if (!*head || (*head)->next == NULL)
 	   return ;	
 	last = *head;	
 	while (last->next != NULL)
@@ -224,11 +231,8 @@ void print_two(t_list *a, t_list *b, int size)
 	size_t len_diff;
 	char big_lst;
 	
-	if (b->content == NULL)
-		return ; 	 
-	
-	len_a = lstlen(a);
-	len_b = lstlen(b);
+	len_a = (a == NULL) ? 0 : lstlen(a);
+	len_b = (b == NULL) ? 0 : lstlen(b);
 	big_lst = (len_a >= len_b) ? 'a' : 'b';
 	len_diff = (big_lst == 'a') ? len_a - len_b : len_b - len_a;	
 	printf("\n");
@@ -281,26 +285,16 @@ int main(int argc, char **argv)
 
 	stack_a = create_stack(argc, argv);	
 //	stack_b = create_stack(argc, argv);
-	stack_b = ft_lstnew(NULL, 0);
-//	stack_b = NULL;
+	stack_b = NULL;
 		
-//	sort_sx(&stack_b);
-//	sort_rrx(&stack_b);
-//	sort_sx(&stack_b);
-//	sort_px(&stack_a, &stack_b);
-
+	
+	setlocale(LC_ALL, "");
 	print_two(stack_a, stack_b, nb_digit(array_max_min(argc, argv)));
-
-	launch_sort(&stack_a, &stack_b, "rra");
-	print_two(stack_a, stack_b, nb_digit(array_max_min(argc, argv)));
-	launch_sort(&stack_a, &stack_b, "pb");
-	print_two(stack_a, stack_b, nb_digit(array_max_min(argc, argv)));
-	launch_sort(&stack_a, &stack_b, "sa");
-	print_two(stack_a, stack_b, nb_digit(array_max_min(argc, argv)));
-	launch_sort(&stack_a, &stack_b, "rra");
-	print_two(stack_a, stack_b, nb_digit(array_max_min(argc, argv)));
-	launch_sort(&stack_a, &stack_b, "pa");
-	print_two(stack_a, stack_b, nb_digit(array_max_min(argc, argv)));
+	sort("rra");
+	sort("pb");
+	sort("sa");
+	sort("rra");
+	sort("pa");
 
 
 //	printf("\x1B[32m");
