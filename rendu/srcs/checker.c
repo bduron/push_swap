@@ -6,7 +6,7 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/05 15:20:43 by bduron            #+#    #+#             */
-/*   Updated: 2017/01/06 16:46:27 by bduron           ###   ########.fr       */
+/*   Updated: 2017/01/09 11:54:58 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,25 @@ int error_arg(int argc, char **argv)
 
 
 /**************** Sorting Commands **********************/
+
+int is_cmd(char *cmd)
+{
+	int i;
+
+	i = 0;	
+	i += (ft_strcmp(cmd, "sa") == 0) ? 1 : 0;
+	i += (ft_strcmp(cmd, "sb")  == 0) ? 1 : 0;
+	i += (ft_strcmp(cmd, "ss")  == 0) ? 1 : 0;
+	i += (ft_strcmp(cmd, "ra")  == 0) ? 1 : 0;
+	i += (ft_strcmp(cmd, "rb")  == 0) ? 1 : 0;
+	i += (ft_strcmp(cmd, "rr")  == 0) ? 1 : 0;
+	i += (ft_strcmp(cmd, "rra") == 0) ? 1 : 0;
+	i += (ft_strcmp(cmd, "rrb") == 0) ? 1 : 0;
+	i += (ft_strcmp(cmd, "rrr") == 0) ? 1 : 0;
+	i += (ft_strcmp(cmd, "pa")  == 0) ? 1 : 0;
+	i += (ft_strcmp(cmd, "pb")  == 0) ? 1 : 0;
+	return (i) ? 1 : 0;
+}
 
 void sort_sx(t_list **head)
 {	
@@ -273,11 +292,31 @@ t_list *create_stack(int argc, char **argv)
 	return (head);
 }
 
+int get_cmd(char **cmd_list)
+{
+	int nb_cmd;
+
+	nb_cmd = 0;	
+	while (get_next_line(0, &cmd_list[nb_cmd]))
+	{
+		if (is_cmd(cmd_list[nb_cmd]) == 0)
+		{
+			printf("KO\n");
+			exit(0);
+		}	
+		nb_cmd++;
+	}
+	return (nb_cmd);
+}
+
+
 int main(int argc, char **argv)
 {
 	t_list *stack_a;
 	t_list *stack_b;
-	char **sort_cmd;
+	char **cmd_list;
+	int nb_cmd;
+	int i;
 	
 	if (argc == 1)
 		return (1);
@@ -286,16 +325,22 @@ int main(int argc, char **argv)
 
 	stack_a = create_stack(argc, argv);	
 	stack_b = NULL;
-	
-	sort_cmd = (char **)malloc(sizeof(char *) * 4096);
-	
 
-	while (get_next_line(0, &sort_cmd))
-	{
-		launch_sort(&stack_a, &stack_b, sort_cmd); 
-		print_two(stack_a, stack_b, nb_digit(array_max_min(argc, argv)));
-	}
+	cmd_list = (char **)malloc(sizeof(char *) * 4096);
+	nb_cmd = get_cmd(cmd_list);	
 	
+	// IF -v 
+	i = 0;
+	while (i < nb_cmd)
+	{
+		launch_sort(&stack_a, &stack_b, cmd_list[i++]);
+		print_two(stack_a, stack_b, nb_digit(array_max_min(argc, argv)));
+	}	
+
+
+
+
+
 //	setlocale(LC_ALL, "");
 //	sort("rra");
 //	sort("pb");
@@ -309,6 +354,9 @@ int main(int argc, char **argv)
 //	printf("\x1B[0m");
 //	printf("\nmax = %d\n", array_max_min(argc, argv));
 //	printf("nb digits = %d\n", nb_digit(array_max_min(argc, argv)));
+
+
+// FREE SORT_CMD, STACK_A, STACK_B	
 
 	return (0);
 }
