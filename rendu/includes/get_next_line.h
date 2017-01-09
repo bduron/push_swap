@@ -1,23 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.h                                        :+:      :+:    :+:   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/01/05 14:54:52 by bduron            #+#    #+#             */
-/*   Updated: 2017/01/05 16:33:49 by bduron           ###   ########.fr       */
+/*   Created: 2016/11/23 17:00:16 by bduron            #+#    #+#             */
+/*   Updated: 2016/11/29 11:14:40 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PUSH_SWAP_H
-# define PUSH_SWAP_H
+#ifndef GET_NEXT_LINE_H
+# define GET_NEXT_LINE_H
 
-# include <stdlib.h>
-# include <unistd.h>
 # include "libft.h"
-# include "get_next_line.h"
+# define BUFF_SIZE 4096
 
-int nb_digit(int n);
+int		get_next_line(int fd, char **line);
 
 #endif

@@ -277,24 +277,31 @@ int main(int argc, char **argv)
 {
 	t_list *stack_a;
 	t_list *stack_b;
-
+	char **sort_cmd;
+	
 	if (argc == 1)
 		return (1);
 	if (error_arg(argc, argv))
 		ft_putstr("Error\n");
 
 	stack_a = create_stack(argc, argv);	
-//	stack_b = create_stack(argc, argv);
 	stack_b = NULL;
-		
 	
-	setlocale(LC_ALL, "");
-	print_two(stack_a, stack_b, nb_digit(array_max_min(argc, argv)));
-	sort("rra");
-	sort("pb");
-	sort("sa");
-	sort("rra");
-	sort("pa");
+	sort_cmd = (char **)malloc(sizeof(char *) * 4096);
+	
+
+	while (get_next_line(0, &sort_cmd))
+	{
+		launch_sort(&stack_a, &stack_b, sort_cmd); 
+		print_two(stack_a, stack_b, nb_digit(array_max_min(argc, argv)));
+	}
+	
+//	setlocale(LC_ALL, "");
+//	sort("rra");
+//	sort("pb");
+//	sort("sa");
+//	sort("rra");
+//	sort("pa");
 
 
 //	printf("\x1B[32m");
