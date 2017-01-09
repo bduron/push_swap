@@ -6,7 +6,7 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/05 15:20:43 by bduron            #+#    #+#             */
-/*   Updated: 2017/01/09 11:54:58 by bduron           ###   ########.fr       */
+/*   Updated: 2017/01/09 14:29:49 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,9 @@
 
 #include <stdio.h>
 #include <locale.h>
-
 #define sort(x) do { printf("\n %s %C \n", #x, L'↴'); \
-			launch_sort(&stack_a, &stack_b, x); \
-			print_two(stack_a, stack_b, nb_digit(array_max_min(argc, argv)));} while (0)
+	launch_sort(&stack_a, &stack_b, x); \
+	print_two(stack_a, stack_b, nb_digit(array_max_min(argc, argv)));} while (0)
 
 
 /**************** Error handling ***********************/
@@ -93,7 +92,7 @@ void sort_sx(t_list **head)
 	t_list *tmp;
 
 	if (!*head || (*head)->next == NULL)
-	   return ;	
+		return ;	
 	tmp = *head;
 	*head = tmp->next;
 	tmp->next = (*head)->next;
@@ -104,9 +103,9 @@ void sort_rx(t_list **head)
 {
 	t_list *tmp;
 	t_list *last;
-	
+
 	if (!*head || (*head)->next == NULL)
-	   return ;	
+		return ;	
 	tmp = *head; 		//1
 	*head = tmp->next;  	//2
 	tmp->next = NULL;	//3
@@ -120,9 +119,9 @@ void sort_rrx(t_list **head)
 {
 	t_list *tmp;
 	t_list *last;
-	
+
 	if (!*head || (*head)->next == NULL)
-	   return ;	
+		return ;	
 	last = *head;	
 	while (last->next != NULL)
 	{
@@ -192,7 +191,7 @@ int array_max_min(int argc, char **argv)
 	int min;
 	int current;
 	int i;	
-	
+
 	min = 0;
 	max = 0;
 	i = 0;
@@ -242,14 +241,13 @@ void print_list(t_list *list)
 	}	
 }
 
-
 void print_two(t_list *a, t_list *b, int size)
 {
 	size_t len_a;
 	size_t len_b;
 	size_t len_diff;
 	char big_lst;
-	
+
 	len_a = (a == NULL) ? 0 : lstlen(a);
 	len_b = (b == NULL) ? 0 : lstlen(b);
 	big_lst = (len_a >= len_b) ? 'a' : 'b';
@@ -280,7 +278,7 @@ t_list *create_stack(int argc, char **argv)
 	t_list *head;
 	int i;
 	int val;
-	
+
 	i =  argc - 1;
 	val = ft_atoi(argv[i--]);	
 	head = ft_lstnew(&val, sizeof(int));
@@ -309,6 +307,23 @@ int get_cmd(char **cmd_list)
 	return (nb_cmd);
 }
 
+int is_sorted(t_list *stack_a, t_list *stack_b)
+{
+	int last;
+
+	if (stack_b != NULL)
+		return (0);
+	last = *(int *)stack_a->content;
+	stack_a = stack_a->next;
+	while (stack_a)
+	{
+		if (*(int *)stack_a->content < last)
+			return (0);
+		last = *(int *)stack_a->content;	
+		stack_a = stack_a->next;
+	}	
+	return (1);
+}	
 
 int main(int argc, char **argv)
 {
@@ -317,26 +332,26 @@ int main(int argc, char **argv)
 	char **cmd_list;
 	int nb_cmd;
 	int i;
-	
+
 	if (argc == 1)
 		return (1);
 	if (error_arg(argc, argv))
 		ft_putstr("Error\n");
-
 	stack_a = create_stack(argc, argv);	
 	stack_b = NULL;
-
 	cmd_list = (char **)malloc(sizeof(char *) * 4096);
 	nb_cmd = get_cmd(cmd_list);	
-	
-	// IF -v 
 	i = 0;
 	while (i < nb_cmd)
 	{
 		launch_sort(&stack_a, &stack_b, cmd_list[i++]);
-		print_two(stack_a, stack_b, nb_digit(array_max_min(argc, argv)));
+		print_two(stack_a, stack_b, nb_digit(array_max_min(argc, argv))); // IF -v
 	}	
+	is_sorted(stack_a, stack_b) ? printf("OK\n") : printf("KO\n");
 
+	// FREE SORT_CMD, STACK_A, STACK_B	
+	return (0);
+}
 
 
 
@@ -351,56 +366,48 @@ int main(int argc, char **argv)
 
 //	printf("\x1B[32m");
 //	print_two(stack_a, stack_b, nb_digit(array_max_min(argc, argv)));
+
 //	printf("\x1B[0m");
 //	printf("\nmax = %d\n", array_max_min(argc, argv));
 //	printf("nb digits = %d\n", nb_digit(array_max_min(argc, argv)));
 
 
-// FREE SORT_CMD, STACK_A, STACK_B	
-
-	return (0);
-}
-
-
-
-
 /*
-
-===============================
-	head
-         |	
-1/	 1 --> 2 --> 3 --> NULL
-	 |
-	tmp
-================================
-	      head
-               |	
-2/	 1 --> 2 --> 3 --> NULL
-	 |
-	tmp
-================================
-	             head
-                      |	
-3/	 1 -->NULL    2 --> 3 --> NULL
-	 |
-	tmp
-================================
-	             head
-                      |	
-4/	 1 -->NULL    2 --> 3 --> NULL
-	 |            |
-	tmp          last     
-================================
-	             head
-                      |	
-5/	 1 -->NULL    2 --> 3 --> NULL // Segfault 
-	 |            	    |
-	tmp                last     
-================================
-	             head
-                      |	
-6/	              2 --> 3 --> 1 --> NULL
-	              	    |     |
-	                   last  tmp   
-================================
-*/
+   ===============================
+   head
+   |	
+   1/	 1 --> 2 --> 3 --> NULL
+   |
+   tmp
+   ================================
+   head
+   |	
+   2/	 1 --> 2 --> 3 --> NULL
+   |
+   tmp
+   ================================
+   head
+   |	
+   3/	 1 -->NULL    2 --> 3 --> NULL
+   |
+   tmp
+   ================================
+   head
+   |	
+   4/	 1 -->NULL    2 --> 3 --> NULL
+   |            |
+   tmp          last     
+   ================================
+   head
+   |	
+   5/	 1 -->NULL    2 --> 3 --> NULL // Segfault 
+   |            	    |
+   tmp                last     
+   ================================
+   head
+   |	
+   6/	              2 --> 3 --> 1 --> NULL
+   |     |
+   last  tmp   
+   ================================
+   */
