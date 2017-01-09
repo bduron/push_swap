@@ -6,7 +6,7 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/05 15:20:43 by bduron            #+#    #+#             */
-/*   Updated: 2017/01/09 14:29:49 by bduron           ###   ########.fr       */
+/*   Updated: 2017/01/09 14:30:28 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 #include <stdio.h>
 #include <locale.h>
+
 #define sort(x) do { printf("\n %s %C \n", #x, L'↴'); \
 	launch_sort(&stack_a, &stack_b, x); \
 	print_two(stack_a, stack_b, nb_digit(array_max_min(argc, argv)));} while (0)
