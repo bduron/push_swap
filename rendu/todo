@@ -9,7 +9,8 @@ Del stdio.h (checker.c)
 Questions :
 ==========
 - Error si argc == 1 ? 
-- ARG="4 67 3 87 23"; ./push_swap $ARG | ./checker $ARG, ARG = (1 string ? ou plsr?)
+- ARG="4 67 3 87 23"; ./push_swap $ARG | ./checker $ARG, 
+ARG = (1 string ? ou plsr?) => strsplit ? 
 - free apres le exit (checker)
 
 

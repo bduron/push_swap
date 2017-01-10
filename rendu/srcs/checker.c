@@ -6,7 +6,7 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/05 15:20:43 by bduron            #+#    #+#             */
-/*   Updated: 2017/01/09 14:30:28 by bduron           ###   ########.fr       */
+/*   Updated: 2017/01/10 17:14:52 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,12 @@
 
 
 /**************** Error handling ***********************/
+
+void error_exit(void)
+{
+	ft_putstr_fd("Error\n", 2);
+	exit(1);
+}
 
 int error_duplicate(int argc, char **argv)
 {
@@ -253,7 +259,6 @@ void print_two(t_list *a, t_list *b, int size)
 	len_b = (b == NULL) ? 0 : lstlen(b);
 	big_lst = (len_a >= len_b) ? 'a' : 'b';
 	len_diff = (big_lst == 'a') ? len_a - len_b : len_b - len_a;	
-	printf("\n");
 	while (len_diff)
 	{
 		big_lst == 'a' ? printf(" |%*d|   \n", size, *(int *)a->content)
@@ -264,11 +269,12 @@ void print_two(t_list *a, t_list *b, int size)
 	}	
 	while (a && b) 	 
 	{
-		printf(" |%*d|  |%*d|\n", size, *(int *)(a->content), size, *(int *)b->content);
+		printf(" |%*d|  |%*d|\n", size, *(int *)(a->content), 
+				size, *(int *)b->content);
 		a = a->next;
 		b = b->next;	
 	}	
-	printf(" (%*c)  (%*c) \n", size, 'A', size, 'B');
+	printf(" (%*c)  (%*c) \n\n", size, 'A', size, 'B');
 }
 
 
@@ -309,7 +315,7 @@ int get_cmd(char **cmd_list)
 }
 
 int is_sorted(t_list *stack_a, t_list *stack_b)
-{
+{ 
 	int last;
 
 	if (stack_b != NULL)
@@ -326,34 +332,81 @@ int is_sorted(t_list *stack_a, t_list *stack_b)
 	return (1);
 }	
 
-int main(int argc, char **argv)
+char **get_flag(int *argc, char **argv, int *flag)
 {
-	t_list *stack_a;
-	t_list *stack_b;
+	int  i;
+
+	ft_bzero(flag, sizeof(int) * 127); 
+	if (argv[1][0] == '-')
+	{
+		i = 1;
+		while (argv[1][i]) 
+		{		
+			if (argv[1][i] == 'v' || argv[1][i] == 'c')
+				flag[(int)argv[1][i]]++;
+			else 
+			{
+				ft_putstr("usage: checker [-vc] number list\n");
+				ft_putstr("  -v verbose mode\n  -c result highlighting\n");
+				exit(1);
+			}
+			i++;
+		}
+		*argc -= 1;
+		return (argv + 1);
+	}	
+	return (argv);
+}
+
+void sort_print_stack(t_list **stack_a, t_list **stack_b,
+		char **argv, int *flag)
+{
 	char **cmd_list;
 	int nb_cmd;
 	int i;
 
-	if (argc == 1)
-		return (1);
-	if (error_arg(argc, argv))
-		ft_putstr("Error\n");
-	stack_a = create_stack(argc, argv);	
-	stack_b = NULL;
 	cmd_list = (char **)malloc(sizeof(char *) * 4096);
 	nb_cmd = get_cmd(cmd_list);	
 	i = 0;
 	while (i < nb_cmd)
 	{
-		launch_sort(&stack_a, &stack_b, cmd_list[i++]);
-		print_two(stack_a, stack_b, nb_digit(array_max_min(argc, argv))); // IF -v
+		launch_sort(stack_a, stack_b, cmd_list[i++]);
+		if (flag['v'])
+			print_two(*stack_a, *stack_b, nb_digit(array_max_min(*flag, argv)));
 	}	
-	is_sorted(stack_a, stack_b) ? printf("OK\n") : printf("KO\n");
-	// FREE SORT_CMD, STACK_A, STACK_B // LEAKS SI erreurs --> free a chaque exit 
-		//void    ft_lstdel(t_list **alst, void (*del)(void *, size_t))	
-	//ft_lstdel(&stack_a, ); ??
-	//ft_lstdel(&stack_b, ); ?? 
+	if (flag['c'])
+	{
+		printf("\x1B[32m");
+		print_two(*stack_a, *stack_b, nb_digit(array_max_min(flag[0], argv)));
+		printf("\x1B[0m");
+	}	
 	free(cmd_list);
+}
+
+int main(int argc, char **argv)
+{
+	t_list *stack_a;
+	t_list *stack_b;
+	int flag[127];
+
+	if (argc == 1)
+		return (1);
+	argv = get_flag(&argc, argv, flag);
+	if (error_arg(argc, argv))
+	{
+		ft_putstr("Error\n");
+		return (1);
+	}
+	stack_a = create_stack(argc, argv);	
+	stack_b = NULL;
+	flag[0] = argc;
+	sort_print_stack(&stack_a, &stack_b, argv, flag);
+	is_sorted(stack_a, stack_b) ? printf("OK\n") : printf("KO\n");
+
+		// FREE SORT_CMD, STACK_A, STACK_B // LEAKS SI erreurs --> free a chaque exit 
+		//void    ft_lstdel(t_list **alst, void (*del)(void *, size_t))	
+		//ft_lstdel(&stack_a, ); ??
+		//ft_lstdel(&stack_b, ); ?? 
 	return (0);
 }
 
@@ -380,19 +433,19 @@ int main(int argc, char **argv)
    ===============================
    head
    |	
-   1/	 1 --> 2 --> 3 --> NULL
+1/ 1 --> 2 --> 3 --> NULL
    |
    tmp
    ================================
    head
    |	
-   2/	 1 --> 2 --> 3 --> NULL
+2/ 1 --> 2 --> 3 --> NULL
    |
    tmp
    ================================
    head
    |	
-   3/	 1 -->NULL    2 --> 3 --> NULL
+3/ 1 -->NULL    2 --> 3 --> NULL
    |
    tmp
    ================================
