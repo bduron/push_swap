@@ -1,0 +1,12 @@
+#include <stdio.h>
+
+int main(void)
+{
+	printf("rra\n");
+	printf("pb\n");
+	printf("sa\n");
+	printf("rra\n");
+	printf("pa\n");
+
+	return (0);
+}

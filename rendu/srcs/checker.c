@@ -349,8 +349,11 @@ int main(int argc, char **argv)
 		print_two(stack_a, stack_b, nb_digit(array_max_min(argc, argv))); // IF -v
 	}	
 	is_sorted(stack_a, stack_b) ? printf("OK\n") : printf("KO\n");
-
-	// FREE SORT_CMD, STACK_A, STACK_B	
+	// FREE SORT_CMD, STACK_A, STACK_B // LEAKS SI erreurs --> free a chaque exit 
+		//void    ft_lstdel(t_list **alst, void (*del)(void *, size_t))	
+	//ft_lstdel(&stack_a, ); ??
+	//ft_lstdel(&stack_b, ); ?? 
+	free(cmd_list);
 	return (0);
 }
 

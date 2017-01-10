@@ -9,7 +9,14 @@ Del stdio.h (checker.c)
 Questions :
 ==========
 - Error si argc == 1 ? 
+- ARG="4 67 3 87 23"; ./push_swap $ARG | ./checker $ARG, ARG = (1 string ? ou plsr?)
+- free apres le exit (checker)
 
 
 To-do :
 ======
+- Erreurs sur stderr (ft_putstr_fd)
+- Utiliser ft_printf
+- Makefile ne recompile que les fichiers 
+modifiés
+- 
