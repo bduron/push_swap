@@ -6,9 +6,11 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/11 08:50:53 by bduron            #+#    #+#             */
-/*   Updated: 2017/01/11 15:56:03 by bduron           ###   ########.fr       */
+/*   Updated: 2017/01/11 17:24:23 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+// `ruby -e "puts (1..100).to_a.shuffle.join('  ')"`
 
 #include "push_swap.h"
 
@@ -388,28 +390,40 @@ void sort_print_stack(t_list **stack_a, t_list **stack_b,    // USELESS
 
 void launch_basic(t_sort *s)
 {
-  	s->stack_a = create_stack(s->cargc, s->cargv);	
-  	s->stack_b = NULL;
-	
-	print_two(s->stack_a, s->stack_b, nb_digit(array_max_min(s->cargc, s->cargv)));
-	while (s->stack_a != NULL)	
-	{
-		if (s->stack_b && s->stack_b->next)
-			if (*(int *)s->stack_b->content < *(int *)s->stack_b->next->content)	
-				launch_sort(&s->stack_a, &s->stack_b, "sb");
-		launch_sort(&s->stack_a, &s->stack_b, "pb");
-	}
-	print_two(s->stack_a, s->stack_b, nb_digit(array_max_min(s->cargc, s->cargv)));
-	while (s->stack_b != NULL)	
-	{
-		if (s->stack_b->next)
-			if (*(int *)s->stack_b->content < *(int *)s->stack_b->next->content)	
-				launch_sort(&s->stack_a, &s->stack_b, "sb");
-		launch_sort(&s->stack_a, &s->stack_b, "pa");
-	}
-	print_two(s->stack_a, s->stack_b, nb_digit(array_max_min(s->cargc, s->cargv)));
-}
+	s->sa = create_stack(s->cargc, s->cargv);	
+	s->sb = NULL;
 
+	print_two(s->sa, s->sb, nb_digit(array_max_min(s->cargc, s->cargv)));
+
+	while (!is_sorted(s->sa, s->sb))
+	{	
+		while (s->sa != NULL)	
+		{
+			if (s->sb && s->sb->next)
+				if (*(int *)s->sb->content < *(int *)s->sb->next->content)	
+				{	
+					launch_sort(&s->sa, &s->sb, "sb");
+					s->nb_cmd++;
+				}	
+			launch_sort(&s->sa, &s->sb, "pb");
+			s->nb_cmd++;
+		}
+		print_two(s->sa, s->sb, nb_digit(array_max_min(s->cargc, s->cargv)));
+		while (s->sb != NULL)	
+		{
+			if (s->sb->next)
+				if (*(int *)s->sb->content < *(int *)s->sb->next->content)	
+				{
+					launch_sort(&s->sa, &s->sb, "sb");
+					s->nb_cmd++;
+				}
+			launch_sort(&s->sa, &s->sb, "pa");
+			s->nb_cmd++;
+		}
+	}
+	print_two(s->sa, s->sb, nb_digit(array_max_min(s->cargc, s->cargv)));
+	printf("%s : %zu operations for %d values\n", s->name, s->nb_cmd, s->cargc - 1);
+}
 
 void launch_all_sorts(t_sort **s)
 {
@@ -430,7 +444,7 @@ void launch_all_sorts(t_sort **s)
 t_sort *init_basic(int argc, char **argv, int *flag)
 {
 	t_sort *basic;
-	
+
 	if ((basic = (t_sort *)malloc(sizeof(t_sort))) == 0)
 		return (NULL);		
 	basic->name = "Basic sort";
@@ -439,8 +453,8 @@ t_sort *init_basic(int argc, char **argv, int *flag)
 	basic->cargv = argv;
 	basic->cflag = flag;
 	basic->cmd_lst = NULL;
-	basic->stack_a = NULL;  
-	basic->stack_b = NULL;  
+	basic->sa = NULL;  
+	basic->sb = NULL;  
 	return (basic);
 }
 
@@ -476,7 +490,7 @@ int main(int argc, char **argv)
 	}
 	s = init_sorts(argc, argv, flag);
 	launch_all_sorts(s);
-///	print_winner(s);	
+	///	print_winner(s);	
 
 	return (0);
 }
