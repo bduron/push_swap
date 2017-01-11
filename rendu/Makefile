@@ -11,6 +11,7 @@
 # **************************************************************************** #
 
 NAME= checker
+PS= push_swap
 SRC= srcs/*.c
 OBJ= *.o
 HEADER= -I includes -I libft/includes
@@ -29,11 +30,16 @@ linux:
 	@gcc -o $(NAME) $(FLAGS) $(SRC) -Llibft -lft -I includes
 	@echo "Compiling checker... OK"
 
+ps:
+	@make -C libft
+	@gcc -o $(PS) $(FLAGS) $(SRC) -Llibft -lft -I includes
+	@echo "Compiling checker... OK"
+
 clean:
 #	@rm -f $(OBJ)
 
 fclean: clean
-	@rm -rf $(NAME) checker.dSYM
+	@rm -rf $(NAME) $(PS) checker.dSYM
 	@make fclean -C libft
 	@echo "Cleaning..."	
 

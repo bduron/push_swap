@@ -6,7 +6,7 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/11 08:50:53 by bduron            #+#    #+#             */
-/*   Updated: 2017/01/11 10:28:30 by bduron           ###   ########.fr       */
+/*   Updated: 2017/01/11 11:34:59 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -386,26 +386,55 @@ void sort_print_stack(t_list **stack_a, t_list **stack_b,    // USELESS
 /************************* PS  -  launch sorting algorithms ***************************/
 
 
-/************************* PS  -  init_sorts  ***************************/
-
-int  init_basic(t_sort *s, int argc, char **argv, int *flag)
+void launch_basic(t_sort *s)
 {
-     name = "Basic sort";
-     nb_cmd = 0;
-     cargc = argc; 
-     cargv = argv;
-     cflag = flag;
-	 cmd_lst = NULL;
-	 stack_a = NULL;  
-	 stack_b = NULL;  
+  	s->stack_a = create_stack(s->cargc, s->cargv);	
+  	s->stack_b = NULL;
+		
+	print_two(s->stack_a, s->stack_b, nb_digit(array_max_min(s->cargc, s->cargv)));
+
 }
 
-t_sort  *init_sorts(int argc, char **argv, int *flag)
-{
-	t_sort *s;
 
-	s = (t_sort *)malloc(sizeof(t_sort) * 5);
-	init_basic(s, argv, argc, flag);
+void launch_all_sorts(t_sort **s)
+{
+	launch_basic(s[0]);
+	//launch_basic(s[1]);
+	//launch_basic(s[2]);
+	//launch_basic(s[3]);
+	//launch_basic(s[4]);
+
+
+
+}
+
+
+
+/************************* PS  -  init_sorts  ***************************/
+
+t_sort *init_basic(int argc, char **argv, int *flag)
+{
+	t_sort *basic;
+	
+	if ((basic = (t_sort *)malloc(sizeof(t_sort))) == 0)
+		return (NULL);		
+	basic->name = "Basic sort";
+	basic->nb_cmd = 0;
+	basic->cargc = argc; 
+	basic->cargv = argv;
+	basic->cflag = flag;
+	basic->cmd_lst = NULL;
+	basic->stack_a = NULL;  
+	basic->stack_b = NULL;  
+	return (basic);
+}
+
+t_sort  **init_sorts(int argc, char **argv, int *flag)
+{
+	t_sort **s;
+
+	s = (t_sort **)malloc(sizeof(t_sort *) * 5);
+	s[0] = init_basic(argc, argv, flag);
 	//init_basic(s, argv, argc, flag);
 	//init_basic(s, argv, argc, flag);
 	//init_basic(s, argv, argc, flag);
@@ -420,7 +449,7 @@ t_sort  *init_sorts(int argc, char **argv, int *flag)
 int main(int argc, char **argv)
 {
 	int flag[127];
-	t_sort *s;
+	t_sort **s;
 
 	if (argc == 1)
 		return (1);
@@ -432,7 +461,7 @@ int main(int argc, char **argv)
 	}
 	s = init_sorts(argc, argv, flag);
 	launch_all_sorts(s);
-	print_winner(s);	
+///	print_winner(s);	
 
 	return (0);
 }
