@@ -1,19 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   checker.c                                          :+:      :+:    :+:   */
+/*   push_swap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/01/05 15:20:43 by bduron            #+#    #+#             */
-/*   Updated: 2017/01/11 08:48:46 by bduron           ###   ########.fr       */
+/*   Created: 2017/01/11 08:50:53 by bduron            #+#    #+#             */
+/*   Updated: 2017/01/11 10:28:30 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
 #include <stdio.h>
-#include <locale.h>
 
 #define sort(x) do { printf("\n %s %C \n", #x, L'↴'); \
 	launch_sort(&stack_a, &stack_b, x); \
@@ -278,7 +277,7 @@ void print_two(t_list *a, t_list *b, int size)
 }
 
 
-/**************** Main **********************/
+/**************** Main  Checker **********************/
 
 t_list *create_stack(int argc, char **argv)
 {
@@ -297,7 +296,7 @@ t_list *create_stack(int argc, char **argv)
 	return (head);
 }
 
-int get_cmd(char **cmd_list)
+int get_cmd(char **cmd_list)     // USELESS
 {
 	int nb_cmd;
 
@@ -358,7 +357,7 @@ char **get_flag(int *argc, char **argv, int *flag)
 	return (argv);
 }
 
-void sort_print_stack(t_list **stack_a, t_list **stack_b,
+void sort_print_stack(t_list **stack_a, t_list **stack_b,    // USELESS
 		char **argv, int *flag)
 {
 	char **cmd_list;
@@ -383,88 +382,92 @@ void sort_print_stack(t_list **stack_a, t_list **stack_b,
 	free(cmd_list);
 }
 
+
+/************************* PS  -  launch sorting algorithms ***************************/
+
+
+/************************* PS  -  init_sorts  ***************************/
+
+int  init_basic(t_sort *s, int argc, char **argv, int *flag)
+{
+     name = "Basic sort";
+     nb_cmd = 0;
+     cargc = argc; 
+     cargv = argv;
+     cflag = flag;
+	 cmd_lst = NULL;
+	 stack_a = NULL;  
+	 stack_b = NULL;  
+}
+
+t_sort  *init_sorts(int argc, char **argv, int *flag)
+{
+	t_sort *s;
+
+	s = (t_sort *)malloc(sizeof(t_sort) * 5);
+	init_basic(s, argv, argc, flag);
+	//init_basic(s, argv, argc, flag);
+	//init_basic(s, argv, argc, flag);
+	//init_basic(s, argv, argc, flag);
+	//init_basic(s, argv, argc, flag);
+
+	return (s);
+}
+
+
+/************************* PS - Main  ***************************/
+
 int main(int argc, char **argv)
 {
-	t_list *stack_a;
-	t_list *stack_b;
 	int flag[127];
+	t_sort *s;
 
 	if (argc == 1)
 		return (1);
-	argv = get_flag(&argc, argv, flag);
+	//	argv = get_flag(&argc, argv, flag);  // ARG ? 
 	if (error_arg(argc, argv))
 	{
 		ft_putstr("Error\n");
 		return (1);
 	}
-	stack_a = create_stack(argc, argv);	
-	stack_b = NULL;
-	flag[0] = argc;
-	sort_print_stack(&stack_a, &stack_b, argv, flag);
-	is_sorted(stack_a, stack_b) ? printf("OK\n") : printf("KO\n");
+	s = init_sorts(argc, argv, flag);
+	launch_all_sorts(s);
+	print_winner(s);	
 
-		// FREE SORT_CMD, STACK_A, STACK_B // LEAKS SI erreurs --> free a chaque exit 
-		//void    ft_lstdel(t_list **alst, void (*del)(void *, size_t))	
-		//ft_lstdel(&stack_a, ); ??
-		//ft_lstdel(&stack_b, ); ?? 
 	return (0);
 }
 
 
 
 
-//	setlocale(LC_ALL, "");
-//	sort("rra");
-//	sort("pb");
-//	sort("sa");
-//	sort("rra");
-//	sort("pa");
 
 
-//	printf("\x1B[32m");
-//	print_two(stack_a, stack_b, nb_digit(array_max_min(argc, argv)));
-
-//	printf("\x1B[0m");
-//	printf("\nmax = %d\n", array_max_min(argc, argv));
-//	printf("nb digits = %d\n", nb_digit(array_max_min(argc, argv)));
 
 
-/*
-   ===============================
-   head
-   |	
-1/ 1 --> 2 --> 3 --> NULL
-   |
-   tmp
-   ================================
-   head
-   |	
-2/ 1 --> 2 --> 3 --> NULL
-   |
-   tmp
-   ================================
-   head
-   |	
-3/ 1 -->NULL    2 --> 3 --> NULL
-   |
-   tmp
-   ================================
-   head
-   |	
-   4/	 1 -->NULL    2 --> 3 --> NULL
-   |            |
-   tmp          last     
-   ================================
-   head
-   |	
-   5/	 1 -->NULL    2 --> 3 --> NULL // Segfault 
-   |            	    |
-   tmp                last     
-   ================================
-   head
-   |	
-   6/	              2 --> 3 --> 1 --> NULL
-   |     |
-   last  tmp   
-   ================================
-   */
+
+
+
+
+
+//int main(int argc, char **argv)
+//{
+//	t_list *stack_a;
+//	t_list *stack_b;
+//	int flag[127];
+//
+//	if (argc == 1)
+//		return (1);
+//	argv = get_flag(&argc, argv, flag);
+//	if (error_arg(argc, argv))
+//	{
+//		ft_putstr("Error\n");
+//		return (1);
+//	}
+//	stack_a = create_stack(argc, argv);	
+//	stack_b = NULL;
+//	flag[0] = argc;
+//	sort_print_stack(&stack_a, &stack_b, argv, flag);
+//	is_sorted(stack_a, stack_b) ? printf("OK\n") : printf("KO\n");
+//
+//	return (0);
+//}
