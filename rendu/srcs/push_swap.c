@@ -6,7 +6,7 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/11 08:50:53 by bduron            #+#    #+#             */
-/*   Updated: 2017/01/11 11:34:59 by bduron           ###   ########.fr       */
+/*   Updated: 2017/01/11 15:56:03 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -390,9 +390,24 @@ void launch_basic(t_sort *s)
 {
   	s->stack_a = create_stack(s->cargc, s->cargv);	
   	s->stack_b = NULL;
-		
+	
 	print_two(s->stack_a, s->stack_b, nb_digit(array_max_min(s->cargc, s->cargv)));
-
+	while (s->stack_a != NULL)	
+	{
+		if (s->stack_b && s->stack_b->next)
+			if (*(int *)s->stack_b->content < *(int *)s->stack_b->next->content)	
+				launch_sort(&s->stack_a, &s->stack_b, "sb");
+		launch_sort(&s->stack_a, &s->stack_b, "pb");
+	}
+	print_two(s->stack_a, s->stack_b, nb_digit(array_max_min(s->cargc, s->cargv)));
+	while (s->stack_b != NULL)	
+	{
+		if (s->stack_b->next)
+			if (*(int *)s->stack_b->content < *(int *)s->stack_b->next->content)	
+				launch_sort(&s->stack_a, &s->stack_b, "sb");
+		launch_sort(&s->stack_a, &s->stack_b, "pa");
+	}
+	print_two(s->stack_a, s->stack_b, nb_digit(array_max_min(s->cargc, s->cargv)));
 }
 
 
