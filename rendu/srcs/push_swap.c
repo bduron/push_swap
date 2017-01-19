@@ -403,38 +403,73 @@ void print_wrap(t_sort *s)
 
 /************************* PS  -  launch sorting algorithms ***************************/
 
+int rrx_or_rx(t_list *s, int min)
+{
+	int	min_index;
+	int stack_len;
 
+	if (!s || !s->next)
+		return (2);
+	stack_len = 0;
+	min_index = 0;
+	while (s)
+	{
+		if (*(int *)s->content == min)
+			min_index = stack_len;
+		stack_len++;
+		s = s->next; 
+	} 
+	return (min_index * 100 / stack_len > 50) ? 0 : 1;	
+}
 
-
-void launch_bubble(t_sort *s)
+int find_min(t_list *s)
 {	
-	int i;
+	int min;
+	
+	if (!s || !s->next)
+		return (-1);
+	min = *(int *)s->content;
+	while (s)
+	{
+		min = (*(int *)s->content < min) ? *(int *)s->content : min;
+		s = s->next;
+	}	
+	return (min);
+}
+
+void launch_fmin(t_sort *s)
+{	
+	int min;
+	int best_cmd;
 
 	s->sa = create_stack(s->cargc, s->cargv);	
 	s->sb = NULL;
 
-//	print_two(s->sa, s->sb, nb_digit(array_max_min(s->cargc, s->cargv))); // 
+	print_two(s->sa, s->sb, nb_digit(array_max_min(s->cargc, s->cargv))); // 
+//	min = find_min(s->sa);
+//	printf("\nMin = %d\n", min);
+//	if (rrx_or_rx(s->sa, min) == 0)
+//		printf("Best command to reach %d is RRX\n", min);
+//	else 	
+//		printf("Best command to reach %d is RX\n", min);
 
-	while (!is_sorted(s->sa, s->sb))
-	{	
-		i = 0;
-		while (!is_sorted(s->sa, s->sb))	
-		{
-			if (s->sa && s->sa->next)
-				if (*(int *)s->sa->content > *(int *)s->sa->next->content)	
-				{
-					launch_sort(&s->sa, &s->sb, "sa");
-					s->nb_cmd++;	
-				}	
-			if (!is_sorted(s->sa, s->sb))	
-			{
-			launch_sort(&s->sa, &s->sb, "ra");
-			s->nb_cmd++;	
-			}
-			i++;
-		}
-//		print_two(s->sa, s->sb, nb_digit(array_max_min(s->cargc, s->cargv)));
+	while (s->sa != NULL)
+	{
+		min = find_min(s->sa);	
+		best_cmd = rrx_or_rx(s->sa, min);
+		if (best_cmd == 0)
+			while (*(int *)s->sa->content != min)
+				launch_wrapper(s, "rra", 0);
+		else if (best_cmd == 1)
+			while (*(int *)s->sa->content != min)
+				launch_wrapper(s, "ra", 0);
+		launch_wrapper(s, "pb", 0);
 	}
+	while (s->sb != NULL)	
+		launch_wrapper(s, "pa", 0);
+			
+
+	
 	print_two(s->sa, s->sb, nb_digit(array_max_min(s->cargc, s->cargv)));
 	printf("%s : %zu operations for %d values\n", s->name, s->nb_cmd, s->cargc - 1);
 }
@@ -470,47 +505,12 @@ void launch_basic(t_sort *s)
 	}	
 }
 
-//void launch_basic(t_sort *s)
-//{
-//	s->sa = create_stack(s->cargc, s->cargv);	
-//	s->sb = NULL;
-//
-//	print_two(s->sa, s->sb, nb_digit(array_max_min(s->cargc, s->cargv)));
-//
-//	while (!is_sorted(s->sa, s->sb))
-//	{	
-//		while (s->sa != NULL)	
-//		{
-//			if (s->sb && s->sb->next)
-//				if (*(int *)s->sb->content < *(int *)s->sb->next->content)	
-//				{	
-//					launch_sort(&s->sa, &s->sb, "sb");
-//					s->nb_cmd++;
-//				}	
-//			launch_sort(&s->sa, &s->sb, "pb");
-//			s->nb_cmd++;
-//		}
-//		print_two(s->sa, s->sb, nb_digit(array_max_min(s->cargc, s->cargv)));
-//		while (s->sb != NULL)	
-//		{
-//			if (s->sb->next)
-//				if (*(int *)s->sb->content < *(int *)s->sb->next->content)	
-//				{
-//					launch_sort(&s->sa, &s->sb, "sb");
-//					s->nb_cmd++;
-//				}
-//			launch_sort(&s->sa, &s->sb, "pa");
-//			s->nb_cmd++;
-//		}
-//	}
-//	print_two(s->sa, s->sb, nb_digit(array_max_min(s->cargc, s->cargv)));
-//	printf("%s : %zu operations for %d values\n", s->name, s->nb_cmd, s->cargc - 1);
-//}
 
 void launch_all_sorts(t_sort **s)
 {
-	launch_basic(s[0]);
-	//launch_bubble(s[1]);
+	//launch_basic(s[0]);
+//	launch_quicksort(s[1]);
+	launch_fmin(s[2]);
 	//launch_basic(s[2]);
 	//launch_basic(s[3]);
 	//launch_basic(s[4]);
@@ -523,21 +523,38 @@ void launch_all_sorts(t_sort **s)
 
 /************************* PS  -  init_sorts  ***************************/
 
-t_sort *init_bubble(int argc, char **argv, int *flag)
+t_sort *init_fmin(int argc, char **argv, int *flag)
 {
-	t_sort *bubble;
+	t_sort *fmin;
 
-	if ((bubble = (t_sort *)malloc(sizeof(t_sort))) == 0)
+	if ((fmin = (t_sort *)malloc(sizeof(t_sort))) == 0)
 		return (NULL);		
-	bubble->name = "Bubble sort";
-	bubble->nb_cmd = 0;
-	bubble->cargc = argc; 
-	bubble->cargv = argv;
-	bubble->cflag = flag;
-	bubble->cmd_lst = NULL;
-	bubble->sa = NULL;  
-	bubble->sb = NULL;  
-	return (bubble);
+	fmin->name = "Fmin";
+	fmin->nb_cmd = 0;
+	fmin->cargc = argc; 
+	fmin->cargv = argv;
+	fmin->cflag = flag;
+	fmin->cmd_lst = NULL;
+	fmin->sa = NULL;  
+	fmin->sb = NULL;  
+	return (fmin);
+}
+
+t_sort *init_quicksort(int argc, char **argv, int *flag)
+{
+	t_sort *quicksort;
+
+	if ((quicksort = (t_sort *)malloc(sizeof(t_sort))) == 0)
+		return (NULL);		
+	quicksort->name = "Quicksort";
+	quicksort->nb_cmd = 0;
+	quicksort->cargc = argc; 
+	quicksort->cargv = argv;
+	quicksort->cflag = flag;
+	quicksort->cmd_lst = NULL;
+	quicksort->sa = NULL;  
+	quicksort->sb = NULL;  
+	return (quicksort);
 }
 
 t_sort *init_basic(int argc, char **argv, int *flag)
@@ -563,7 +580,8 @@ t_sort  **init_sorts(int argc, char **argv, int *flag)
 
 	s = (t_sort **)malloc(sizeof(t_sort *) * 5);
 	s[0] = init_basic(argc, argv, flag);
-	s[1] = init_bubble(argc, argv, flag);
+	s[1] = init_quicksort(argc, argv, flag);
+	s[2] = init_fmin(argc, argv, flag);
 	//init_basic(s, argv, argc, flag);
 	//init_basic(s, argv, argc, flag);
 	//init_basic(s, argv, argc, flag);
