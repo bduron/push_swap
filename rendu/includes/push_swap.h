@@ -28,6 +28,7 @@ typedef struct s_sort
 	int 	cargc;
 	char 	**cargv;
 	int 	*cflag;
+	int 	*arr;
 }				t_sort;
 
 int nb_digit(int n);

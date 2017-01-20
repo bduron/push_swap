@@ -437,6 +437,33 @@ int find_min(t_list *s)
 	return (min);
 }
 
+
+void launch_fmed(t_sort *s)
+{	
+	int i;
+
+	s->sa = create_stack(s->cargc, s->cargv);	
+	s->sb = NULL;
+
+	print_two(s->sa, s->sb, nb_digit(array_max_min(s->cargc, s->cargv))); // 
+	
+	i = 0;
+	while (i < s->cargc - 1)
+		printf("%d ", s->arr[i++]);
+	
+
+//	min = find_min(s->sa);
+//	printf("\nMin = %d\n", min);
+//	if (rrx_or_rx(s->sa, min) == 0)
+//		printf("Best command to reach %d is RRX\n", min);
+//	else 	
+//		printf("Best command to reach %d is RX\n", min);
+
+			
+	print_two(s->sa, s->sb, nb_digit(array_max_min(s->cargc, s->cargv)));
+	printf("%s : %zu operations for %d values\n", s->name, s->nb_cmd, s->cargc - 1);
+}
+
 void launch_fmin(t_sort *s)
 {	
 	int min;
@@ -446,30 +473,21 @@ void launch_fmin(t_sort *s)
 	s->sb = NULL;
 
 	print_two(s->sa, s->sb, nb_digit(array_max_min(s->cargc, s->cargv))); // 
-//	min = find_min(s->sa);
-//	printf("\nMin = %d\n", min);
-//	if (rrx_or_rx(s->sa, min) == 0)
-//		printf("Best command to reach %d is RRX\n", min);
-//	else 	
-//		printf("Best command to reach %d is RX\n", min);
-
 	while (s->sa != NULL)
 	{
 		min = find_min(s->sa);	
-		best_cmd = rrx_or_rx(s->sa, min);
-		if (best_cmd == 0)
-			while (*(int *)s->sa->content != min)
-				launch_wrapper(s, "rra", 0);
-		else if (best_cmd == 1)
-			while (*(int *)s->sa->content != min)
-				launch_wrapper(s, "ra", 0);
+      	best_cmd = rrx_or_rx(s->sa, min);
+      	if (best_cmd == 0)
+      		while (*(int *)s->sa->content != min)
+      			launch_wrapper(s, "rra", 0);
+      	else if (best_cmd == 1)
+      		while (*(int *)s->sa->content != min)
+      			launch_wrapper(s, "ra", 0);
 		launch_wrapper(s, "pb", 0);
 	}
 	while (s->sb != NULL)	
 		launch_wrapper(s, "pa", 0);
 			
-
-	
 	print_two(s->sa, s->sb, nb_digit(array_max_min(s->cargc, s->cargv)));
 	printf("%s : %zu operations for %d values\n", s->name, s->nb_cmd, s->cargc - 1);
 }
@@ -508,9 +526,10 @@ void launch_basic(t_sort *s)
 
 void launch_all_sorts(t_sort **s)
 {
-	//launch_basic(s[0]);
+//	launch_basic(s[0]);
 //	launch_quicksort(s[1]);
-	launch_fmin(s[2]);
+//	launch_fmin(s[2]);
+	launch_fmed(s[3]);
 	//launch_basic(s[2]);
 	//launch_basic(s[3]);
 	//launch_basic(s[4]);
@@ -519,9 +538,90 @@ void launch_all_sorts(t_sort **s)
 
 }
 
+/********* generate array, quicksort it, find median ************/
+
+int *arr_to_sort(int argc, char **argv)
+{
+	int *arr;
+	int i;
+
+	arr = (int *)malloc(sizeof(int) * argc - 1);
+	i = 0;
+	while (i < argc - 1)
+	{
+		arr[i] = ft_atoi(argv[i + 1]);
+		i++;
+	}	
+	return (arr);
+}
+
+void swap(int *a, int *b)
+{
+        int swap;
+
+        swap = *a;
+        *a = *b;
+        *b = swap;
+}
+
+int partionning(int *arr, int start, int end)
+{
+        int pindex;
+        int pivot;
+        int i;
+
+        pindex = start;
+        pivot = arr[end];
+        i = start ;
+        while (i < end)
+        {
+                if (arr[i] <= pivot)
+                {
+                        swap(&arr[i], &arr[pindex]);
+                        pindex++;
+                }
+                i++;
+        }
+        swap(&arr[end], &arr[pindex]); 
+        return (pindex);
+}
+
+int *quicksort(int *arr, int start, int end)
+{
+        int pindex;
+
+        if (start >= end)
+                return (0);
+        pindex = partionning(arr, start, end);
+        quicksort(arr, start, pindex - 1);
+        quicksort(arr, pindex + 1, end);
+        return (arr);
+}
+
 
 
 /************************* PS  -  init_sorts  ***************************/
+
+
+t_sort *init_fmed(int argc, char **argv, int *flag)
+{
+	t_sort *fmed;
+
+	if ((fmed = (t_sort *)malloc(sizeof(t_sort))) == 0)
+		return (NULL);		
+	fmed->name = "Fmed";
+	fmed->nb_cmd = 0;
+	fmed->cargc = argc; 
+	fmed->cargv = argv;
+	fmed->cflag = flag;
+	fmed->cmd_lst = NULL;
+	fmed->sa = NULL;  
+	fmed->sb = NULL;  
+	fmed->arr = arr_to_sort(argc, argv);	
+//	fmed->arr = quicksort(arr_to_sort(argc, argv), 0, argc - 2);	
+	quicksort(fmed->arr, 0, argc - 2);	
+	return (fmed);
+}
 
 t_sort *init_fmin(int argc, char **argv, int *flag)
 {
@@ -582,6 +682,7 @@ t_sort  **init_sorts(int argc, char **argv, int *flag)
 	s[0] = init_basic(argc, argv, flag);
 	s[1] = init_quicksort(argc, argv, flag);
 	s[2] = init_fmin(argc, argv, flag);
+	s[3] = init_fmed(argc, argv, flag);
 	//init_basic(s, argv, argc, flag);
 	//init_basic(s, argv, argc, flag);
 	//init_basic(s, argv, argc, flag);
@@ -589,6 +690,7 @@ t_sort  **init_sorts(int argc, char **argv, int *flag)
 
 	return (s);
 }
+
 
 
 /************************* PS - Main  ***************************/
