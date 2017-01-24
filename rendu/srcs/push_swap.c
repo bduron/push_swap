@@ -422,6 +422,38 @@ int rrx_or_rx(t_list *s, int min)
 	return (min_index * 100 / stack_len > 50) ? 0 : 1;	
 }
 
+int find_next_up(t_list *s, int median)
+{	
+	int first;
+	int last;
+	int first_i;
+	int last_i;
+	int i;
+
+	if (!s || !s->next)
+		return (-1);
+	first_i = 0;
+	last_i = 0;
+	i = 0;
+	first = -1;
+	last = -1;
+	while (s)
+	{
+		if (first == -1 && *(int *)s->content > median)
+			first = *(int *)s->content;
+		if (first == -1)	
+			first_i++;
+		if (*(int *)s->content > median)
+		{
+			last = *(int *)s->content;
+			last_i = i;
+		}
+		i++;
+		s = s->next;		
+	}		
+	// IF last && first == -1 ? 
+	return (first_i < (i - last_i)) ? first : last;
+}
 
 int find_next(t_list *s, int median)
 {	
@@ -505,21 +537,23 @@ void launch_fquar(t_sort *s)
 	int i;
 	int max;
 	int best_cmd;
-	int next;
+//	int next;
 
 	s->sa = create_stack(s->cargc, s->cargv);	
 	s->sb = NULL;
 
 	print_two(s->sa, s->sb, nb_digit(array_max_min(s->cargc, s->cargv))); // 
 	
-//	printf("\nQuartiles\n");
-//	i = 0;
-//	while (s->quarts[i] != -1)
-//		printf("%d ", s->quarts[i++]);
+	printf("\nQuartiles\n");
+	i = 0;
+	while (s->quarts[i] != -1)
+		printf("%d ", s->quarts[i++]);
 //////////// FIND NEAREST
-//	i = 0;
-//	int next = find_next(s->sa, s->quarts[i]);
-//	printf("\nThe nearest number below the median %d is %d.\n", s->quarts[i], next);
+	i = 0;
+	int next = find_next_up(s->sa, 75);
+	printf("\nThe nearest number > %d is %d.\n", 75, next);
+
+
 
 	i = 0;
 	while (s->sa)
@@ -829,6 +863,7 @@ int *quicksort(int *arr, int start, int end)
 t_sort *init_fquar(int argc, char **argv, int *flag)
 {
 	t_sort *fquar;
+	int nb_quart;
 
 	if ((fquar = (t_sort *)malloc(sizeof(t_sort))) == 0)
 		return (NULL);		
@@ -842,7 +877,8 @@ t_sort *init_fquar(int argc, char **argv, int *flag)
 	fquar->sb = NULL;  
 	fquar->arr = arr_to_sort(argc, argv);	
 	quicksort(fquar->arr, 0, argc - 2);	
-	fquar->quarts = find_quartiles(fquar->arr, argc - 1, 40); // rendre nb_quartiles variable 
+	nb_quart = (argc - 1) / 10;
+	fquar->quarts = find_quartiles(fquar->arr, argc - 1, nb_quart); // rendre nb_quartiles variable 
 	return (fquar);
 }
 
