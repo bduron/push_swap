@@ -422,6 +422,56 @@ int rrx_or_rx(t_list *s, int min)
 	return (min_index * 100 / stack_len > 50) ? 0 : 1;	
 }
 
+
+int find_next(t_list *s, int median)
+{	
+	int first;
+	int last;
+	int first_i;
+	int last_i;
+	int i;
+
+	if (!s || !s->next)
+		return (-1);
+	first_i = 0;
+	last_i = 0;
+	i = 0;
+	first = -1;
+	last = -1;
+	while (s)
+	{
+		if (first == -1 && *(int *)s->content <= median)
+			first = *(int *)s->content;
+		if (first == -1)	
+			first_i++;
+		if (*(int *)s->content <= median)
+		{
+			last = *(int *)s->content;
+			last_i = i;
+		}
+		i++;
+		s = s->next;		
+	}		
+	// IF last && first == -1 ? 
+	return (first_i < (i - last_i)) ? first : last;
+}
+
+
+int find_max(t_list *s)
+{	
+	int max;
+	
+	if (!s || !s->next)
+		return (-1);
+	max = *(int *)s->content;
+	while (s)
+	{
+		max = (*(int *)s->content > max) ? *(int *)s->content : max;
+		s = s->next;
+	}	
+	return (max);
+}
+
 int find_min(t_list *s)
 {	
 	int min;
@@ -437,21 +487,137 @@ int find_min(t_list *s)
 	return (min);
 }
 
+int medians_rem(t_list *s, int n)
+{
+	if (!s)
+		return (-1);	
+	while (s)
+	{
+		if (*(int *)s->content <= n)
+			return (1);
+		s = s->next;	
+	}	
+	return (0);
+}
 
-void launch_fmed(t_sort *s)
+void launch_fquar(t_sort *s)
 {	
 	int i;
+	int max;
+	int best_cmd;
+	int next;
 
 	s->sa = create_stack(s->cargc, s->cargv);	
 	s->sb = NULL;
 
 	print_two(s->sa, s->sb, nb_digit(array_max_min(s->cargc, s->cargv))); // 
 	
-	i = 0;
-	while (i < s->cargc - 1)
-		printf("%d ", s->arr[i++]);
-	
+//	printf("\nQuartiles\n");
+//	i = 0;
+//	while (s->quarts[i] != -1)
+//		printf("%d ", s->quarts[i++]);
+//////////// FIND NEAREST
+//	i = 0;
+//	int next = find_next(s->sa, s->quarts[i]);
+//	printf("\nThe nearest number below the median %d is %d.\n", s->quarts[i], next);
 
+	i = 0;
+	while (s->sa)
+	{
+		if (*(int *)s->sa->content <= s->quarts[i])
+    		launch_wrapper(s, "pb", 0);
+		if (medians_rem(s->sa, s->quarts[i]) == 0)
+			i++; 
+		next = find_next(s->sa, s->quarts[i]);	
+      	best_cmd = rrx_or_rx(s->sa, next);
+      	if (best_cmd == 0)
+      		while (*(int *)s->sa->content != next)
+      			launch_wrapper(s, "rra", 0);
+      	else if (best_cmd == 1)
+      		while (*(int *)s->sa->content != next)
+      			launch_wrapper(s, "ra", 0);
+	}
+    launch_wrapper(s, "pb", 0);
+	while (s->sb != NULL)
+	{
+		max = find_max(s->sb);	
+      	best_cmd = rrx_or_rx(s->sb, max);
+      	if (best_cmd == 0)
+      		while (*(int *)s->sb->content != max)
+      			launch_wrapper(s, "rrb", 0);
+      	else if (best_cmd == 1)
+      		while (*(int *)s->sb->content != max)
+      			launch_wrapper(s, "rb", 0);
+		launch_wrapper(s, "pa", 0);
+	}
+		
+			
+	print_two(s->sa, s->sb, nb_digit(array_max_min(s->cargc, s->cargv)));
+	printf("%s : %zu operations for %d values\n", s->name, s->nb_cmd, s->cargc - 1);
+//	while (s->cmd_lst)
+//	{
+//		printf("%s\n", (char *)s->cmd_lst->content);	
+//		s->cmd_lst = s->cmd_lst->next; 	
+//	}	
+}
+
+void launch_fmed(t_sort *s)
+{	
+	int i;
+	int max;
+	int best_cmd;
+	int next;
+
+	s->sa = create_stack(s->cargc, s->cargv);	
+	s->sb = NULL;
+
+	print_two(s->sa, s->sb, nb_digit(array_max_min(s->cargc, s->cargv))); // 
+	
+//	printf("\n");
+//	i = 0;
+//	while (i < s->cargc - 1)
+//		printf("%d ", s->arr[i++]);
+//	printf("\nlog(16) = %d\n", find_log(16));
+//	i = 0;
+//	while (s->medians[i] != -1)
+//		printf("%d ", s->medians[i++]);
+//////////// FIND NEAREST
+//	i = 0;
+//	int next = find_next(s->sa, s->medians[i]);
+//	printf("The nearest number below the median %d is %d.\n", s->medians[i], next);
+
+
+
+	i = 0;
+	while (s->medians[i] != -1)
+	{
+		if (*(int *)s->sa->content <= s->medians[i])
+    		launch_wrapper(s, "pb", 1);
+		if (medians_rem(s->sa, s->medians[i]) == 0)
+			i++; 
+		next = find_next(s->sa, s->medians[i]);	
+      	best_cmd = rrx_or_rx(s->sa, next);
+      	if (best_cmd == 0)
+      		while (*(int *)s->sa->content != next)
+      			launch_wrapper(s, "rra", 1);
+      	else if (best_cmd == 1)
+      		while (*(int *)s->sa->content != next)
+      			launch_wrapper(s, "ra", 1);
+	}
+    launch_wrapper(s, "pb", 1);
+	while (s->sb != NULL)
+	{
+		max = find_max(s->sb);	
+      	best_cmd = rrx_or_rx(s->sb, max);
+      	if (best_cmd == 0)
+      		while (*(int *)s->sb->content != max)
+      			launch_wrapper(s, "rrb", 1);
+      	else if (best_cmd == 1)
+      		while (*(int *)s->sb->content != max)
+      			launch_wrapper(s, "rb", 1);
+		launch_wrapper(s, "pa", 1);
+	}
+		
 //	min = find_min(s->sa);
 //	printf("\nMin = %d\n", min);
 //	if (rrx_or_rx(s->sa, min) == 0)
@@ -462,6 +628,11 @@ void launch_fmed(t_sort *s)
 			
 	print_two(s->sa, s->sb, nb_digit(array_max_min(s->cargc, s->cargv)));
 	printf("%s : %zu operations for %d values\n", s->name, s->nb_cmd, s->cargc - 1);
+	while (s->cmd_lst)
+	{
+		printf("%s\n", (char *)s->cmd_lst->content);	
+		s->cmd_lst = s->cmd_lst->next; 	
+	}	
 }
 
 void launch_fmin(t_sort *s)
@@ -472,7 +643,7 @@ void launch_fmin(t_sort *s)
 	s->sa = create_stack(s->cargc, s->cargv);	
 	s->sb = NULL;
 
-	print_two(s->sa, s->sb, nb_digit(array_max_min(s->cargc, s->cargv))); // 
+////	print_two(s->sa, s->sb, nb_digit(array_max_min(s->cargc, s->cargv))); // 
 	while (s->sa != NULL)
 	{
 		min = find_min(s->sa);	
@@ -488,7 +659,7 @@ void launch_fmin(t_sort *s)
 	while (s->sb != NULL)	
 		launch_wrapper(s, "pa", 0);
 			
-	print_two(s->sa, s->sb, nb_digit(array_max_min(s->cargc, s->cargv)));
+////	print_two(s->sa, s->sb, nb_digit(array_max_min(s->cargc, s->cargv)));
 	printf("%s : %zu operations for %d values\n", s->name, s->nb_cmd, s->cargc - 1);
 }
 
@@ -514,13 +685,13 @@ void launch_basic(t_sort *s)
 			launch_wrapper(s, "pa", 0);
 		}
 	}
-	print_wrap(s);
+////	print_wrap(s);
 	printf("%s : %zu operations for %d values\n", s->name, s->nb_cmd, s->cargc - 1);
-	while (s->cmd_lst)
-	{
-		printf("%s\n", (char *)s->cmd_lst->content);	
-		s->cmd_lst = s->cmd_lst->next; 	
-	}	
+//	while (s->cmd_lst)
+//	{
+//		printf("%s\n", (char *)s->cmd_lst->content);	
+//		s->cmd_lst = s->cmd_lst->next; 	
+//	}	
 }
 
 
@@ -529,7 +700,8 @@ void launch_all_sorts(t_sort **s)
 //	launch_basic(s[0]);
 //	launch_quicksort(s[1]);
 //	launch_fmin(s[2]);
-	launch_fmed(s[3]);
+//	launch_fmed(s[3]);
+	launch_fquar(s[4]);
 	//launch_basic(s[2]);
 	//launch_basic(s[3]);
 	//launch_basic(s[4]);
@@ -540,6 +712,57 @@ void launch_all_sorts(t_sort **s)
 
 /********* generate array, quicksort it, find median ************/
 
+int find_log(int n)
+{
+	int i;
+
+	i = 0;
+	while (n /= 2)
+		i++;	
+	return (i);
+}
+
+int *find_quartiles(int *arr, int size, int nb)
+{
+	int *quartiles;
+	int i;	
+	int j;
+
+	quartiles = (int *)malloc(sizeof(int) * nb + 2);	
+	i = 0;
+	j = 0;
+	while (i < size && j < nb)
+	{
+		i = i + size / (nb + 1);
+		quartiles[j] = arr[i];
+		j++;
+	}	 	
+	quartiles[j++] = arr[size - 1];	
+	quartiles[j] = -1;	
+	return (quartiles);
+}
+
+int *find_medians(int *arr, int size)
+{
+	int *medians;
+	int i;	
+	int len;
+
+	medians = (int *)malloc(sizeof(int) * find_log(size) + 1);	
+
+	i = 0;
+	len = size;
+	while (size /= 2)
+		medians[i++] = arr[len - size - 1];
+		 	
+	medians[i] = -1;	
+
+	return (medians);
+}
+
+                                                    
+/////////////////// FIND MEDIAN ///////////////////
+                                                  
 int *arr_to_sort(int argc, char **argv)
 {
 	int *arr;
@@ -603,13 +826,33 @@ int *quicksort(int *arr, int start, int end)
 /************************* PS  -  init_sorts  ***************************/
 
 
+t_sort *init_fquar(int argc, char **argv, int *flag)
+{
+	t_sort *fquar;
+
+	if ((fquar = (t_sort *)malloc(sizeof(t_sort))) == 0)
+		return (NULL);		
+	fquar->name = "Find quartiles sort";
+	fquar->nb_cmd = 0;
+	fquar->cargc = argc; 
+	fquar->cargv = argv;
+	fquar->cflag = flag;
+	fquar->cmd_lst = NULL;
+	fquar->sa = NULL;  
+	fquar->sb = NULL;  
+	fquar->arr = arr_to_sort(argc, argv);	
+	quicksort(fquar->arr, 0, argc - 2);	
+	fquar->quarts = find_quartiles(fquar->arr, argc - 1, 40); // rendre nb_quartiles variable 
+	return (fquar);
+}
+
 t_sort *init_fmed(int argc, char **argv, int *flag)
 {
 	t_sort *fmed;
 
 	if ((fmed = (t_sort *)malloc(sizeof(t_sort))) == 0)
 		return (NULL);		
-	fmed->name = "Fmed";
+	fmed->name = "Find medians sort";
 	fmed->nb_cmd = 0;
 	fmed->cargc = argc; 
 	fmed->cargv = argv;
@@ -618,8 +861,8 @@ t_sort *init_fmed(int argc, char **argv, int *flag)
 	fmed->sa = NULL;  
 	fmed->sb = NULL;  
 	fmed->arr = arr_to_sort(argc, argv);	
-//	fmed->arr = quicksort(arr_to_sort(argc, argv), 0, argc - 2);	
 	quicksort(fmed->arr, 0, argc - 2);	
+	fmed->medians = find_medians(fmed->arr, argc - 1);
 	return (fmed);
 }
 
@@ -629,7 +872,7 @@ t_sort *init_fmin(int argc, char **argv, int *flag)
 
 	if ((fmin = (t_sort *)malloc(sizeof(t_sort))) == 0)
 		return (NULL);		
-	fmin->name = "Fmin";
+	fmin->name = "Find min sort";
 	fmin->nb_cmd = 0;
 	fmin->cargc = argc; 
 	fmin->cargv = argv;
@@ -683,8 +926,7 @@ t_sort  **init_sorts(int argc, char **argv, int *flag)
 	s[1] = init_quicksort(argc, argv, flag);
 	s[2] = init_fmin(argc, argv, flag);
 	s[3] = init_fmed(argc, argv, flag);
-	//init_basic(s, argv, argc, flag);
-	//init_basic(s, argv, argc, flag);
+	s[4] = init_fquar(argc, argv, flag);
 	//init_basic(s, argv, argc, flag);
 	//init_basic(s, argv, argc, flag);
 

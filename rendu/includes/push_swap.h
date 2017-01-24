@@ -29,8 +29,11 @@ typedef struct s_sort
 	char 	**cargv;
 	int 	*cflag;
 	int 	*arr;
+	int 	*medians;
+	int 	*quarts;
 }				t_sort;
 
 int nb_digit(int n);
+int find_log(int n);
 
 #endif
