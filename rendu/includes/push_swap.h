@@ -6,7 +6,7 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/05 14:54:52 by bduron            #+#    #+#             */
-/*   Updated: 2017/01/11 15:57:32 by bduron           ###   ########.fr       */
+/*   Updated: 2017/01/25 13:05:56 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ typedef struct s_sort
 	int 	*arr;
 	int 	*medians;
 	int 	*quarts;
+	int 	nb_quarts;
 }				t_sort;
 
 int nb_digit(int n);

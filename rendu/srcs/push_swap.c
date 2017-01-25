@@ -6,7 +6,7 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/11 08:50:53 by bduron            #+#    #+#             */
-/*   Updated: 2017/01/11 17:24:23 by bduron           ###   ########.fr       */
+/*   Updated: 2017/01/25 15:52:43 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -422,6 +422,41 @@ int rrx_or_rx(t_list *s, int min)
 	return (min_index * 100 / stack_len > 50) ? 0 : 1;	
 }
 
+
+int find_quartile(t_list *s, int lower, int upper)
+{	
+	int first;
+	int last;
+	int first_i;
+	int last_i;
+	int i;
+
+	if (!s || !s->next)
+		return (-1);
+	first_i = 0;
+	last_i = 0;
+	i = 0;
+	first = -1;
+	last = -1;
+	while (s)
+	{
+		if (first == -1 && 
+				(*(int *)s->content > upper || *(int *)s->content <= lower))
+			first = *(int *)s->content;
+		if (first == -1)	
+			first_i++;
+		if (*(int *)s->content > upper || *(int *)s->content <= lower)
+		{
+			last = *(int *)s->content;
+			last_i = i;
+		}
+		i++;
+		s = s->next;		
+	}		
+	// IF last && first == -1 ? 
+	return (first_i < (i - last_i)) ? first : last;
+}
+
 int find_next_up(t_list *s, int median)
 {	
 	int first;
@@ -519,6 +554,19 @@ int find_min(t_list *s)
 	return (min);
 }
 
+int quarts_rem(t_list *s, int lower, int upper)
+{
+	if (!s)
+		return (-1);	
+	while (s)
+	{
+		if (*(int *)s->content <= lower || *(int *)s->content > upper)
+			return (1);
+		s = s->next;	
+	}	
+	return (0);
+}
+
 int medians_rem(t_list *s, int n)
 {
 	if (!s)
@@ -542,47 +590,73 @@ void launch_fquar(t_sort *s)
 	s->sa = create_stack(s->cargc, s->cargv);	
 	s->sb = NULL;
 
-	print_two(s->sa, s->sb, nb_digit(array_max_min(s->cargc, s->cargv))); // 
+//	print_two(s->sa, s->sb, nb_digit(array_max_min(s->cargc, s->cargv))); // 
 	
 	printf("\nQuartiles\n");
 	i = 0;
-	while (s->quarts[i] != -1)
+	while (i < s->nb_quarts)
 		printf("%d ", s->quarts[i++]);
 //////////// FIND NEAREST
 	i = 0;
-	int next = find_next_up(s->sa, 75);
-	printf("\nThe nearest number > %d is %d.\n", 75, next);
-
+	int next = find_quartile(s->sa, s->quarts[0], s->quarts[s->nb_quarts - 1]);
+	printf("\nThe nearest number (<= %d || > %d) is %d.\n", s->quarts[0], s->quarts[s->nb_quarts - 1], next);
 
 
 	i = 0;
 	while (s->sa)
 	{
+		printf("val = %d\n", s->quarts[s->nb_quarts - 1 - i]);
 		if (*(int *)s->sa->content <= s->quarts[i])
     		launch_wrapper(s, "pb", 0);
-		if (medians_rem(s->sa, s->quarts[i]) == 0)
-			i++; 
-		next = find_next(s->sa, s->quarts[i]);	
+		else if (*(int *)s->sa->content > s->quarts[s->nb_quarts - 1 - i])
+		{
+    		launch_wrapper(s, "pb", 0);
+    		launch_wrapper(s, "rb", 0);
+		}
+			
+
+		if (quarts_rem(s->sa, s->quarts[i], s->quarts[s->nb_quarts - 1 - i]) == 0)
+			i++;
+
+
+		next = find_quartile(s->sa, s->quarts[i], s->quarts[s->nb_quarts - 1 - i]);
+		printf("\nnext = %d\ni = %d\n", next, i);
       	best_cmd = rrx_or_rx(s->sa, next);
       	if (best_cmd == 0)
       		while (*(int *)s->sa->content != next)
+			{
       			launch_wrapper(s, "rra", 0);
+				printf("\nnext = %d\ni = %d\n", next, i);
+			}
       	else if (best_cmd == 1)
       		while (*(int *)s->sa->content != next)
+			{
       			launch_wrapper(s, "ra", 0);
+				printf("\nnext = %d\ni = %d\n", next, i);
+			}
 	}
-    launch_wrapper(s, "pb", 0);
+    launch_wrapper(s, "pb", 1);
 	while (s->sb != NULL)
 	{
 		max = find_max(s->sb);	
       	best_cmd = rrx_or_rx(s->sb, max);
       	if (best_cmd == 0)
       		while (*(int *)s->sb->content != max)
-      			launch_wrapper(s, "rrb", 0);
+			{
+				if (*(int *)s->sb->content < *(int *)s->sb->next->content)
+					launch_wrapper(s, "sb", 1);
+				else
+					launch_wrapper(s, "rrb", 1);
+			}
       	else if (best_cmd == 1)
       		while (*(int *)s->sb->content != max)
-      			launch_wrapper(s, "rb", 0);
-		launch_wrapper(s, "pa", 0);
+			{
+				if (*(int *)s->sb->content < *(int *)s->sb->next->content)
+					launch_wrapper(s, "sb", 1);
+				else
+					launch_wrapper(s, "rb", 1);
+	}
+		launch_wrapper(s, "pa", 1);
 	}
 		
 			
@@ -764,7 +838,7 @@ int *find_quartiles(int *arr, int size, int nb)
 	int i;	
 	int j;
 
-	quartiles = (int *)malloc(sizeof(int) * nb + 2);	
+	quartiles = (int *)malloc(sizeof(int) * nb);	
 	i = 0;
 	j = 0;
 	while (i < size && j < nb)
@@ -773,8 +847,6 @@ int *find_quartiles(int *arr, int size, int nb)
 		quartiles[j] = arr[i];
 		j++;
 	}	 	
-	quartiles[j++] = arr[size - 1];	
-	quartiles[j] = -1;	
 	return (quartiles);
 }
 
@@ -865,7 +937,6 @@ int *quicksort(int *arr, int start, int end)
 t_sort *init_fquar(int argc, char **argv, int *flag)
 {
 	t_sort *fquar;
-	int nb_quart;
 
 	if ((fquar = (t_sort *)malloc(sizeof(t_sort))) == 0)
 		return (NULL);		
@@ -879,8 +950,8 @@ t_sort *init_fquar(int argc, char **argv, int *flag)
 	fquar->sb = NULL;  
 	fquar->arr = arr_to_sort(argc, argv);	
 	quicksort(fquar->arr, 0, argc - 2);	
-	nb_quart = (argc - 1) / 10;
-	fquar->quarts = find_quartiles(fquar->arr, argc - 1, nb_quart); // rendre nb_quartiles variable 
+	fquar->nb_quarts = (argc - 1) / 4 - 1;
+	fquar->quarts = find_quartiles(fquar->arr, argc - 1, fquar->nb_quarts); // rendre nb_quartiles variable 
 	return (fquar);
 }
 
@@ -1092,4 +1163,26 @@ int main(int argc, char **argv)
 ////		printf("%s\n", (char *)s->cmd_lst->content);	
 ////		s->cmd_lst = s->cmd_lst->next; 	
 ////	}	
+//}
+
+
+
+//int *find_quartiles(int *arr, int size, int nb)
+//{
+//	int *quartiles;
+//	int i;	
+//	int j;
+//
+//	quartiles = (int *)malloc(sizeof(int) * nb + 2);	
+//	i = 0;
+//	j = 0;
+//	while (i < size && j < nb)
+//	{
+//		i = i + size / (nb + 1);
+//		quartiles[j] = arr[i];
+//		j++;
+//	}	 	
+//	quartiles[j++] = arr[size - 1];	
+//	quartiles[j] = -1;	
+//	return (quartiles);
 //}
