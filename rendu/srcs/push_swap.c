@@ -595,6 +595,8 @@ void launch_fquar(t_sort *s)
 //	}	
 }
 
+
+
 void launch_fmed(t_sort *s)
 {	
 	int i;
@@ -1026,4 +1028,68 @@ int main(int argc, char **argv)
 //	is_sorted(stack_a, stack_b) ? printf("OK\n") : printf("KO\n");
 //
 //	return (0);
+//}
+
+
+//void launch_fquar(t_sort *s)
+//{	
+//	int i;
+//	int max;
+//	int best_cmd;
+////	int next;
+//
+//	s->sa = create_stack(s->cargc, s->cargv);	
+//	s->sb = NULL;
+//
+//	print_two(s->sa, s->sb, nb_digit(array_max_min(s->cargc, s->cargv))); // 
+//	
+//	printf("\nQuartiles\n");
+//	i = 0;
+//	while (s->quarts[i] != -1)
+//		printf("%d ", s->quarts[i++]);
+////////////// FIND NEAREST
+//	i = 0;
+//	int next = find_next_up(s->sa, 75);
+//	printf("\nThe nearest number > %d is %d.\n", 75, next);
+//
+//
+//
+//	i = 0;
+//	while (s->sa)
+//	{
+//		if (*(int *)s->sa->content <= s->quarts[i])
+//    		launch_wrapper(s, "pb", 0);
+//		if (medians_rem(s->sa, s->quarts[i]) == 0)
+//			i++; 
+//		next = find_next(s->sa, s->quarts[i]);	
+//      	best_cmd = rrx_or_rx(s->sa, next);
+//      	if (best_cmd == 0)
+//      		while (*(int *)s->sa->content != next)
+//      			launch_wrapper(s, "rra", 0);
+//      	else if (best_cmd == 1)
+//      		while (*(int *)s->sa->content != next)
+//      			launch_wrapper(s, "ra", 0);
+//	}
+//    launch_wrapper(s, "pb", 0);
+//	while (s->sb != NULL)
+//	{
+//		max = find_max(s->sb);	
+//      	best_cmd = rrx_or_rx(s->sb, max);
+//      	if (best_cmd == 0)
+//      		while (*(int *)s->sb->content != max)
+//      			launch_wrapper(s, "rrb", 0);
+//      	else if (best_cmd == 1)
+//      		while (*(int *)s->sb->content != max)
+//      			launch_wrapper(s, "rb", 0);
+//		launch_wrapper(s, "pa", 0);
+//	}
+//		
+//			
+//	print_two(s->sa, s->sb, nb_digit(array_max_min(s->cargc, s->cargv)));
+//	printf("%s : %zu operations for %d values\n", s->name, s->nb_cmd, s->cargc - 1);
+////	while (s->cmd_lst)
+////	{
+////		printf("%s\n", (char *)s->cmd_lst->content);	
+////		s->cmd_lst = s->cmd_lst->next; 	
+////	}	
 //}
