@@ -6,7 +6,7 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/11 08:50:53 by bduron            #+#    #+#             */
-/*   Updated: 2017/01/25 15:52:43 by bduron           ###   ########.fr       */
+/*   Updated: 2017/01/25 17:17:22 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -585,27 +585,26 @@ void launch_fquar(t_sort *s)
 	int i;
 	int max;
 	int best_cmd;
-//	int next;
+	int next;
 
 	s->sa = create_stack(s->cargc, s->cargv);	
 	s->sb = NULL;
 
 //	print_two(s->sa, s->sb, nb_digit(array_max_min(s->cargc, s->cargv))); // 
 	
-	printf("\nQuartiles\n");
-	i = 0;
-	while (i < s->nb_quarts)
-		printf("%d ", s->quarts[i++]);
-//////////// FIND NEAREST
-	i = 0;
-	int next = find_quartile(s->sa, s->quarts[0], s->quarts[s->nb_quarts - 1]);
-	printf("\nThe nearest number (<= %d || > %d) is %d.\n", s->quarts[0], s->quarts[s->nb_quarts - 1], next);
+//	printf("\nQuartiles\n");
+//	i = 0;
+//	while (i < s->nb_quarts)
+//		printf("%d ", s->quarts[i++]);
+////////////// FIND NEAREST
+//	i = 0;
+//	int next = find_quartile(s->sa, s->quarts[0], s->quarts[s->nb_quarts - 1]);
+//	printf("\nThe nearest number (<= %d || > %d) is %d.\n", s->quarts[0], s->quarts[s->nb_quarts - 1], next);
 
 
 	i = 0;
 	while (s->sa)
 	{
-		printf("val = %d\n", s->quarts[s->nb_quarts - 1 - i]);
 		if (*(int *)s->sa->content <= s->quarts[i])
     		launch_wrapper(s, "pb", 0);
 		else if (*(int *)s->sa->content > s->quarts[s->nb_quarts - 1 - i])
@@ -613,54 +612,35 @@ void launch_fquar(t_sort *s)
     		launch_wrapper(s, "pb", 0);
     		launch_wrapper(s, "rb", 0);
 		}
-			
 
 		if (quarts_rem(s->sa, s->quarts[i], s->quarts[s->nb_quarts - 1 - i]) == 0)
 			i++;
 
-
 		next = find_quartile(s->sa, s->quarts[i], s->quarts[s->nb_quarts - 1 - i]);
-		printf("\nnext = %d\ni = %d\n", next, i);
       	best_cmd = rrx_or_rx(s->sa, next);
       	if (best_cmd == 0)
       		while (*(int *)s->sa->content != next)
-			{
       			launch_wrapper(s, "rra", 0);
-				printf("\nnext = %d\ni = %d\n", next, i);
-			}
       	else if (best_cmd == 1)
       		while (*(int *)s->sa->content != next)
-			{
       			launch_wrapper(s, "ra", 0);
-				printf("\nnext = %d\ni = %d\n", next, i);
-			}
 	}
-    launch_wrapper(s, "pb", 1);
+    launch_wrapper(s, "pb", 0);
 	while (s->sb != NULL)
 	{
 		max = find_max(s->sb);	
       	best_cmd = rrx_or_rx(s->sb, max);
       	if (best_cmd == 0)
       		while (*(int *)s->sb->content != max)
-			{
-				if (*(int *)s->sb->content < *(int *)s->sb->next->content)
-					launch_wrapper(s, "sb", 1);
-				else
-					launch_wrapper(s, "rrb", 1);
-			}
+      			launch_wrapper(s, "rrb", 0);
       	else if (best_cmd == 1)
       		while (*(int *)s->sb->content != max)
-			{
-				if (*(int *)s->sb->content < *(int *)s->sb->next->content)
-					launch_wrapper(s, "sb", 1);
-				else
-					launch_wrapper(s, "rb", 1);
-	}
-		launch_wrapper(s, "pa", 1);
+      			launch_wrapper(s, "rb", 0);
+		launch_wrapper(s, "pa", 0);
 	}
 		
 			
-	print_two(s->sa, s->sb, nb_digit(array_max_min(s->cargc, s->cargv)));
+//	print_two(s->sa, s->sb, nb_digit(array_max_min(s->cargc, s->cargv)));
 	printf("%s : %zu operations for %d values\n", s->name, s->nb_cmd, s->cargc - 1);
 //	while (s->cmd_lst)
 //	{
@@ -950,7 +930,7 @@ t_sort *init_fquar(int argc, char **argv, int *flag)
 	fquar->sb = NULL;  
 	fquar->arr = arr_to_sort(argc, argv);	
 	quicksort(fquar->arr, 0, argc - 2);	
-	fquar->nb_quarts = (argc - 1) / 4 - 1;
+	fquar->nb_quarts = (argc - 1) / 36 - 1;
 	fquar->quarts = find_quartiles(fquar->arr, argc - 1, fquar->nb_quarts); // rendre nb_quartiles variable 
 	return (fquar);
 }
