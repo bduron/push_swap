@@ -6,7 +6,7 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/11 08:50:53 by bduron            #+#    #+#             */
-/*   Updated: 2017/01/26 16:15:32 by bduron           ###   ########.fr       */
+/*   Updated: 2017/01/26 16:41:04 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -339,7 +339,7 @@ int is_near_sorted(t_sort *s)
 	}
 	if (*(int *)tmp->content > first)
 		if (*(int *)tmp->content != max || first != min)
-		return (0);
+			return (0);
 	return (1);		
 }	
 
@@ -488,7 +488,7 @@ int find_quartile(t_list *s, int lower, int upper)
 int find_max(t_list *s)
 {	
 	int max;
-	
+
 	if (!s || !s->next)
 		return (-1);
 	max = *(int *)s->content;
@@ -525,63 +525,63 @@ void launch_fquar(t_sort *s)
 	s->sa = create_stack(s->cargc, s->cargv);	
 	s->sb = NULL;
 
-//	print_two(s->sa, s->sb, nb_digit(array_max_min(s->cargc, s->cargv))); // 
-	
-//	printf("\nQuartiles\n");
-//	i = 0;
-//	while (i < s->nb_quarts)
-//		printf("%d ", s->quarts[i++]);
-////////////// FIND NEAREST
-//	i = 0;
-//	int next = find_quartile(s->sa, s->quarts[0], s->quarts[s->nb_quarts - 1]);
-//	printf("\nThe nearest number (<= %d || > %d) is %d.\n", s->quarts[0], s->quarts[s->nb_quarts - 1], next);
+	//	print_two(s->sa, s->sb, nb_digit(array_max_min(s->cargc, s->cargv))); // 
+
+	//	printf("\nQuartiles\n");
+	//	i = 0;
+	//	while (i < s->nb_quarts)
+	//		printf("%d ", s->quarts[i++]);
+	////////////// FIND NEAREST
+	//	i = 0;
+	//	int next = find_quartile(s->sa, s->quarts[0], s->quarts[s->nb_quarts - 1]);
+	//	printf("\nThe nearest number (<= %d || > %d) is %d.\n", s->quarts[0], s->quarts[s->nb_quarts - 1], next);
 
 
 	i = 0;
 	while (s->sa)
 	{
 		if (*(int *)s->sa->content <= s->quarts[i])
-    		launch_wrapper(s, "pb", 0);
+			launch_wrapper(s, "pb", 0);
 		else if (*(int *)s->sa->content > s->quarts[s->nb_quarts - 1 - i])
 		{
-    		launch_wrapper(s, "pb", 0);
-    		launch_wrapper(s, "rb", 0);
+			launch_wrapper(s, "pb", 0);
+			launch_wrapper(s, "rb", 0);
 		}
 
 		if (quarts_rem(s->sa, s->quarts[i], s->quarts[s->nb_quarts - 1 - i]) == 0)
 			i++;
 
 		next = find_quartile(s->sa, s->quarts[i], s->quarts[s->nb_quarts - 1 - i]);
-      	best_cmd = rrx_or_rx(s->sa, next);
-      	if (best_cmd == 0)
-      		while (*(int *)s->sa->content != next)
-      			launch_wrapper(s, "rra", 0);
-      	else if (best_cmd == 1)
-      		while (*(int *)s->sa->content != next)
-      			launch_wrapper(s, "ra", 0);
+		best_cmd = rrx_or_rx(s->sa, next);
+		if (best_cmd == 0)
+			while (*(int *)s->sa->content != next)
+				launch_wrapper(s, "rra", 0);
+		else if (best_cmd == 1)
+			while (*(int *)s->sa->content != next)
+				launch_wrapper(s, "ra", 0);
 	}
-    launch_wrapper(s, "pb", 0);
+	launch_wrapper(s, "pb", 0);
 	while (s->sb != NULL)
 	{
 		max = find_max(s->sb);	
-      	best_cmd = rrx_or_rx(s->sb, max);
-      	if (best_cmd == 0)
-      		while (*(int *)s->sb->content != max)
-      			launch_wrapper(s, "rrb", 0);
-      	else if (best_cmd == 1)
-      		while (*(int *)s->sb->content != max)
-      			launch_wrapper(s, "rb", 0);
+		best_cmd = rrx_or_rx(s->sb, max);
+		if (best_cmd == 0)
+			while (*(int *)s->sb->content != max)
+				launch_wrapper(s, "rrb", 0);
+		else if (best_cmd == 1)
+			while (*(int *)s->sb->content != max)
+				launch_wrapper(s, "rb", 0);
 		launch_wrapper(s, "pa", 0);
 	}
-		
-			
-//	print_two(s->sa, s->sb, nb_digit(array_max_min(s->cargc, s->cargv)));
+
+
+	//	print_two(s->sa, s->sb, nb_digit(array_max_min(s->cargc, s->cargv)));
 	printf("%s : %zu operations for %d values\n", s->name, s->nb_cmd, s->cargc - 1);
-//	while (s->cmd_lst)
-//	{
-//		printf("%s\n", (char *)s->cmd_lst->content);	
-//		s->cmd_lst = s->cmd_lst->next; 	
-//	}	
+	//	while (s->cmd_lst)
+	//	{
+	//		printf("%s\n", (char *)s->cmd_lst->content);	
+	//		s->cmd_lst = s->cmd_lst->next; 	
+	//	}	
 }
 
 
@@ -630,53 +630,53 @@ void launch_small(t_sort *s)
 	s->sa = create_stack(s->cargc, s->cargv);	
 	s->sb = NULL;
 
-//	printf("Top content : %d\n", *(int *)s->sa->content);
+	//	printf("Top content : %d\n", *(int *)s->sa->content);
 	printf("Is this stack near sorted ? %d\n", is_near_sorted(s));
-//	printf("Top content : %d\n", *(int *)s->sa->content);
+	//	printf("Top content : %d\n", *(int *)s->sa->content);
 	printf("The nearest unsorted couple is %d\n", find_unsorted(s));
-//	printf("Top content : %d\n", *(int *)s->sa->content);
-	
+	//	printf("Top content : %d\n", *(int *)s->sa->content);
+
 
 	print_two(s->sa, s->sb, nb_digit(array_max_min(s->cargc, s->cargv)));
 	while (!is_near_sorted(s))
 	{
 		if (*(int *)s->sa->content > *(int *)s->sa->next->content
 				&& (*(int *)s->sa->content != max 
-				|| *(int *)s->sa->next->content != min))
+					|| *(int *)s->sa->next->content != min))
 			launch_wrapper(s, "sa", 0);
-
-		next = find_unsorted(s);
-      	best_cmd = rrx_or_rx(s->sa, next);
-      	if (best_cmd == 0)
-      		while (*(int *)s->sa->content != next)
-      			launch_wrapper(s, "rra", 0);
-      	else if (best_cmd == 1)
-      		while (*(int *)s->sa->content != next)
-      			launch_wrapper(s, "ra", 0);
-//		find next unsorted couple
-//			find best cmd to push it on top of stack
+		else 
+		{	
+			next = find_unsorted(s);
+			best_cmd = rrx_or_rx(s->sa, next);
+			if (best_cmd == 0)
+				while (*(int *)s->sa->content != next)
+					launch_wrapper(s, "rra", 0);
+			else if (best_cmd == 1)
+				while (*(int *)s->sa->content != next)
+					launch_wrapper(s, "ra", 0);
+		}
 	}
 	while (!is_sorted(s->sa, s->sb))
 	{
-      	best_cmd = rrx_or_rx(s->sa, min);
-      	if (best_cmd == 0)
-      		while (*(int *)s->sa->content != min)
-      			launch_wrapper(s, "rra", 1);
-      	else if (best_cmd == 1)
-      		while (*(int *)s->sa->content != min)
-      			launch_wrapper(s, "ra", 1);
-	//	find best cmd to put Min on top 
-	//	while (current != min)		
-	//		best_cmd;
+		best_cmd = rrx_or_rx(s->sa, min);
+		if (best_cmd == 0)
+			while (*(int *)s->sa->content != min)
+				launch_wrapper(s, "rra", 1);
+		else if (best_cmd == 1)
+			while (*(int *)s->sa->content != min)
+				launch_wrapper(s, "ra", 1);
+		//	find best cmd to put Min on top 
+		//	while (current != min)		
+		//		best_cmd;
 	}
 
-//	print_two(s->sa, s->sb, nb_digit(array_max_min(s->cargc, s->cargv)));
+	//	print_two(s->sa, s->sb, nb_digit(array_max_min(s->cargc, s->cargv)));
 	printf("%s : %zu operations for %d values\n", s->name, s->nb_cmd, s->cargc - 1);
-//	while (s->cmd_lst)
-//	{
-//		printf("%s\n", (char *)s->cmd_lst->content);	
-//		s->cmd_lst = s->cmd_lst->next; 	
-//	}	
+	//	while (s->cmd_lst)
+	//	{
+	//		printf("%s\n", (char *)s->cmd_lst->content);	
+	//		s->cmd_lst = s->cmd_lst->next; 	
+	//	}	
 }
 
 
@@ -702,27 +702,23 @@ void launch_basic(t_sort *s)
 			launch_wrapper(s, "pa", 0);
 		}
 	}
-////	print_wrap(s);
+	////	print_wrap(s);
 	printf("%s : %zu operations for %d values\n", s->name, s->nb_cmd, s->cargc - 1);
-//	while (s->cmd_lst)
-//	{
-//		printf("%s\n", (char *)s->cmd_lst->content);	
-//		s->cmd_lst = s->cmd_lst->next; 	
-//	}	
+	//	while (s->cmd_lst)
+	//	{
+	//		printf("%s\n", (char *)s->cmd_lst->content);	
+	//		s->cmd_lst = s->cmd_lst->next; 	
+	//	}	
 }
 
 
 void launch_all_sorts(t_sort **s)
 {
 //	launch_basic(s[0]);
-	launch_small(s[1]);
-//	launch_fquar(s[4]);
-	//launch_basic(s[2]);
-	//launch_basic(s[3]);
-	//launch_basic(s[4]);
-
-
-
+	if ((*s)->cargc - 1 < 30)
+		launch_small(s[1]);
+	else  
+		launch_fquar(s[4]);
 }
 
 /********* generate array, quicksort it, find median ************/
@@ -746,9 +742,9 @@ int *find_quartiles(int *arr, int size, int nb)
 	return (quartiles);
 }
 
-                                                    
+
 /////////////////// FIND MEDIAN ///////////////////
-                                                  
+
 int *arr_to_sort(int argc, char **argv)
 {
 	int *arr;
@@ -766,45 +762,45 @@ int *arr_to_sort(int argc, char **argv)
 
 void swap(int *a, int *b)
 {
-        int swap;
+	int swap;
 
-        swap = *a;
-        *a = *b;
-        *b = swap;
+	swap = *a;
+	*a = *b;
+	*b = swap;
 }
 
 int partionning(int *arr, int start, int end)
 {
-        int pindex;
-        int pivot;
-        int i;
+	int pindex;
+	int pivot;
+	int i;
 
-        pindex = start;
-        pivot = arr[end];
-        i = start ;
-        while (i < end)
-        {
-                if (arr[i] <= pivot)
-                {
-                        swap(&arr[i], &arr[pindex]);
-                        pindex++;
-                }
-                i++;
-        }
-        swap(&arr[end], &arr[pindex]); 
-        return (pindex);
+	pindex = start;
+	pivot = arr[end];
+	i = start ;
+	while (i < end)
+	{
+		if (arr[i] <= pivot)
+		{
+			swap(&arr[i], &arr[pindex]);
+			pindex++;
+		}
+		i++;
+	}
+	swap(&arr[end], &arr[pindex]); 
+	return (pindex);
 }
 
 int *quicksort(int *arr, int start, int end)
 {
-        int pindex;
+	int pindex;
 
-        if (start >= end)
-                return (0);
-        pindex = partionning(arr, start, end);
-        quicksort(arr, start, pindex - 1);
-        quicksort(arr, pindex + 1, end);
-        return (arr);
+	if (start >= end)
+		return (0);
+	pindex = partionning(arr, start, end);
+	quicksort(arr, start, pindex - 1);
+	quicksort(arr, pindex + 1, end);
+	return (arr);
 }
 
 
@@ -846,7 +842,8 @@ t_sort *init_fquar(int argc, char **argv, int *flag)
 	fquar->sb = NULL;  
 	fquar->arr = arr_to_sort(argc, argv);	
 	quicksort(fquar->arr, 0, argc - 2);	
-	fquar->nb_quarts = (argc - 1) / 11 - 1;
+	fquar->nb_quarts = (argc - 1 < 250) ? 
+		(argc - 1) / 11 - 1 : (argc - 1) / 28 - 1;
 	fquar->quarts = find_quartiles(fquar->arr, argc - 1, fquar->nb_quarts); // rendre nb_quartiles variable 
 	return (fquar);
 }
@@ -876,8 +873,6 @@ t_sort  **init_sorts(int argc, char **argv, int *flag)
 	s[0] = init_basic(argc, argv, flag);
 	s[1] = init_small(argc, argv, flag);
 	s[4] = init_fquar(argc, argv, flag);
-	//init_basic(s, argv, argc, flag);
-	//init_basic(s, argv, argc, flag);
 
 	return (s);
 }
