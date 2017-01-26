@@ -6,7 +6,7 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/11 08:50:53 by bduron            #+#    #+#             */
-/*   Updated: 2017/01/26 12:35:58 by bduron           ###   ########.fr       */
+/*   Updated: 2017/01/26 15:29:46 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -319,7 +319,8 @@ int is_near_sorted(t_sort *s)
 { 
 	int min;
 	int max;
-
+	t_list
+		
 	min = s->arr[0];
 	max = s->arr[s->cargc - 2];
 	while (s->sa->next)
@@ -578,17 +579,61 @@ void launch_fquar(t_sort *s)
 }
 
 
+int find_unsorted(t_sort *s)
+{	
+	int last;
+	int last_i;
+	int i;
+	int first;
+
+	i = 0;
+	last = 0;
+	last_i = 2000000000;
+	first = *(int *)s->sa->content;
+	while (s->sa->next)
+	{
+		if (*(int *)s->sa->content != s->arr[s->cargc - 2] 
+				|| *(int *)s->sa->next->content != s->arr[0])
+			if (*(int *)s->sa->content > *(int *)s->sa->next->content)
+				if (s->cargc - 1 - i < last_i)
+				{
+					last = *(int *)s->sa->content;
+					last_i = i;	
+				}
+		i++;
+		s->sa = s->sa->next;		
+	}		
+	if (*(int *)s->sa->content != s->arr[s->cargc - 2] || first != s->arr[0])
+		if (*(int *)s->sa->content > first)
+			return (*(int *)s->sa->content);
+	return (last);
+}
+
+
 void launch_small(t_sort *s)
 {
+	int min;
+	int max;
+
+	min = s->arr[0];
+	max = s->arr[s->cargc - 2];
 	s->sa = create_stack(s->cargc, s->cargv);	
 	s->sb = NULL;
 
-	// printf("Is this stack near sorted ? %d\n", is_near_sorted(s));
+	printf("Top content : %d\n", *(int *)s->sa->content);
+	printf("Is this stack near sorted ? %d\n", is_near_sorted(s));
+	printf("Top content : %d\n", *(int *)s->sa->content);
+// why push stack +1 ?????	
+	printf("The nearest unsorted couple is %d\n", find_unsorted(s));
+	
 
-//	while (!is_near_sorted(s->sa, s->sb))
+//	while (!is_near_sorted(s))
 //	{
-//		if (current > current-1 && current != MIN && current-1 != MAX)
-//			SA
+//		if (*(int *)s->sa->content > *(int *)s->sa->next->content
+//				&& *(int *)s->sa->content != max 
+//				&& *(int *)s->sa->next->content != min)
+//			launch_wrapper(s, "sa", 0);
+//
 //		find next unsorted couple
 //			find best cmd to push it on top of stack
 //	}
