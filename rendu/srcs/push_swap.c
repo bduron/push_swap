@@ -6,7 +6,7 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/11 08:50:53 by bduron            #+#    #+#             */
-/*   Updated: 2017/01/26 15:29:46 by bduron           ###   ########.fr       */
+/*   Updated: 2017/01/26 16:15:32 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -319,21 +319,27 @@ int is_near_sorted(t_sort *s)
 { 
 	int min;
 	int max;
-	t_list
-		
+	int first;
+	t_list *tmp;
+
+	tmp = s->sa;
 	min = s->arr[0];
 	max = s->arr[s->cargc - 2];
-	while (s->sa->next)
+	first = *(int *)tmp->content;
+	while (tmp->next)
 	{
-		if (*(int *)s->sa->content == max 
-				&& *(int *)s->sa->next->content == min)
-			s->sa = s->sa->next;
-		if (!s->sa->next)
+		if (*(int *)tmp->content == max 
+				&& *(int *)tmp->next->content == min)
+			tmp = tmp->next;
+		if (!tmp->next)
 			break;
-		if (*(int *)s->sa->content > *(int *)s->sa->next->content)
+		if (*(int *)tmp->content > *(int *)tmp->next->content)
 			return (0);
-		s->sa = s->sa->next;
+		tmp = tmp->next;
 	}
+	if (*(int *)tmp->content > first)
+		if (*(int *)tmp->content != max || first != min)
+		return (0);
 	return (1);		
 }	
 
@@ -585,27 +591,29 @@ int find_unsorted(t_sort *s)
 	int last_i;
 	int i;
 	int first;
+	t_list *tmp;
 
 	i = 0;
 	last = 0;
 	last_i = 2000000000;
 	first = *(int *)s->sa->content;
-	while (s->sa->next)
+	tmp = s->sa;
+	while (tmp->next)
 	{
-		if (*(int *)s->sa->content != s->arr[s->cargc - 2] 
-				|| *(int *)s->sa->next->content != s->arr[0])
-			if (*(int *)s->sa->content > *(int *)s->sa->next->content)
+		if (*(int *)tmp->content != s->arr[s->cargc - 2] 
+				|| *(int *)tmp->next->content != s->arr[0])
+			if (*(int *)tmp->content > *(int *)tmp->next->content)
 				if (s->cargc - 1 - i < last_i)
 				{
-					last = *(int *)s->sa->content;
+					last = *(int *)tmp->content;
 					last_i = i;	
 				}
 		i++;
-		s->sa = s->sa->next;		
+		tmp = tmp->next;		
 	}		
-	if (*(int *)s->sa->content != s->arr[s->cargc - 2] || first != s->arr[0])
-		if (*(int *)s->sa->content > first)
-			return (*(int *)s->sa->content);
+	if (*(int *)tmp->content != s->arr[s->cargc - 2] || first != s->arr[0])
+		if (*(int *)tmp->content > first)
+			return (*(int *)tmp->content);
 	return (last);
 }
 
@@ -614,36 +622,55 @@ void launch_small(t_sort *s)
 {
 	int min;
 	int max;
+	int next;
+	int best_cmd;
 
 	min = s->arr[0];
 	max = s->arr[s->cargc - 2];
 	s->sa = create_stack(s->cargc, s->cargv);	
 	s->sb = NULL;
 
-	printf("Top content : %d\n", *(int *)s->sa->content);
+//	printf("Top content : %d\n", *(int *)s->sa->content);
 	printf("Is this stack near sorted ? %d\n", is_near_sorted(s));
-	printf("Top content : %d\n", *(int *)s->sa->content);
-// why push stack +1 ?????	
+//	printf("Top content : %d\n", *(int *)s->sa->content);
 	printf("The nearest unsorted couple is %d\n", find_unsorted(s));
+//	printf("Top content : %d\n", *(int *)s->sa->content);
 	
 
-//	while (!is_near_sorted(s))
-//	{
-//		if (*(int *)s->sa->content > *(int *)s->sa->next->content
-//				&& *(int *)s->sa->content != max 
-//				&& *(int *)s->sa->next->content != min)
-//			launch_wrapper(s, "sa", 0);
-//
+	print_two(s->sa, s->sb, nb_digit(array_max_min(s->cargc, s->cargv)));
+	while (!is_near_sorted(s))
+	{
+		if (*(int *)s->sa->content > *(int *)s->sa->next->content
+				&& (*(int *)s->sa->content != max 
+				|| *(int *)s->sa->next->content != min))
+			launch_wrapper(s, "sa", 0);
+
+		next = find_unsorted(s);
+      	best_cmd = rrx_or_rx(s->sa, next);
+      	if (best_cmd == 0)
+      		while (*(int *)s->sa->content != next)
+      			launch_wrapper(s, "rra", 0);
+      	else if (best_cmd == 1)
+      		while (*(int *)s->sa->content != next)
+      			launch_wrapper(s, "ra", 0);
 //		find next unsorted couple
 //			find best cmd to push it on top of stack
-//	}
-//	while (!is_sorted(s->sa, s->sb))
-//	{
-//		find best cmd to put Min on top 
-//		while (current != min)		
-//			best_cmd;
-//	}
+	}
+	while (!is_sorted(s->sa, s->sb))
+	{
+      	best_cmd = rrx_or_rx(s->sa, min);
+      	if (best_cmd == 0)
+      		while (*(int *)s->sa->content != min)
+      			launch_wrapper(s, "rra", 1);
+      	else if (best_cmd == 1)
+      		while (*(int *)s->sa->content != min)
+      			launch_wrapper(s, "ra", 1);
+	//	find best cmd to put Min on top 
+	//	while (current != min)		
+	//		best_cmd;
+	}
 
+//	print_two(s->sa, s->sb, nb_digit(array_max_min(s->cargc, s->cargv)));
 	printf("%s : %zu operations for %d values\n", s->name, s->nb_cmd, s->cargc - 1);
 //	while (s->cmd_lst)
 //	{
