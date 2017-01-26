@@ -6,7 +6,7 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/11 08:50:53 by bduron            #+#    #+#             */
-/*   Updated: 2017/01/25 17:17:22 by bduron           ###   ########.fr       */
+/*   Updated: 2017/01/26 12:35:58 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -315,6 +315,27 @@ int get_cmd(char **cmd_list)     // USELESS
 	return (nb_cmd);
 }
 
+int is_near_sorted(t_sort *s)
+{ 
+	int min;
+	int max;
+
+	min = s->arr[0];
+	max = s->arr[s->cargc - 2];
+	while (s->sa->next)
+	{
+		if (*(int *)s->sa->content == max 
+				&& *(int *)s->sa->next->content == min)
+			s->sa = s->sa->next;
+		if (!s->sa->next)
+			break;
+		if (*(int *)s->sa->content > *(int *)s->sa->next->content)
+			return (0);
+		s->sa = s->sa->next;
+	}
+	return (1);		
+}	
+
 int is_sorted(t_list *stack_a, t_list *stack_b)
 { 
 	int last;
@@ -557,6 +578,34 @@ void launch_fquar(t_sort *s)
 }
 
 
+void launch_small(t_sort *s)
+{
+	s->sa = create_stack(s->cargc, s->cargv);	
+	s->sb = NULL;
+
+	// printf("Is this stack near sorted ? %d\n", is_near_sorted(s));
+
+//	while (!is_near_sorted(s->sa, s->sb))
+//	{
+//		if (current > current-1 && current != MIN && current-1 != MAX)
+//			SA
+//		find next unsorted couple
+//			find best cmd to push it on top of stack
+//	}
+//	while (!is_sorted(s->sa, s->sb))
+//	{
+//		find best cmd to put Min on top 
+//		while (current != min)		
+//			best_cmd;
+//	}
+
+	printf("%s : %zu operations for %d values\n", s->name, s->nb_cmd, s->cargc - 1);
+//	while (s->cmd_lst)
+//	{
+//		printf("%s\n", (char *)s->cmd_lst->content);	
+//		s->cmd_lst = s->cmd_lst->next; 	
+//	}	
+}
 
 
 void launch_basic(t_sort *s)
@@ -593,9 +642,9 @@ void launch_basic(t_sort *s)
 
 void launch_all_sorts(t_sort **s)
 {
-	launch_basic(s[0]);
-//	launch_quicksort(s[1]);
-	launch_fquar(s[4]);
+//	launch_basic(s[0]);
+	launch_small(s[1]);
+//	launch_fquar(s[4]);
 	//launch_basic(s[2]);
 	//launch_basic(s[3]);
 	//launch_basic(s[4]);
@@ -690,6 +739,24 @@ int *quicksort(int *arr, int start, int end)
 
 /************************* PS  -  init_sorts  ***************************/
 
+t_sort *init_small(int argc, char **argv, int *flag)
+{
+	t_sort *small;
+
+	if ((small = (t_sort *)malloc(sizeof(t_sort))) == 0)
+		return (NULL);		
+	small->name = "Small sort";
+	small->nb_cmd = 0;
+	small->cargc = argc; 
+	small->cargv = argv;
+	small->cflag = flag;
+	small->cmd_lst = NULL;
+	small->sa = NULL;  
+	small->sb = NULL;  
+	small->arr = arr_to_sort(argc, argv);	
+	quicksort(small->arr, 0, argc - 2);	
+	return (small);
+}
 
 t_sort *init_fquar(int argc, char **argv, int *flag)
 {
@@ -735,6 +802,7 @@ t_sort  **init_sorts(int argc, char **argv, int *flag)
 
 	s = (t_sort **)malloc(sizeof(t_sort *) * 5);
 	s[0] = init_basic(argc, argv, flag);
+	s[1] = init_small(argc, argv, flag);
 	s[4] = init_fquar(argc, argv, flag);
 	//init_basic(s, argv, argc, flag);
 	//init_basic(s, argv, argc, flag);
