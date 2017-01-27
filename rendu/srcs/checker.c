@@ -6,7 +6,7 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/05 15:20:43 by bduron            #+#    #+#             */
-/*   Updated: 2017/01/11 08:48:46 by bduron           ###   ########.fr       */
+/*   Updated: 2017/01/27 17:32:16 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -342,12 +342,14 @@ char **get_flag(int *argc, char **argv, int *flag)
 		i = 1;
 		while (argv[1][i]) 
 		{		
-			if (argv[1][i] == 'v' || argv[1][i] == 'c')
+			if (argv[1][i] == 'v' || argv[1][i] == 'c' 
+					|| argv[1][i] == 'i' || argv[1][i] == 'n')
 				flag[(int)argv[1][i]]++;
 			else 
 			{
-				ft_putstr("usage: checker [-vc] number list\n");
+				ft_putstr("usage: checker [-vci] number list\n");
 				ft_putstr("  -v verbose mode\n  -c result highlighting\n");
+				ft_putstr("  -i interactive mode\n");
 				exit(1);
 			}
 			i++;
@@ -355,6 +357,7 @@ char **get_flag(int *argc, char **argv, int *flag)
 		*argc -= 1;
 		return (argv + 1);
 	}	
+	flag[0] = *argc - 1;
 	return (argv);
 }
 
@@ -365,7 +368,7 @@ void sort_print_stack(t_list **stack_a, t_list **stack_b,
 	int nb_cmd;
 	int i;
 
-	cmd_list = (char **)malloc(sizeof(char *) * 4096);
+	cmd_list = (char **)malloc(sizeof(char *) * 64000);
 	nb_cmd = get_cmd(cmd_list);	
 	i = 0;
 	while (i < nb_cmd)
@@ -373,13 +376,24 @@ void sort_print_stack(t_list **stack_a, t_list **stack_b,
 		launch_sort(stack_a, stack_b, cmd_list[i++]);
 		if (flag['v'])
 			print_two(*stack_a, *stack_b, nb_digit(array_max_min(*flag, argv)));
+		else if (flag['i'])
+		{
+			usleep(40000);
+			printf("\33[2J");
+			print_two(*stack_a, *stack_b, nb_digit(array_max_min(*flag, argv)));
+			printf(" [%s]\n", cmd_list[i - 1]);
+		}
 	}	
 	if (flag['c'])
 	{
+		if (flag['i'])
+			printf("\33[2J");
 		printf("\x1B[32m");
 		print_two(*stack_a, *stack_b, nb_digit(array_max_min(flag[0], argv)));
 		printf("\x1B[0m");
 	}	
+	if (flag['n'])
+		printf(" [" "\x1B[32m" "%d" "\x1B[0m" " operations for " "\x1B[30m" "%d" "\x1B[0m" " values]\n\n", nb_cmd, flag[0]);
 	free(cmd_list);
 }
 

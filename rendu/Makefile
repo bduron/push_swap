@@ -33,7 +33,7 @@ linux:
 ps:
 	@make -C libft
 	@gcc -o $(PS) $(FLAGS) $(SRC) -Llibft -lft -I includes
-	@echo "Compiling checker... OK"
+	@echo "Compiling push_swap... OK"
 
 clean:
 #	@rm -f $(OBJ)
