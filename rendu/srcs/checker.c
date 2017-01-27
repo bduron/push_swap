@@ -6,7 +6,7 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/05 15:20:43 by bduron            #+#    #+#             */
-/*   Updated: 2017/01/27 17:32:16 by bduron           ###   ########.fr       */
+/*   Updated: 2017/01/27 18:13:55 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -397,12 +397,34 @@ void sort_print_stack(t_list **stack_a, t_list **stack_b,
 	free(cmd_list);
 }
 
+int has_space(char *s)
+{
+	if (!s)
+	   return (0);
+	while (*s)
+		if (*s++ == ' ')
+			return (1);	
+	return (0);
+}
+// Split white space, regulariser argc, assouplir la gestion d;erreur 
+
+char **normalize_argv(char **argv, int *argc);
+{
+	if (*argc == 2 && has_space(argv[1])) 
+	
+
+
+
+	return (argv);
+}
+
 int main(int argc, char **argv)
 {
 	t_list *stack_a;
 	t_list *stack_b;
 	int flag[127];
 
+//	printf("has space ? %d\n", has_space(argv[1]));	
 	if (argc == 1)
 		return (1);
 	argv = get_flag(&argc, argv, flag);
@@ -411,6 +433,7 @@ int main(int argc, char **argv)
 		ft_putstr("Error\n");
 		return (1);
 	}
+	argv = normalize_argv(argv, &argc);
 	stack_a = create_stack(argc, argv);	
 	stack_b = NULL;
 	flag[0] = argc;
@@ -423,62 +446,3 @@ int main(int argc, char **argv)
 		//ft_lstdel(&stack_b, ); ?? 
 	return (0);
 }
-
-
-
-
-//	setlocale(LC_ALL, "");
-//	sort("rra");
-//	sort("pb");
-//	sort("sa");
-//	sort("rra");
-//	sort("pa");
-
-
-//	printf("\x1B[32m");
-//	print_two(stack_a, stack_b, nb_digit(array_max_min(argc, argv)));
-
-//	printf("\x1B[0m");
-//	printf("\nmax = %d\n", array_max_min(argc, argv));
-//	printf("nb digits = %d\n", nb_digit(array_max_min(argc, argv)));
-
-
-/*
-   ===============================
-   head
-   |	
-1/ 1 --> 2 --> 3 --> NULL
-   |
-   tmp
-   ================================
-   head
-   |	
-2/ 1 --> 2 --> 3 --> NULL
-   |
-   tmp
-   ================================
-   head
-   |	
-3/ 1 -->NULL    2 --> 3 --> NULL
-   |
-   tmp
-   ================================
-   head
-   |	
-   4/	 1 -->NULL    2 --> 3 --> NULL
-   |            |
-   tmp          last     
-   ================================
-   head
-   |	
-   5/	 1 -->NULL    2 --> 3 --> NULL // Segfault 
-   |            	    |
-   tmp                last     
-   ================================
-   head
-   |	
-   6/	              2 --> 3 --> 1 --> NULL
-   |     |
-   last  tmp   
-   ================================
-   */
