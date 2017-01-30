@@ -1,0 +1,39 @@
+2d1
+< _arr_to_sort
+8,11d6
+< _find_max
+< _find_quartile
+< _find_quartiles
+< _find_unsorted
+18d12
+< _ft_lstaddback
+31a26
+> _ft_usleep
+38,42d32
+< _init_basic
+< _init_fquar
+< _init_reverse
+< _init_small
+< _init_sorts
+44,45d33
+< _is_near_sorted
+< _is_reverse
+47,50d34
+< _launch_all_sorts
+< _launch_fquar
+< _launch_reverse
+< _launch_small
+52d35
+< _launch_wrapper
+59,60d41
+< _partionning
+< _print_cmd
+63,66c44
+< _print_wrap
+< _quarts_rem
+< _quicksort
+< _rrx_or_rx
+---
+> _sort_print_stack
+71d48
+< _swap

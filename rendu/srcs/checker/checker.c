@@ -6,7 +6,7 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/05 15:20:43 by bduron            #+#    #+#             */
-/*   Updated: 2017/01/30 09:54:32 by bduron           ###   ########.fr       */
+/*   Updated: 2017/01/30 15:52:27 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,20 @@
 	launch_sort(&stack_a, &stack_b, x); \
 	print_two(stack_a, stack_b, nb_digit(array_max_min(argc, argv)));} while (0)
 
+
+void ft_usleep(int time)
+{
+	int i;
+	int j;
+
+	i = 0;
+	while (i++ < time)
+	{	
+		j = 0;
+		while (j++ < time)
+			;
+	}
+}
 
 /**************** Error handling ***********************/
 
@@ -350,6 +364,7 @@ char **get_flag(int *argc, char **argv, int *flag)
 				ft_putstr("usage: checker [-vci] number list\n");
 				ft_putstr("  -v verbose mode\n  -c result highlighting\n");
 				ft_putstr("  -i interactive mode\n");
+				ft_putstr("  -n display operation count\n");
 				exit(1);
 			}
 			i++;
@@ -378,7 +393,7 @@ void sort_print_stack(t_list **stack_a, t_list **stack_b,
 			print_two(*stack_a, *stack_b, nb_digit(array_max_min(*flag, argv)));
 		else if (flag['i'])
 		{
-			usleep(20000);
+			ft_usleep(3500);
 			printf("\33[2J");
 			print_two(*stack_a, *stack_b, nb_digit(array_max_min(*flag, argv)));
 			printf(" [%s]\n", cmd_list[i - 1]);
@@ -408,7 +423,7 @@ int has_space(char *s)
 }
 // Split white space, regulariser argc, assouplir la gestion d;erreur 
 
-char **normalize_argv(char **argv, int *argc)
+char **normalize_argv(char **argv, int *argc, int *is_normalized)
 {
 	int i;
 	int j;
@@ -430,7 +445,7 @@ char **normalize_argv(char **argv, int *argc)
 //		printf("%s ", argv[i]);
 
 		j = 0;
-		last = "./checker";		
+		last = ft_strdup("./checker");		
 		while (j < i)
 		{
 			current = argv[j];			
@@ -439,6 +454,7 @@ char **normalize_argv(char **argv, int *argc)
 			j++;
 		}
 		argv[j] = last;
+		*is_normalized = 1;
 //	[3][2][1][NULL]
 //	[n][3][2][1]
 //	 0  1  2  3					
@@ -453,11 +469,26 @@ char **normalize_argv(char **argv, int *argc)
 
 /** OK cleaner, checker interference avec les flags d'options **/
 
+void ft_strsplitdel(char ***split, int size)
+{
+	int i;
+	char **tab = *split;
+
+	if (!split)
+		return ;
+	i = 0;
+	while (i < size)
+		ft_strdel(&tab[i++]);
+	free(*split);
+	*split = NULL;
+}
+
 
 int main(int argc, char **argv)
 {
 	t_list *stack_a;
 	t_list *stack_b;
+	int is_normalized;
 	int flag[127];
 	
 //	printf("has space ? %d\n", has_space(argv[1]));	
@@ -465,8 +496,9 @@ int main(int argc, char **argv)
 //	printf("Argc after : %d\n", argc);	
 	if (argc == 1)
 		return (1);
+	is_normalized = 0;
 	argv = get_flag(&argc, argv, flag);
-	argv = normalize_argv(argv, &argc);
+	argv = normalize_argv(argv, &argc, &is_normalized);
 	if (error_arg(argc, argv))
 	{
 		ft_putstr("Error\n");
@@ -477,6 +509,10 @@ int main(int argc, char **argv)
 	flag[0] = argc;
 	sort_print_stack(&stack_a, &stack_b, argv, flag);
 	is_sorted(stack_a, stack_b) ? printf("OK\n") : printf("KO\n");
+	if (is_normalized)
+		ft_strsplitdel(&argv, argc);	
+
+//	free(argv[0]);
 
 		// FREE SORT_CMD, STACK_A, STACK_B // LEAKS SI erreurs --> free a chaque exit 
 		//void    ft_lstdel(t_list **alst, void (*del)(void *, size_t))	

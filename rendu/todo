@@ -1,15 +1,30 @@
+Leaks : 
+=======
+Checker 
+[ ] strsplit -> **argv
+[ ] get_cmd -> **cmd_list 
+[ ] get_next_line ? 
+[ ] create_stack -> 
+
+Push_swap
+[ ] strsplit -> **argv
+[ ] get_cmd -> **cmd_list 
+[ ] get_next_line ? 
+[ ] create_stack -> 
+
 Last things :
 =============
 
-[X] Error check (segfault)    
-[OK] Parametres valides, Wrong cmd -> Error (vs KO)  
-[X] Ft_printf 
-[X] Leaks
-[X] Makefile
-[X] Norme 
-[X] Replace utime       
-[X]       
+[ ] Error check (segfault)    
+[ ] Ft_printf 
+[ ] Leaks
+[ ] Makefile
+[ ] Norme 
+[ ] Error on stderr       
 
+
+[OK] Replace utime       
+[OK] Parametres valides, Wrong cmd -> Error (vs KO)  
 [OK] Sorted array = 0 op (> 100)
 [OK] Reverse sorted 5 elem <= 12 op  
 
