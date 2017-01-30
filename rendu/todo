@@ -1,13 +1,16 @@
 Last things :
 =============
 
+[X] Error check (segfault)    
+[X] Ft_printf 
+[X] Leaks
+[X] Makefile
+[X] Norme 
+[X] Replace utime       
+[X]       
+
 [OK] Sorted array = 0 op (> 100)
 [OK] Reverse sorted 5 elem <= 12 op  
-[X] 
-[X] 
-[X] 
-[X] 
-
 
 
 

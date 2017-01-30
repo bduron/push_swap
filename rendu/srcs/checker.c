@@ -393,7 +393,7 @@ void sort_print_stack(t_list **stack_a, t_list **stack_b,
 		printf("\x1B[0m");
 	}	
 	if (flag['n'])
-		printf(" [" "\x1B[32m" "%d" "\x1B[0m" " operations for " "\x1B[30m" "%d" "\x1B[0m" " values]\n\n", nb_cmd, flag[0]);
+		printf(" [" "\x1B[32m" "%d" "\x1B[0m" " operations for " "\x1B[32m" "%d" "\x1B[0m" " values]\n\n", nb_cmd, flag[0] - 1);
 	free(cmd_list);
 }
 
@@ -408,32 +408,70 @@ int has_space(char *s)
 }
 // Split white space, regulariser argc, assouplir la gestion d;erreur 
 
-char **normalize_argv(char **argv, int *argc);
+char **normalize_argv(char **argv, int *argc)
 {
+	int i;
+	int j;
+	char *last;
+	char *current;
+		
+
+	i = 0;
+//	printf("Argc before : %d\n", *argc); //	
 	if (*argc == 2 && has_space(argv[1])) 
-	
+	{
+		argv = ft_strsplit(argv[1], ' ');
+		while (argv[i])
+		//	printf("%s ", argv[i++]);	
+			i++;
+		*argc = i + 1;
 
+//	for (i = 0; i < *argc - 1; i++)
+//		printf("%s ", argv[i]);
 
+		j = 0;
+		last = "./checker";		
+		while (j < i)
+		{
+			current = argv[j];			
+			argv[j] = last;
+			last = current;
+			j++;
+		}
+		argv[j] = last;
+//	[3][2][1][NULL]
+//	[n][3][2][1]
+//	 0  1  2  3					
+	}
 
+//	for (i = 0; i < *argc; i++)
+//		printf("%s ", argv[i]);
+
+//	printf("Argc after : %d\n", *argc); //	
 	return (argv);
 }
+
+/** OK cleaner, checker interference avec les flags d'options **/
+
 
 int main(int argc, char **argv)
 {
 	t_list *stack_a;
 	t_list *stack_b;
 	int flag[127];
-
+	
 //	printf("has space ? %d\n", has_space(argv[1]));	
+//	printf("Argc before : %d\n", argc);	
+//	printf("Argc after : %d\n", argc);	
 	if (argc == 1)
 		return (1);
 	argv = get_flag(&argc, argv, flag);
+	argv = normalize_argv(argv, &argc);
 	if (error_arg(argc, argv))
 	{
 		ft_putstr("Error\n");
 		return (1);
 	}
-	argv = normalize_argv(argv, &argc);
 	stack_a = create_stack(argc, argv);	
 	stack_b = NULL;
 	flag[0] = argc;
