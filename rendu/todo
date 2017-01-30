@@ -2,6 +2,7 @@ Last things :
 =============
 
 [X] Error check (segfault)    
+[OK] Parametres valides, Wrong cmd -> Error (vs KO)  
 [X] Ft_printf 
 [X] Leaks
 [X] Makefile

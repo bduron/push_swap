@@ -6,7 +6,7 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/05 15:20:43 by bduron            #+#    #+#             */
-/*   Updated: 2017/01/27 18:13:55 by bduron           ###   ########.fr       */
+/*   Updated: 2017/01/30 09:54:32 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -306,7 +306,7 @@ int get_cmd(char **cmd_list)
 	{
 		if (is_cmd(cmd_list[nb_cmd]) == 0)
 		{
-			printf("KO\n");
+			printf("Error\n");
 			exit(0);
 		}	
 		nb_cmd++;
@@ -378,7 +378,7 @@ void sort_print_stack(t_list **stack_a, t_list **stack_b,
 			print_two(*stack_a, *stack_b, nb_digit(array_max_min(*flag, argv)));
 		else if (flag['i'])
 		{
-			usleep(40000);
+			usleep(20000);
 			printf("\33[2J");
 			print_two(*stack_a, *stack_b, nb_digit(array_max_min(*flag, argv)));
 			printf(" [%s]\n", cmd_list[i - 1]);
