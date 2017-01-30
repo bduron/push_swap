@@ -6,19 +6,13 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/05 15:20:43 by bduron            #+#    #+#             */
-/*   Updated: 2017/01/30 15:52:27 by bduron           ###   ########.fr       */
+/*   Updated: 2017/01/30 18:10:26 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-#include <stdio.h>
-#include <locale.h>
-
-#define sort(x) do { printf("\n %s %C \n", #x, L'↴'); \
-	launch_sort(&stack_a, &stack_b, x); \
-	print_two(stack_a, stack_b, nb_digit(array_max_min(argc, argv)));} while (0)
-
+#include <stdio.h> // TO DEL
 
 void ft_usleep(int time)
 {
@@ -32,6 +26,20 @@ void ft_usleep(int time)
 		while (j++ < time)
 			;
 	}
+}
+
+void ft_strsplitdel(char ***split, int size)
+{
+	int i;
+	char **tab = *split;
+
+	if (!split)
+		return ;
+	i = 0;
+	while (i < size)
+		ft_strdel(&tab[i++]);
+	free(*split);
+	*split = NULL;
 }
 
 /**************** Error handling ***********************/
@@ -409,13 +417,14 @@ void sort_print_stack(t_list **stack_a, t_list **stack_b,
 	}	
 	if (flag['n'])
 		printf(" [" "\x1B[32m" "%d" "\x1B[0m" " operations for " "\x1B[32m" "%d" "\x1B[0m" " values]\n\n", nb_cmd, flag[0] - 1);
-	free(cmd_list);
+
+	ft_strsplitdel(&cmd_list, 64000);
 }
 
 int has_space(char *s)
 {
 	if (!s)
-	   return (0);
+		return (0);
 	while (*s)
 		if (*s++ == ' ')
 			return (1);	
@@ -429,20 +438,20 @@ char **normalize_argv(char **argv, int *argc, int *is_normalized)
 	int j;
 	char *last;
 	char *current;
-		
+
 
 	i = 0;
-//	printf("Argc before : %d\n", *argc); //	
+	//	printf("Argc before : %d\n", *argc); //	
 	if (*argc == 2 && has_space(argv[1])) 
 	{
 		argv = ft_strsplit(argv[1], ' ');
 		while (argv[i])
-		//	printf("%s ", argv[i++]);	
+			//	printf("%s ", argv[i++]);	
 			i++;
 		*argc = i + 1;
 
-//	for (i = 0; i < *argc - 1; i++)
-//		printf("%s ", argv[i]);
+		//	for (i = 0; i < *argc - 1; i++)
+		//		printf("%s ", argv[i]);
 
 		j = 0;
 		last = ft_strdup("./checker");		
@@ -455,32 +464,35 @@ char **normalize_argv(char **argv, int *argc, int *is_normalized)
 		}
 		argv[j] = last;
 		*is_normalized = 1;
-//	[3][2][1][NULL]
-//	[n][3][2][1]
-//	 0  1  2  3					
+		//	[3][2][1][NULL]
+		//	[n][3][2][1]
+		//	 0  1  2  3					
 	}
 
-//	for (i = 0; i < *argc; i++)
-//		printf("%s ", argv[i]);
+	//	for (i = 0; i < *argc; i++)
+	//		printf("%s ", argv[i]);
 
-//	printf("Argc after : %d\n", *argc); //	
+	//	printf("Argc after : %d\n", *argc); //	
 	return (argv);
 }
 
 /** OK cleaner, checker interference avec les flags d'options **/
 
-void ft_strsplitdel(char ***split, int size)
-{
-	int i;
-	char **tab = *split;
 
-	if (!split)
+void	ft_lstdel_simple(t_list **alst)
+{
+	t_list *tmp;
+
+	if (!*alst)
 		return ;
-	i = 0;
-	while (i < size)
-		ft_strdel(&tab[i++]);
-	free(*split);
-	*split = NULL;
+	tmp = *alst;
+	while (tmp)
+	{
+		*alst = tmp->next;
+		free(tmp);
+		tmp = *alst;
+	}
+	*alst = NULL;
 }
 
 
@@ -490,10 +502,7 @@ int main(int argc, char **argv)
 	t_list *stack_b;
 	int is_normalized;
 	int flag[127];
-	
-//	printf("has space ? %d\n", has_space(argv[1]));	
-//	printf("Argc before : %d\n", argc);	
-//	printf("Argc after : %d\n", argc);	
+
 	if (argc == 1)
 		return (1);
 	is_normalized = 0;
@@ -509,14 +518,17 @@ int main(int argc, char **argv)
 	flag[0] = argc;
 	sort_print_stack(&stack_a, &stack_b, argv, flag);
 	is_sorted(stack_a, stack_b) ? printf("OK\n") : printf("KO\n");
+
 	if (is_normalized)
 		ft_strsplitdel(&argv, argc);	
+	ft_lstdel_simple(&stack_a);
+	ft_lstdel_simple(&stack_b);
 
-//	free(argv[0]);
+	//	free(argv[0]);
 
-		// FREE SORT_CMD, STACK_A, STACK_B // LEAKS SI erreurs --> free a chaque exit 
-		//void    ft_lstdel(t_list **alst, void (*del)(void *, size_t))	
-		//ft_lstdel(&stack_a, ); ??
-		//ft_lstdel(&stack_b, ); ?? 
+	// FREE SORT_CMD, STACK_A, STACK_B // LEAKS SI erreurs --> free a chaque exit 
+	//void    ft_lstdel(t_list **alst, void (*del)(void *, size_t))	
+	//ft_lstdel(&stack_a, ); ??
+	//ft_lstdel(&stack_b, ); ?? 
 	return (0);
 }
