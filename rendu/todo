@@ -1,7 +1,7 @@
 Leaks : 
 =======
 Checker 
-[ ] strsplit -> **argv
+[X] strsplit -> **argv
 [ ] get_cmd -> **cmd_list 
 [ ] get_next_line ? 
 [ ] create_stack -> 

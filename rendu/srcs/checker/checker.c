@@ -6,7 +6,7 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/05 15:20:43 by bduron            #+#    #+#             */
-/*   Updated: 2017/01/30 18:10:26 by bduron           ###   ########.fr       */
+/*   Updated: 2017/01/31 17:33:21 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -496,15 +496,40 @@ void	ft_lstdel_simple(t_list **alst)
 }
 
 
+//LEAKS 
+//int main(void)
+//{
+//	int i;
+//	int j;
+//	char **list;
+//
+//	list = (char **)malloc(sizeof(char *) * 10);
+//
+//	i = 0;	
+//	while (get_next_line(0, &list[i]))
+//		i++;
+//	
+//	j = 0;
+//	while (j < i)
+//		printf("%s\n", list[j++]);
+//
+//	list = NULL;
+//	for (;;)
+//		;
+//	return (1);
+//}
+
 int main(int argc, char **argv)
 {
 	t_list *stack_a;
 	t_list *stack_b;
 	int is_normalized;
 	int flag[127];
+	char **argv_archive;
 
 	if (argc == 1)
 		return (1);
+	argv_archive = argv;
 	is_normalized = 0;
 	argv = get_flag(&argc, argv, flag);
 	argv = normalize_argv(argv, &argc, &is_normalized);
@@ -530,5 +555,7 @@ int main(int argc, char **argv)
 	//void    ft_lstdel(t_list **alst, void (*del)(void *, size_t))	
 	//ft_lstdel(&stack_a, ); ??
 	//ft_lstdel(&stack_b, ); ?? 
+	for (;;)
+		;
 	return (0);
 }
