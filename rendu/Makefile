@@ -17,7 +17,7 @@ PS_SRC= srcs/push_swap/*.c
 CHECKER_SRC= srcs/checker/*.c
 OBJ= *.o
 HEADER= -I includes -I libft/includes
-FLAGS= -g -Wall -Wextra -Werror
+FLAGS= -g -Wall -Wextra -Werror ##-fsanitize=address
  
 
 all: $(CHECKER)

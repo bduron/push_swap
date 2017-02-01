@@ -6,7 +6,7 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/05 15:20:43 by bduron            #+#    #+#             */
-/*   Updated: 2017/02/01 09:09:57 by bduron           ###   ########.fr       */
+/*   Updated: 2017/02/01 16:38:25 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,18 +28,18 @@ void ft_usleep(int time)
 	}
 }
 
-void ft_strsplitdel(char ***split, int size)
+void ft_strsplitdel(char **split, int size)
 {
 	int i;
-	char **tab = *split;
+//	char **tab = *split;
 
-	if (!split)
-		return ;
+//	if (!split)
+//		return ;
 	i = 0;
 	while (i < size)
-		ft_strdel(&tab[i++]);
-	free(*split);
-	*split = NULL;
+		free(split[i++]);                        
+	free(split);
+//	*split = NULL;
 }
 
 /**************** Error handling ***********************/
@@ -387,11 +387,12 @@ char **get_flag(int *argc, char **argv, int *flag)
 void sort_print_stack(t_list **stack_a, t_list **stack_b,
 		char **argv, int *flag)
 {
+//	char *cmd_list[64000];
 	char **cmd_list;
 	int nb_cmd;
 	int i;
 
-	cmd_list = (char **)malloc(sizeof(char *) * 64000);
+	cmd_list = (char **)malloc(sizeof(char *) * 6400);
 	nb_cmd = get_cmd(cmd_list);	
 	i = 0;
 	while (i < nb_cmd)
@@ -418,7 +419,7 @@ void sort_print_stack(t_list **stack_a, t_list **stack_b,
 	if (flag['n'])
 		printf(" [" "\x1B[32m" "%d" "\x1B[0m" " operations for " "\x1B[32m" "%d" "\x1B[0m" " values]\n\n", nb_cmd, flag[0] - 1);
 
-	ft_strsplitdel(&cmd_list, 64000);
+	ft_strsplitdel(cmd_list, nb_cmd);
 }
 
 int has_space(char *s)
@@ -488,6 +489,7 @@ void	ft_lstdel_simple(t_list **alst)
 	tmp = *alst;
 	while (tmp)
 	{
+		free(tmp->content);
 		*alst = tmp->next;
 		free(tmp);
 		tmp = *alst;
@@ -496,14 +498,14 @@ void	ft_lstdel_simple(t_list **alst)
 }
 
 
-////LEAKS 
+//LEAKS 
 //int main(void)
 //{
 //	int i;
 //	int j;
 //	char **list;
 //
-//	list = (char **)malloc(sizeof(char *) * 10);
+//	list = (char **)malloc(sizeof(char *) * 6400);
 //
 //	i = 0;	
 //	while (get_next_line(0, &list[i]))
@@ -513,7 +515,8 @@ void	ft_lstdel_simple(t_list **alst)
 //	while (j < i)
 //		printf("%s\n", list[j++]);
 //
-//	list = NULL;
+//	ft_strsplitdel(list, 702);	
+////	list = NULL;
 //	for (;;)
 //		;
 //	return (1);
@@ -523,16 +526,11 @@ int main(int argc, char **argv)
 {
 	t_list *stack_a;
 	t_list *stack_b;
-	int is_normalized;
 	int flag[127];
-	char **argv_archive;
 
 	if (argc == 1)
 		return (1);
-	argv_archive = argv;
-	is_normalized = 0;
 	argv = get_flag(&argc, argv, flag);
-	argv = normalize_argv(argv, &argc, &is_normalized);
 	if (error_arg(argc, argv))
 	{
 		ft_putstr("Error\n");
@@ -544,17 +542,8 @@ int main(int argc, char **argv)
 	sort_print_stack(&stack_a, &stack_b, argv, flag);
 	is_sorted(stack_a, stack_b) ? printf("OK\n") : printf("KO\n");
 
-	if (is_normalized)
-		ft_strsplitdel(&argv, argc);	
 	ft_lstdel_simple(&stack_a);
-	ft_lstdel_simple(&stack_b);
 
-	//	free(argv[0]);
-
-	// FREE SORT_CMD, STACK_A, STACK_B // LEAKS SI erreurs --> free a chaque exit 
-	//void    ft_lstdel(t_list **alst, void (*del)(void *, size_t))	
-	//ft_lstdel(&stack_a, ); ??
-	//ft_lstdel(&stack_b, ); ?? 
 	for (;;)
 		;
 	return (0);

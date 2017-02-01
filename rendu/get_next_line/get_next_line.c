@@ -6,7 +6,7 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/23 16:59:02 by bduron            #+#    #+#             */
-/*   Updated: 2016/11/29 09:59:16 by bduron           ###   ########.fr       */
+/*   Updated: 2017/02/01 12:50:45 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,15 @@ char	*ft_strjoin_free(char *s1, char *s2)
 
 int		flush_tmp(char **tmp, char *bufchr, char **line)
 {
+	void *bak_tmp; //
+	
 	if (*tmp && (bufchr = ft_strchr(*tmp, '\n')))
 	{
 		*bufchr = '\0';
 		*line = ft_strdup(*tmp);
+		bak_tmp = *tmp; //
 		*tmp = ft_strdup(bufchr + 1);
+		free(bak_tmp); //
 		return (1);
 	}
 	else

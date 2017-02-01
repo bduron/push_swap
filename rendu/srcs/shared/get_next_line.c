@@ -6,7 +6,7 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/23 16:59:02 by bduron            #+#    #+#             */
-/*   Updated: 2016/11/29 09:59:16 by bduron           ###   ########.fr       */
+/*   Updated: 2017/02/01 16:28:35 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,15 @@ char	*ft_strjoin_free(char *s1, char *s2)
 
 int		flush_tmp(char **tmp, char *bufchr, char **line)
 {
+	void *backup_tmp;
+	
 	if (*tmp && (bufchr = ft_strchr(*tmp, '\n')))
 	{
 		*bufchr = '\0';
 		*line = ft_strdup(*tmp);
+		backup_tmp = *tmp;
 		*tmp = ft_strdup(bufchr + 1);
+		free(backup_tmp);
 		return (1);
 	}
 	else
@@ -40,6 +44,7 @@ int		no_newline(char **tmp, char *bufchr, char **line)
 	if (*tmp && !bufchr && **tmp)
 	{
 		*line = *tmp;
+		free(*tmp);
 		*tmp = NULL;
 		return (1);
 	}
@@ -80,7 +85,12 @@ int		get_next_line(int fd, char **line)
 		if (next_newline(&tmp, &bufchr, buf, line))
 			return (1);
 		else
-			tmp = !tmp ? ft_strdup(buf) : ft_strjoin_free(tmp, buf);
+		{
+			if (!tmp)
+				tmp = ft_strdup(buf);
+			else 
+				tmp = !tmp ? ft_strdup(buf) : ft_strjoin_free(tmp, buf);
+		}
 		ft_memset(buf, '\0', BUFF_SIZE + 1);
 	}
 	if (no_newline(&tmp, bufchr, line))
