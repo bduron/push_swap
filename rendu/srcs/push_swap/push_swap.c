@@ -6,7 +6,7 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/11 08:50:53 by bduron            #+#    #+#             */
-/*   Updated: 2017/01/27 16:19:50 by bduron           ###   ########.fr       */
+/*   Updated: 2017/02/01 17:40:13 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -699,7 +699,6 @@ void launch_all_sorts(t_sort **s)
 	else  
 		cmd = launch_fquar(s[4]);
 	print_cmd(cmd->cmd_lst);
-	//printf("%s : %zu operations for %d values\n", s->name, s->nb_cmd, s->cargc - 1);
 }
 
 /********* generate array, quicksort it, find median ************/
@@ -878,7 +877,6 @@ t_sort  **init_sorts(int argc, char **argv, int *flag)
 }
 
 
-
 /************************* PS - Main  ***************************/
 
 int main(int argc, char **argv)
@@ -888,8 +886,6 @@ int main(int argc, char **argv)
 
 	if (argc == 1)
 		return (1);
-	//	argv = get_flag(&argc, argv, flag);  // ARG ? 
-	argv = normalize_argv(argv, &argc);
 	if (error_arg(argc, argv))
 	{
 		ft_putstr("Error\n");
@@ -897,7 +893,9 @@ int main(int argc, char **argv)
 	}
 	s = init_sorts(argc, argv, flag);
 	launch_all_sorts(s);
-	///	print_winner(s);	
+	
+	for (;;)
+		;
 
 	return (0);
 }

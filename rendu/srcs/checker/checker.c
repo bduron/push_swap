@@ -6,7 +6,7 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/05 15:20:43 by bduron            #+#    #+#             */
-/*   Updated: 2017/02/01 16:38:25 by bduron           ###   ########.fr       */
+/*   Updated: 2017/02/01 17:30:52 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -541,10 +541,6 @@ int main(int argc, char **argv)
 	flag[0] = argc;
 	sort_print_stack(&stack_a, &stack_b, argv, flag);
 	is_sorted(stack_a, stack_b) ? printf("OK\n") : printf("KO\n");
-
 	ft_lstdel_simple(&stack_a);
-
-	for (;;)
-		;
 	return (0);
 }
