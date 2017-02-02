@@ -6,7 +6,7 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/02 14:17:17 by bduron            #+#    #+#             */
-/*   Updated: 2017/02/02 14:36:29 by bduron           ###   ########.fr       */
+/*   Updated: 2017/02/02 15:34:34 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,38 +30,43 @@ int *find_quartiles(int *arr, int size, int nb)
 	return (quartiles);
 }
 
-t_sort *launch_fquar(t_sort *s)
+void empty_stack_a(t_sort *s, int best_cmd, int next)
 {
 	int i;
-	int max;
-	int best_cmd;
-	int next;
+
+	i = 0;
+	while (s->sa)
+	{
+		if (*(int *)s->sa->content <= s->quarts[i])
+			launch_wrapper(s, "pb", 0);
+		else if (*(int *)s->sa->content > s->quarts[s->nb_quarts - 1 - i])
+		{
+			launch_wrapper(s, "pb", 0);
+			launch_wrapper(s, "rb", 0);
+		}
+		if (quarts_rem(s->sa, s->quarts[i], s->quarts[s->nb_quarts - 1 - i])
+				== 0)
+			i++;
+		next = find_quartile(s->sa, s->quarts[i],
+				s->quarts[s->nb_quarts - 1 - i], 0);
+		best_cmd = rrx_or_rx(s->sa, next);
+		if (best_cmd == 0)
+			while (*(int *)s->sa->content != next)
+				launch_wrapper(s, "rra", 0);
+		else if (best_cmd == 1)
+			while (*(int *)s->sa->content != next)
+				launch_wrapper(s, "ra", 0);
+	}
+}
+
+t_sort *launch_fquar(t_sort *s, int max, int best_cmd, int next)
+{
 
 	s->sa = create_stack(s->cargc, s->cargv);
 	s->sb = NULL;
-	i = 0;
 	if (!is_sorted(s->sa, s->sb))
 	{
-		while (s->sa)
-		{
-			if (*(int *)s->sa->content <= s->quarts[i])
-				launch_wrapper(s, "pb", 0);
-			else if (*(int *)s->sa->content > s->quarts[s->nb_quarts - 1 - i])
-			{
-				launch_wrapper(s, "pb", 0);
-				launch_wrapper(s, "rb", 0);
-			}
-			if (quarts_rem(s->sa, s->quarts[i], s->quarts[s->nb_quarts - 1 - i]) == 0)
-				i++;
-			next = find_quartile(s->sa, s->quarts[i], s->quarts[s->nb_quarts - 1 - i]);
-			best_cmd = rrx_or_rx(s->sa, next);
-			if (best_cmd == 0)
-				while (*(int *)s->sa->content != next)
-					launch_wrapper(s, "rra", 0);
-			else if (best_cmd == 1)
-				while (*(int *)s->sa->content != next)
-					launch_wrapper(s, "ra", 0);
-		}
+		empty_stack_a(s, best_cmd, next);
 		launch_wrapper(s, "pb", 0);
 		while (s->sb != NULL)
 		{
@@ -93,35 +98,31 @@ int quarts_rem(t_list *s, int lower, int upper)
 	return (0);
 }
 
-int find_quartile(t_list *s, int lower, int upper)
+int find_quartile(t_list *s, int lower, int upper, int i)
 {
-	int first;
-	int last;
-	int first_i;
-	int last_i;
-	int i;
+	int first[2];
+	int last[2];
 
 	if (!s || !s->next)
 		return (-1);
-	first_i = 0;
-	last_i = 0;
-	i = 0;
-	first = -1;
-	last = -1;
+	first[1] = 0;
+	last[1] = 0;
+	*first = -1;
+	*last = -1;
 	while (s)
 	{
-		if (first == -1 && 
+		if (*first == -1 &&
 				(*(int *)s->content > upper || *(int *)s->content <= lower))
-			first = *(int *)s->content;
-		if (first == -1)
-			first_i++;
+			*first = *(int *)s->content;
+		if (*first == -1)
+			first[1]++;
 		if (*(int *)s->content > upper || *(int *)s->content <= lower)
 		{
-			last = *(int *)s->content;
-			last_i = i;
+			*last = *(int *)s->content;
+			last[1] = i;
 		}
 		i++;
 		s = s->next;
 	}
-	return (first_i < (i - last_i)) ? first : last;
+	return (first[1] < (i - last[1])) ? *first : *last;
 }

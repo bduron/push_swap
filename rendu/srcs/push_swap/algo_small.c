@@ -6,23 +6,18 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/02 14:43:41 by bduron            #+#    #+#             */
-/*   Updated: 2017/02/02 14:44:51 by bduron           ###   ########.fr       */
+/*   Updated: 2017/02/02 16:01:36 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-t_sort *launch_small(t_sort *s)
+void launch_small_next(t_sort *s, int min, int best_cmd)
 {
-	int min;
-	int max;
 	int next;
-	int best_cmd;
+	int max;
 
-	min = s->arr[0];
 	max = s->arr[s->cargc - 2];
-	s->sa = create_stack(s->cargc, s->cargv);
-	s->sb = NULL;
 	while (!is_near_sorted(s))
 	{
 		if (*(int *)s->sa->content > *(int *)s->sa->next->content
@@ -31,7 +26,7 @@ t_sort *launch_small(t_sort *s)
 			launch_wrapper(s, "sa", 0);
 		else
 		{
-			next = find_unsorted(s);
+			next = find_unsorted(s, 0, 0);
 			best_cmd = rrx_or_rx(s->sa, next);
 			if (best_cmd == 0)
 				while (*(int *)s->sa->content != next)
@@ -41,6 +36,18 @@ t_sort *launch_small(t_sort *s)
 					launch_wrapper(s, "ra", 0);
 		}
 	}
+}
+
+t_sort *launch_small(t_sort *s)
+{
+	int min;
+	int best_cmd;
+
+	best_cmd = 0;
+	min = s->arr[0];
+	s->sa = create_stack(s->cargc, s->cargv);
+	s->sb = NULL;
+	launch_small_next(s, min, best_cmd);
 	while (!is_sorted(s->sa, s->sb))
 	{
 		best_cmd = rrx_or_rx(s->sa, min);
@@ -74,16 +81,12 @@ t_sort *launch_reverse(t_sort *s)
 	return (s);
 }
 
-int find_unsorted(t_sort *s)
+int find_unsorted(t_sort *s, int last, int i)
 {
-	int last;
 	int last_i;
-	int i;
 	int first;
 	t_list *tmp;
 
-	i = 0;
-	last = 0;
 	last_i = 2000000000;
 	first = *(int *)s->sa->content;
 	tmp = s->sa;

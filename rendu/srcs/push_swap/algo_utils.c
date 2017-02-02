@@ -6,7 +6,7 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/02 14:39:30 by bduron            #+#    #+#             */
-/*   Updated: 2017/02/02 14:42:45 by bduron           ###   ########.fr       */
+/*   Updated: 2017/02/02 15:27:37 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void launch_all_sorts(t_sort **s)
 	else if ((*s)->cargc - 1 < 30)
 		cmd = launch_small(s[1]);
 	else
-		cmd = launch_fquar(s[4]);
+		cmd = launch_fquar(s[4], 0, 0, 0);
 	print_cmd(cmd->cmd_lst);
 	ft_lstdel_simple(&(cmd->cmd_lst));
 	ft_lstdel_simple(&(s[0]->srev));

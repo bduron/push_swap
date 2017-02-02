@@ -15,11 +15,11 @@ Push_swap
 Last things :
 =============
 
-[ ] spliter les fonctions
+[x] spliter les fonctions
 [ ] Leaks de 1 byte sur GNL 
 [ ] Error check (segfault)    
 [ ] Ft_printf 
-[ ] Leaks
+[x] Leaks
 [ ] Makefile
 [ ] Norme 
 [ ] Error on stderr       

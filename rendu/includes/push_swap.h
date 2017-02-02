@@ -6,7 +6,7 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/05 14:54:52 by bduron            #+#    #+#             */
-/*   Updated: 2017/02/02 14:45:52 by bduron           ###   ########.fr       */
+/*   Updated: 2017/02/02 16:01:39 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,9 @@ int *quicksort(int *arr, int start, int end);
 
 int *find_quartiles(int *arr, int size, int nb);
 int quarts_rem(t_list *s, int lower, int upper);
-int find_quartile(t_list *s, int lower, int upper);
-t_sort *launch_fquar(t_sort *s);
+int find_quartile(t_list *s, int lower, int upper, int i);
+t_sort *launch_fquar(t_sort *s, int max, int best_cmd, int next);
+void empty_stack_a(t_sort *s, int best_cmd, int next);
 
 void launch_wrapper(t_sort *s, char *cmd, int print);
 int *arr_to_sort(int argc, char **argv);
@@ -93,9 +94,10 @@ int free_all(t_sort **s);
 void launch_all_sorts(t_sort **s);
 void print_cmd(t_list *cmd);
 
-int find_unsorted(t_sort *s);
+int find_unsorted(t_sort *s, int last, int i);
 t_sort *launch_reverse(t_sort *s);
 t_sort *launch_small(t_sort *s);
+void launch_small_next(t_sort *s, int min, int best_cmd);
 
 
 #endif
