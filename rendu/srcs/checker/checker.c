@@ -6,7 +6,7 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/05 15:20:43 by bduron            #+#    #+#             */
-/*   Updated: 2017/02/02 14:01:19 by bduron           ###   ########.fr       */
+/*   Updated: 2017/02/02 17:03:28 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,10 +46,7 @@ int main(int argc, char **argv)
 		return (1);
 	argv = get_flag(&argc, argv, flag);
 	if (error_arg(argc, argv))
-	{
-		ft_putstr("Error\n");
-		return (1);
-	}
+		error_exit();
 	stack_a = create_stack(argc, argv);	
 	stack_b = NULL;
 	flag[0] = argc;

@@ -6,7 +6,7 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/02 12:24:20 by bduron            #+#    #+#             */
-/*   Updated: 2017/02/02 12:34:22 by bduron           ###   ########.fr       */
+/*   Updated: 2017/02/02 17:04:16 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,7 @@ int get_cmd(char **cmd_list)
 	while (get_next_line(0, &cmd_list[nb_cmd]))
 	{
 		if (is_cmd(cmd_list[nb_cmd]) == 0)
-		{
-			printf("Error\n");
-			exit(0);
-		}
+			error_exit();
 		nb_cmd++;
 	}
 	return (nb_cmd);

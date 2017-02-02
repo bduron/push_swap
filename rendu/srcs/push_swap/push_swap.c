@@ -6,7 +6,7 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/11 08:50:53 by bduron            #+#    #+#             */
-/*   Updated: 2017/02/02 14:53:37 by bduron           ###   ########.fr       */
+/*   Updated: 2017/02/02 17:02:29 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,7 @@ int		main(int argc, char **argv)
 	if (argc == 1)
 		return (1);
 	if (error_arg(argc, argv))
-	{
-		ft_putstr("Error\n");
-		return (1);
-	}
+		error_exit();
 	s = init_sorts(argc, argv, flag);
 	launch_all_sorts(s);
 	free_all(s);

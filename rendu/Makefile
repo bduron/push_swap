@@ -17,10 +17,11 @@ PS_SRC= srcs/push_swap/*.c
 CHECKER_SRC= srcs/checker/*.c
 OBJ= *.o
 HEADER= -I includes -I libft/includes
+FT_PRINTF= -Lft_printf -lftprintf
 FLAGS= -g -Wall -Wextra -Werror ##-fsanitize=address
  
 
-all: $(CHECKER)
+all: $(CHECKER) 
 
 $(CHECKER):
 	@make -C libft
@@ -29,7 +30,8 @@ $(CHECKER):
 
 check:
 	@make -C libft
-	@gcc -o $(CHECKER) $(FLAGS) $(SHARED_SRC) $(CHECKER_SRC) -Llibft -lft -I includes
+	@make -C ft_printf
+	@gcc -o $(CHECKER) $(FLAGS) $(SHARED_SRC) $(CHECKER_SRC) $(FT_PRINTF) -Llibft -lft -I includes
 	@echo "Compiling checker... OK"
 
 ps:

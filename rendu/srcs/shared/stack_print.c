@@ -6,7 +6,7 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/02 10:27:33 by bduron            #+#    #+#             */
-/*   Updated: 2017/02/02 10:27:37 by bduron           ###   ########.fr       */
+/*   Updated: 2017/02/02 17:36:26 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void print_two(t_list *a, t_list *b, int size)
 	}
 	while (a && b)
 	{
-		printf(" |%*d|  |%*d|\n", size, *(int *)(a->content),
+		ft_printf(" |%*d|  |%*d|\n", size, *(int *)(a->content),
 				size, *(int *)b->content);
 		a = a->next;
 		b = b->next;

@@ -6,7 +6,7 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/05 14:54:52 by bduron            #+#    #+#             */
-/*   Updated: 2017/02/02 16:01:39 by bduron           ###   ########.fr       */
+/*   Updated: 2017/02/02 17:37:13 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include "libft.h"
+# include "libftprintf.h"
 # include "get_next_line.h"
 
 typedef struct s_sort
