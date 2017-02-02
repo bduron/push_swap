@@ -6,7 +6,7 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/23 16:59:02 by bduron            #+#    #+#             */
-/*   Updated: 2017/02/01 16:28:35 by bduron           ###   ########.fr       */
+/*   Updated: 2017/02/02 10:30:47 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,12 +85,7 @@ int		get_next_line(int fd, char **line)
 		if (next_newline(&tmp, &bufchr, buf, line))
 			return (1);
 		else
-		{
-			if (!tmp)
-				tmp = ft_strdup(buf);
-			else 
-				tmp = !tmp ? ft_strdup(buf) : ft_strjoin_free(tmp, buf);
-		}
+			tmp = !tmp ? ft_strdup(buf) : ft_strjoin_free(tmp, buf);
 		ft_memset(buf, '\0', BUFF_SIZE + 1);
 	}
 	if (no_newline(&tmp, bufchr, line))

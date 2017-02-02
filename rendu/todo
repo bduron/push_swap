@@ -15,6 +15,7 @@ Push_swap
 Last things :
 =============
 
+[ ] spliter les fonctions
 [ ] Leaks de 1 byte sur GNL 
 [ ] Error check (segfault)    
 [ ] Ft_printf 

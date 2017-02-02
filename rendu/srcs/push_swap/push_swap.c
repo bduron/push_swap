@@ -6,364 +6,17 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/11 08:50:53 by bduron            #+#    #+#             */
-/*   Updated: 2017/02/01 17:40:13 by bduron           ###   ########.fr       */
+/*   Updated: 2017/02/02 10:51:45 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 #include <stdio.h>
 
-void    ft_lstdel_simple(t_list **alst)
-{
-    t_list *tmp;
-
-    if (!*alst)
-        return ;
-    tmp = *alst;
-    while (tmp)
-    {
-        free(tmp->content);
-        *alst = tmp->next;
-        free(tmp);
-        tmp = *alst;
-    }
-    *alst = NULL;
-}
-
-
-/**************** Error handling ***********************/
-
-int has_space(char *s) 
-{
-    if (!s)
-       return (0);
-    while (*s)
-        if (*s++ == ' ')
-            return (1); 
-    return (0);
-}
-
-char **normalize_argv(char **argv, int *argc)
-{
-    int i;
-    int j;
-    char *last;
-    char *current;
-    
-
-    i = 0;
-    if (*argc == 2 && has_space(argv[1])) 
-    {
-        argv = ft_strsplit(argv[1], ' ');
-        while (argv[i])
-            i++;
-        *argc = i + 1;
-        j = 0;
-        last = "./checker";    
-        while (j < i)
-        {
-            current = argv[j];    
-            argv[j] = last;
-            last = current;
-            j++;
-        }
-        argv[j] = last;
-    }   
-    return (argv);
-}
-
-
-void error_exit(void)
-{
-	ft_putstr_fd("Error\n", 2);
-	exit(1);
-}
-
-int error_duplicate(int argc, char **argv)
-{
-	int i;
-	int j;
-
-	i = 1;
-	while (i < argc)
-	{
-		j = i + 1;		 
-		while (j < argc)
-			if (ft_atoi(argv[i]) == ft_atoi(argv[j++]))
-				return (1); 
-		i++;
-	}	
-	return (0);
-}
-
-int error_arg(int argc, char **argv)
-{
-	int i;
-	int j;
-
-	i = 1;
-	while (i < argc) 
-	{
-		j = 0;
-		if (argv[i][j] == '-')
-			j++;
-		while (argv[i][j])
-			if (ft_isdigit(argv[i][j++]) == 0)
-				return (1); 
-		if (j - (argv[i][0] == '-') > 10)
-			return (1); 
-		if (j - (argv[i][0] == '-') == 10)
-			if (ft_atoi(argv[i]) > 2147483647 
-					|| ft_atoi(argv[i]) < -2147483648)
-				return (1); 
-		i++;
-	}
-	if (error_duplicate(argc, argv))
-		return (1);
-	return (0); 
-}	
-
-
-/**************** Sorting Commands **********************/
-
-int is_cmd(char *cmd)
-{
-	int i;
-
-	i = 0;	
-	i += (ft_strcmp(cmd, "sa") == 0) ? 1 : 0;
-	i += (ft_strcmp(cmd, "sb")  == 0) ? 1 : 0;
-	i += (ft_strcmp(cmd, "ss")  == 0) ? 1 : 0;
-	i += (ft_strcmp(cmd, "ra")  == 0) ? 1 : 0;
-	i += (ft_strcmp(cmd, "rb")  == 0) ? 1 : 0;
-	i += (ft_strcmp(cmd, "rr")  == 0) ? 1 : 0;
-	i += (ft_strcmp(cmd, "rra") == 0) ? 1 : 0;
-	i += (ft_strcmp(cmd, "rrb") == 0) ? 1 : 0;
-	i += (ft_strcmp(cmd, "rrr") == 0) ? 1 : 0;
-	i += (ft_strcmp(cmd, "pa")  == 0) ? 1 : 0;
-	i += (ft_strcmp(cmd, "pb")  == 0) ? 1 : 0;
-	return (i) ? 1 : 0;
-}
-
-void sort_sx(t_list **head)
-{	
-	t_list *tmp;
-
-	if (!*head || (*head)->next == NULL)
-		return ;	
-	tmp = *head;
-	*head = tmp->next;
-	tmp->next = (*head)->next;
-	(*head)->next = tmp;
-}
-
-void sort_rx(t_list **head)
-{
-	t_list *tmp;
-	t_list *last;
-
-	if (!*head || (*head)->next == NULL)
-		return ;	
-	tmp = *head; 		//1
-	*head = tmp->next;  	//2
-	tmp->next = NULL;	//3
-	last = *head;		//4
-	while (last->next != NULL) //5  //6 //SEGFAULT ICI 
-		last = last->next;		
-	last->next = tmp;
-}	
-
-void sort_rrx(t_list **head)
-{
-	t_list *tmp;
-	t_list *last;
-
-	if (!*head || (*head)->next == NULL)
-		return ;	
-	last = *head;	
-	while (last->next != NULL)
-	{
-		if (last->next->next == NULL)
-			tmp = last;
-		last = last->next;		
-	}
-	tmp->next = NULL;
-	last->next = *head;
-	*head = last;	
-}
-
-void sort_px(t_list **head_a, t_list **head_b)
-{
-	t_list *tmp;
-
-	if (*head_b == NULL)
-		return ;
-
-	tmp = (*head_b)->next;	
-	(*head_b)->next = *head_a;
-	*head_a = *head_b;
-	*head_b = tmp;
-}
-
-void launch_sort(t_list **head_a, t_list **head_b, char *cmd)
-{
-	if (ft_strcmp(cmd, "sa") == 0)
-		sort_sx(head_a);
-	else if (ft_strcmp(cmd, "sb") == 0)
-		sort_sx(head_b);
-	else if (ft_strcmp(cmd, "ss") == 0)
-	{
-		sort_sx(head_a);
-		sort_sx(head_b);
-	}
-	else if (ft_strcmp(cmd, "ra") == 0)
-		sort_rx(head_a);
-	else if (ft_strcmp(cmd, "rb") == 0)
-		sort_rx(head_b);
-	else if (ft_strcmp(cmd, "rr") == 0)
-	{
-		sort_rx(head_a);
-		sort_rx(head_b);
-	}
-	else if (ft_strcmp(cmd, "rra") == 0)
-		sort_rrx(head_a);
-	else if (ft_strcmp(cmd, "rrb") == 0)
-		sort_rrx(head_b);
-	else if (ft_strcmp(cmd, "rrr") == 0)
-	{
-		sort_rrx(head_a);
-		sort_rrx(head_b);
-	}
-	else if (ft_strcmp(cmd, "pa") == 0)
-		sort_px(head_a, head_b);
-	else if (ft_strcmp(cmd, "pb") == 0)
-		sort_px(head_b, head_a);
-}
-
-
-/**************** Utils *********************/
-
-int array_max_min(int argc, char **argv)
-{
-	int max;
-	int min;
-	int current;
-	int i;	
-
-	min = 0;
-	max = 0;
-	i = 0;
-	while (i < argc)
-	{
-		current = ft_atoi(argv[i++]);
-		if (current > max)
-			max = current;
-		if (current < min)
-			min = current;
-	}	
-	return (nb_digit(min) >= nb_digit(max)) ? min : max;
-}
-
-int nb_digit(int n)
-{
-	int len;
-
-	len = (n < 0) ? 1 : 0;	
-	while (n)
-	{	
-		n /= 10;
-		len++;
-	}
-	return (len);
-}
-
-size_t lstlen(t_list *list)
-{
-	size_t len;
-
-	len = 0;
-	while (list)
-	{
-		list = list->next;
-		len++;
-	}	
-	return (len);
-}
-
-void print_list(t_list *list)
-{
-	while (list) 	 
-	{
-		printf("%d\n", *(int *)(list->content));
-		list = list->next;
-	}	
-}
-
-void print_two(t_list *a, t_list *b, int size)
-{
-	size_t len_a;
-	size_t len_b;
-	size_t len_diff;
-	char big_lst;
-
-	len_a = (a == NULL) ? 0 : lstlen(a);
-	len_b = (b == NULL) ? 0 : lstlen(b);
-	big_lst = (len_a >= len_b) ? 'a' : 'b';
-	len_diff = (big_lst == 'a') ? len_a - len_b : len_b - len_a;	
-	while (len_diff)
-	{
-		big_lst == 'a' ? printf(" |%*d|   \n", size, *(int *)a->content)
-			: printf(" %*c%*d|\n", size + 5, '|', size, *(int *)b->content);	
-		a = (big_lst == 'a') ? a->next : a;	
-		b = (big_lst == 'b') ? b->next : b;	
-		len_diff--;
-	}	
-	while (a && b) 	 
-	{
-		printf(" |%*d|  |%*d|\n", size, *(int *)(a->content), 
-				size, *(int *)b->content);
-		a = a->next;
-		b = b->next;	
-	}	
-	printf(" (%*c)  (%*c) \n\n", size, 'A', size, 'B');
-}
-
 
 /**************** Main  Checker **********************/
 
-t_list *create_stack(int argc, char **argv)
-{
-	t_list *head;
-	int i;
-	int val;
 
-	i =  argc - 1;
-	val = ft_atoi(argv[i--]);	
-	head = ft_lstnew(&val, sizeof(int));
-	while (i > 0)
-	{
-		val = ft_atoi(argv[i--]);	
-		ft_lstadd(&head, ft_lstnew(&val, sizeof(int)));			
-	}
-	return (head);
-}
-
-int get_cmd(char **cmd_list)     // USELESS
-{
-	int nb_cmd;
-
-	nb_cmd = 0;	
-	while (get_next_line(0, &cmd_list[nb_cmd]))
-	{
-		if (is_cmd(cmd_list[nb_cmd]) == 0)
-		{
-			printf("KO\n");
-			exit(0);
-		}	
-		nb_cmd++;
-	}
-	return (nb_cmd);
-}
 
 int is_near_sorted(t_sort *s)
 { 
@@ -393,23 +46,6 @@ int is_near_sorted(t_sort *s)
 	return (1);		
 }	
 
-int is_sorted(t_list *stack_a, t_list *stack_b)
-{ 
-	int last;
-
-	if (stack_b != NULL)
-		return (0);
-	last = *(int *)stack_a->content;
-	stack_a = stack_a->next;
-	while (stack_a)
-	{
-		if (*(int *)stack_a->content < last)
-			return (0);
-		last = *(int *)stack_a->content;	
-		stack_a = stack_a->next;
-	}	
-	return (1);
-}	
 
 int is_reverse(t_list *stack)
 { 
@@ -422,31 +58,6 @@ int is_reverse(t_list *stack)
 	return (1);
 }	
 
-char **get_flag(int *argc, char **argv, int *flag)
-{
-	int  i;
-
-	ft_bzero(flag, sizeof(int) * 127); 
-	if (argv[1][0] == '-')
-	{
-		i = 1;
-		while (argv[1][i]) 
-		{		
-			if (argv[1][i] == 'v' || argv[1][i] == 'c')
-				flag[(int)argv[1][i]]++;
-			else 
-			{
-				ft_putstr("usage: checker [-vc] number list\n");
-				ft_putstr("  -v verbose mode\n  -c result highlighting\n");
-				exit(1);
-			}
-			i++;
-		}
-		*argc -= 1;
-		return (argv + 1);
-	}	
-	return (argv);
-}
 
 /************************* PS  -  launch sorting algorithms wrapper ***************************/
 
@@ -456,16 +67,9 @@ void launch_wrapper(t_sort *s, char *cmd, int print)
 	s->nb_cmd++;	
 	if (print)
 	{
-		//	usleep(2000);
-		//	printf("\33[2J");
 		print_two(s->sa, s->sb, nb_digit(array_max_min(s->cargc, s->cargv)));  
 	}
 		ft_lstaddback(&s->cmd_lst, ft_lstnew(cmd, sizeof(char) * 4));			
-}
-
-void print_wrap(t_sort *s)
-{
-	print_two(s->sa, s->sb, nb_digit(array_max_min(s->cargc, s->cargv)));  
 }
 
 /************************* PS  -  launch sorting algorithms ***************************/
@@ -904,7 +508,6 @@ int free_all(t_sort **s)
 	free(s[4]->quarts);
 	free(s[4]->arr);
 	free(s[1]->arr);
-	free(s[0]->arr);
 	free(s[0]);
 	free(s[1]);
 	free(s[2]);
@@ -932,8 +535,6 @@ int main(int argc, char **argv)
 	launch_all_sorts(s);
 	free_all(s);
 
-//	for (;;)
-//		;
 
 	return (0);
 }
