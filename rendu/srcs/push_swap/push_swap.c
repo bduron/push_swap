@@ -13,6 +13,24 @@
 #include "push_swap.h"
 #include <stdio.h>
 
+void    ft_lstdel_simple(t_list **alst)
+{
+    t_list *tmp;
+
+    if (!*alst)
+        return ;
+    tmp = *alst;
+    while (tmp)
+    {
+        free(tmp->content);
+        *alst = tmp->next;
+        free(tmp);
+        tmp = *alst;
+    }
+    *alst = NULL;
+}
+
+
 /**************** Error handling ***********************/
 
 int has_space(char *s) 
@@ -581,6 +599,7 @@ t_sort *launch_fquar(t_sort *s)
 			launch_wrapper(s, "pa", 0);
 		}
 	}
+	ft_lstdel_simple(&(s->sa));
 	return (s);
 }
 
@@ -657,6 +676,7 @@ t_sort *launch_small(t_sort *s)
 			while (*(int *)s->sa->content != min)
 				launch_wrapper(s, "ra", 0);
 	}
+	ft_lstdel_simple(&(s->sa));
 	return (s);
 }
 
@@ -675,6 +695,7 @@ t_sort *launch_reverse(t_sort *s)
 		launch_wrapper(s, "pa", 0);
 		launch_wrapper(s, "pa", 0);
 	}
+	ft_lstdel_simple(&(s->sa));
 	return (s);	
 }
 
@@ -699,6 +720,8 @@ void launch_all_sorts(t_sort **s)
 	else  
 		cmd = launch_fquar(s[4]);
 	print_cmd(cmd->cmd_lst);
+	ft_lstdel_simple(&(cmd->cmd_lst));
+	ft_lstdel_simple(&(s[0]->srev));
 }
 
 /********* generate array, quicksort it, find median ************/
@@ -876,6 +899,20 @@ t_sort  **init_sorts(int argc, char **argv, int *flag)
 	return (s);
 }
 
+int free_all(t_sort **s)
+{
+	free(s[4]->quarts);
+	free(s[4]->arr);
+	free(s[1]->arr);
+	free(s[0]->arr);
+	free(s[0]);
+	free(s[1]);
+	free(s[2]);
+	free(s[4]);
+	free(s);
+	return (1);
+}
+
 
 /************************* PS - Main  ***************************/
 
@@ -893,9 +930,10 @@ int main(int argc, char **argv)
 	}
 	s = init_sorts(argc, argv, flag);
 	launch_all_sorts(s);
-	
-	for (;;)
-		;
+	free_all(s);
+
+//	for (;;)
+//		;
 
 	return (0);
 }

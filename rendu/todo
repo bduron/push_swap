@@ -1,20 +1,21 @@
 Leaks : 
 =======
 Checker 
-[X] strsplit -> **argv
-[X] get_cmd -> **cmd_list 
-[X] get_next_line ? 
-[X] create_stack -> 
+[x] strsplit -> **argv
+[x] get_cmd -> **cmd_list 
+[x] get_next_line ? 
+[x] create_stack -> 
 
 Push_swap
-[ ] strsplit -> **argv
-[ ] get_cmd -> **cmd_list 
-[ ] get_next_line ? 
-[ ] create_stack -> 
+[x] strsplit -> **argv
+[x] get_cmd -> **cmd_list 
+[x] get_next_line ? 
+[x] create_stack -> 
 
 Last things :
 =============
 
+[ ] Leaks de 1 byte sur GNL 
 [ ] Error check (segfault)    
 [ ] Ft_printf 
 [ ] Leaks

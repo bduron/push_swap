@@ -392,7 +392,7 @@ void sort_print_stack(t_list **stack_a, t_list **stack_b,
 	int nb_cmd;
 	int i;
 
-	cmd_list = (char **)malloc(sizeof(char *) * 6400);
+	cmd_list = (char **)malloc(sizeof(char *) * 64000);
 	nb_cmd = get_cmd(cmd_list);	
 	i = 0;
 	while (i < nb_cmd)
