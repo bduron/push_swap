@@ -1,23 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   ft_printf_strings_utils.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/11/23 17:00:16 by bduron            #+#    #+#             */
-/*   Updated: 2017/02/02 18:40:24 by bduron           ###   ########.fr       */
+/*   Created: 2017/01/03 15:31:58 by bduron            #+#    #+#             */
+/*   Updated: 2017/01/03 15:36:01 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#include "libftprintf.h"
 
-# include "libft.h"
-# include <unistd.h>
-# include <stdlib.h>
-# define BUFF_SIZE 4
+size_t	ft_wlen(wchar_t s)
+{
+	size_t len;
 
-int		get_next_line(int fd, char **line);
+	len = 0;
+	if (s <= 0x7F)
+		len += 1;
+	else if (s <= 0x7FF)
+		len += 2;
+	else if (s <= 0xFFFF)
+		len += 3;
+	else if (s <= 0x10FFFF)
+		len += 4;
+	return (len);
+}
 
-#endif
+size_t	rem(size_t len, wchar_t *s)
+{
+	size_t	rem;
+	int		i;
+
+	rem = len;
+	i = 0;
+	while (i < len && rem >= ft_wlen(s[i]))
+		rem -= ft_wlen(s[i++]);
+	return (rem);
+}
