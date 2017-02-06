@@ -1,28 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.c                                        :+:      :+:    :+:   */
+/*   ft_memccpy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/01/11 08:50:53 by bduron            #+#    #+#             */
-/*   Updated: 2017/02/06 11:44:02 by bduron           ###   ########.fr       */
+/*   Created: 2016/11/09 09:44:54 by bduron            #+#    #+#             */
+/*   Updated: 2017/02/06 10:35:08 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "push_swap.h"
+#include "libft.h"
 
-int		main(int argc, char **argv)
+void	*ft_memccpy(void *dst, const void *src, int c, size_t n)
 {
-	int flag[127];
-	t_sort **s;
+	unsigned char	*d;
+	const char		*s;
 
-	if (argc == 1)
-		return (1);
-	if (error_arg(argc, argv))
-		error_exit();
-	s = init_sorts(argc, argv, flag);
-	launch_all_sorts(s);
-	free_all(s);
-	return (0);
+	d = dst;
+	s = src;
+	while (n--)
+	{
+		if (c == *s)
+		{
+			*d++ = *s++;
+			return ((void *)d);
+		}
+		*d++ = *s++;
+	}
+	return (NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/02 10:27:33 by bduron            #+#    #+#             */
-/*   Updated: 2017/02/02 17:36:26 by bduron           ###   ########.fr       */
+/*   Updated: 2017/02/06 11:38:00 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,8 +72,8 @@ void print_two(t_list *a, t_list *b, int size)
 	len_diff = (big_lst == 'a') ? len_a - len_b : len_b - len_a;
 	while (len_diff)
 	{
-		big_lst == 'a' ? printf(" |%*d|   \n", size, *(int *)a->content)
-			: printf(" %*c%*d|\n", size + 5, '|', size, *(int *)b->content);
+		big_lst == 'a' ? ft_printf(" |%*d|   \n", size, *(int *)a->content)
+			: ft_printf(" %*c%*d|\n", size + 5, '|', size, *(int *)b->content);
 		a = (big_lst == 'a') ? a->next : a;
 		b = (big_lst == 'b') ? b->next : b;
 		len_diff--;
@@ -85,5 +85,5 @@ void print_two(t_list *a, t_list *b, int size)
 		a = a->next;
 		b = b->next;
 	}
-	printf(" (%*c)  (%*c) \n\n", size, 'A', size, 'B');
+	ft_printf(" (%*c)  (%*c) \n\n", size, 'A', size, 'B');
 }

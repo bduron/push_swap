@@ -1,28 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.c                                        :+:      :+:    :+:   */
+/*   ft_strnstr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/01/11 08:50:53 by bduron            #+#    #+#             */
-/*   Updated: 2017/02/06 11:44:02 by bduron           ###   ########.fr       */
+/*   Created: 2016/11/14 11:34:49 by bduron            #+#    #+#             */
+/*   Updated: 2017/02/06 10:36:11 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "push_swap.h"
+#include "libft.h"
 
-int		main(int argc, char **argv)
+char	*ft_strnstr(const char *big, const char *little, size_t len)
 {
-	int flag[127];
-	t_sort **s;
+	size_t		lenstr;
+	const char	*b;
+	size_t		l;
 
-	if (argc == 1)
-		return (1);
-	if (error_arg(argc, argv))
-		error_exit();
-	s = init_sorts(argc, argv, flag);
-	launch_all_sorts(s);
-	free_all(s);
-	return (0);
+	l = len;
+	b = big;
+	lenstr = ft_strlen(little);
+	if (*little == 0)
+		return ((char *)big);
+	while (*big && len)
+	{
+		if ((big - b + lenstr) <= l && *big == *little
+				&& ft_strncmp(big, little, lenstr) == 0)
+			return ((char *)big);
+		big++;
+		len--;
+	}
+	return (NULL);
 }

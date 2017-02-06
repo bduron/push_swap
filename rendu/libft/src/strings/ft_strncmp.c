@@ -1,28 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.c                                        :+:      :+:    :+:   */
+/*   ft_strncmp.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/01/11 08:50:53 by bduron            #+#    #+#             */
-/*   Updated: 2017/02/06 11:44:02 by bduron           ###   ########.fr       */
+/*   Created: 2016/11/15 09:04:30 by bduron            #+#    #+#             */
+/*   Updated: 2017/02/06 10:36:11 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "push_swap.h"
+#include "libft.h"
 
-int		main(int argc, char **argv)
+int		ft_strncmp(const char *s1, const char *s2, size_t n)
 {
-	int flag[127];
-	t_sort **s;
+	unsigned char *str1;
+	unsigned char *str2;
 
-	if (argc == 1)
-		return (1);
-	if (error_arg(argc, argv))
-		error_exit();
-	s = init_sorts(argc, argv, flag);
-	launch_all_sorts(s);
-	free_all(s);
-	return (0);
+	if (!n)
+		return (0);
+	str1 = (unsigned char *)s1;
+	str2 = (unsigned char *)s2;
+	n--;
+	while (*str1 == *str2 && *str1 && *str2 && n)
+	{
+		str1++;
+		str2++;
+		n--;
+	}
+	return (*str1 - *str2);
 }

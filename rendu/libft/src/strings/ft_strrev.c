@@ -1,28 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.c                                        :+:      :+:    :+:   */
+/*   ft_strrev.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/01/11 08:50:53 by bduron            #+#    #+#             */
-/*   Updated: 2017/02/06 11:44:02 by bduron           ###   ########.fr       */
+/*   Created: 2016/11/15 14:30:00 by bduron            #+#    #+#             */
+/*   Updated: 2017/02/06 10:36:11 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "push_swap.h"
+#include "libft.h"
 
-int		main(int argc, char **argv)
+void	ft_strrev(char *s)
 {
-	int flag[127];
-	t_sort **s;
+	int		i;
+	int		j;
+	char	tmp;
 
-	if (argc == 1)
-		return (1);
-	if (error_arg(argc, argv))
-		error_exit();
-	s = init_sorts(argc, argv, flag);
-	launch_all_sorts(s);
-	free_all(s);
-	return (0);
+	i = 0;
+	j = 0;
+	while (s[i])
+		i++;
+	i--;
+	while (i > j)
+	{
+		tmp = s[i];
+		s[i] = s[j];
+		s[j] = tmp;
+		i--;
+		j++;
+	}
 }

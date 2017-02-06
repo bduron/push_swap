@@ -1,28 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.c                                        :+:      :+:    :+:   */
+/*   ft_printf_strings_utils.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/01/11 08:50:53 by bduron            #+#    #+#             */
-/*   Updated: 2017/02/06 11:44:02 by bduron           ###   ########.fr       */
+/*   Created: 2017/01/03 15:31:58 by bduron            #+#    #+#             */
+/*   Updated: 2017/02/06 10:58:51 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "push_swap.h"
+#include "ft_printf.h"
 
-int		main(int argc, char **argv)
+size_t	ft_wlen(wchar_t s)
 {
-	int flag[127];
-	t_sort **s;
+	size_t len;
 
-	if (argc == 1)
-		return (1);
-	if (error_arg(argc, argv))
-		error_exit();
-	s = init_sorts(argc, argv, flag);
-	launch_all_sorts(s);
-	free_all(s);
-	return (0);
+	len = 0;
+	if (s <= 0x7F)
+		len += 1;
+	else if (s <= 0x7FF)
+		len += 2;
+	else if (s <= 0xFFFF)
+		len += 3;
+	else if (s <= 0x10FFFF)
+		len += 4;
+	return (len);
+}
+
+size_t	rem(size_t len, wchar_t *s)
+{
+	size_t	rem;
+	int		i;
+
+	rem = len;
+	i = 0;
+	while ((size_t)i < len && rem >= ft_wlen(s[i]))
+		rem -= ft_wlen(s[i++]);
+	return (rem);
 }

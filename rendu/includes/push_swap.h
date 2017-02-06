@@ -6,20 +6,16 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/05 14:54:52 by bduron            #+#    #+#             */
-/*   Updated: 2017/02/02 17:37:13 by bduron           ###   ########.fr       */
+/*   Updated: 2017/02/06 11:48:19 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PUSH_SWAP_H
 # define PUSH_SWAP_H
 
-# include <stdio.h> // TO REMOVE
-
 # include <stdlib.h>
 # include <unistd.h>
 # include "libft.h"
-# include "libftprintf.h"
-# include "get_next_line.h"
 
 typedef struct s_sort
 {

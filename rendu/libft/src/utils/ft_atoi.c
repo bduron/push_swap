@@ -1,28 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.c                                        :+:      :+:    :+:   */
+/*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/01/11 08:50:53 by bduron            #+#    #+#             */
-/*   Updated: 2017/02/06 11:44:02 by bduron           ###   ########.fr       */
+/*   Created: 2016/11/04 14:48:01 by bduron            #+#    #+#             */
+/*   Updated: 2017/02/06 10:36:22 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "push_swap.h"
+#include "libft.h"
 
-int		main(int argc, char **argv)
+long		ft_atoi(const char *str)
 {
-	int flag[127];
-	t_sort **s;
+	int is_negative;
+	long n;
 
-	if (argc == 1)
-		return (1);
-	if (error_arg(argc, argv))
-		error_exit();
-	s = init_sorts(argc, argv, flag);
-	launch_all_sorts(s);
-	free_all(s);
-	return (0);
+	n = 0;
+	is_negative = 0;
+	while (*str == ' ' || *str == '\t' || *str == '\n' || *str == '\v' ||
+			*str == '\r' || *str == '\f')
+		str++;
+	if (*str == '+')
+		str++;
+	else if (*str == '-')
+	{
+		is_negative = 1;
+		str++;
+	}
+	while (*str >= '0' && *str <= '9')
+	{
+		n = n * 10 + (*str - '0');
+		str++;
+	}
+	return (is_negative ? -n : n);
 }

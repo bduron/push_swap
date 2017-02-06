@@ -6,7 +6,7 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/02 14:39:30 by bduron            #+#    #+#             */
-/*   Updated: 2017/02/02 17:31:17 by bduron           ###   ########.fr       */
+/*   Updated: 2017/02/06 11:37:57 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void print_cmd(t_list *cmd)
 {
 	while (cmd)
 	{
-		printf("%s\n", (char *)cmd->content);
+		ft_printf("%s\n", (char *)cmd->content);
 		cmd = cmd->next;
 	}
 }

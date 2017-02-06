@@ -1,28 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   push_swap.c                                        :+:      :+:    :+:   */
+/*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/01/11 08:50:53 by bduron            #+#    #+#             */
-/*   Updated: 2017/02/06 11:44:02 by bduron           ###   ########.fr       */
+/*   Created: 2016/11/09 15:58:29 by bduron            #+#    #+#             */
+/*   Updated: 2017/02/06 10:36:11 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "push_swap.h"
+#include "libft.h"
 
-int		main(int argc, char **argv)
+char	*ft_strtrim(char const *s)
 {
-	int flag[127];
-	t_sort **s;
+	char	*p;
+	size_t	len;
 
-	if (argc == 1)
-		return (1);
-	if (error_arg(argc, argv))
-		error_exit();
-	s = init_sorts(argc, argv, flag);
-	launch_all_sorts(s);
-	free_all(s);
-	return (0);
+	if (!s)
+		return (char *)s;
+	while (*s == ' ' || *s == '\n' || *s == '\t')
+		s++;
+	len = ft_strlen(s) - 1;
+	while ((s[len] == ' ' || s[len] == '\n' || s[len] == '\t') && *s)
+		len--;
+	len++;
+	p = (char *)malloc(sizeof(char) * (len + 1));
+	if (!p)
+		return (NULL);
+	ft_strncpy(p, s, len);
+	p[len] = '\0';
+	return (p);
 }

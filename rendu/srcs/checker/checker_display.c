@@ -6,7 +6,7 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/02 12:36:21 by bduron            #+#    #+#             */
-/*   Updated: 2017/02/02 17:35:58 by bduron           ###   ########.fr       */
+/*   Updated: 2017/02/06 11:37:57 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void ft_strsplitdel(char **split, int size)
 void option_n(int *flag, int nb_cmd)
 {
 	if (flag['n'])
-		printf(" [" "\x1B[32m" "%d" "\x1B[0m" " operations for " 
+		ft_printf(" [" "\x1B[32m" "%d" "\x1B[0m" " operations for " 
 				"\x1B[32m" "%d" "\x1B[0m" " values]\n\n", nb_cmd, flag[0] - 1);
 }
 
@@ -47,10 +47,10 @@ void option_display(t_list **stack_a, t_list **stack_b, char **argv, int *flag)
 	if (flag['c'])
 	{
 		if (flag['i'])
-			printf("\33[2J");
-		printf("\x1B[32m");
+			ft_printf("\33[2J");
+		ft_printf("\x1B[32m");
 		print_two(*stack_a, *stack_b, nb_digit(array_max_min(flag[0], argv)));
-		printf("\x1B[0m");
+		ft_printf("\x1B[0m");
 	}
 }
 
@@ -72,9 +72,9 @@ void sort_print_stack(t_list **stack_a, t_list **stack_b,
 		else if (flag['i'])
 		{
 			ft_usleep(3500);
-			printf("\33[2J");
+			ft_printf("\33[2J");
 			print_two(*stack_a, *stack_b, nb_digit(array_max_min(*flag, argv)));
-			printf(" [%s]\n", cmd_list[i - 1]);
+			ft_printf(" [%s]\n", cmd_list[i - 1]);
 		}
 	}
 	option_display(stack_a, stack_b, argv, flag);

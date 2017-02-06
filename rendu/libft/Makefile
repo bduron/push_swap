@@ -11,7 +11,9 @@
 # **************************************************************************** #
 
 NAME= libft.a
-SRC= ft_atoi.c  \
+SRC= src/*/*.c
+
+#	ft_atoi.c  \
 	ft_bzero.c  \
 	ft_isalnum.c  \
 	ft_isalpha.c  \
@@ -75,7 +77,8 @@ SRC= ft_atoi.c  \
 	ft_islower.c  \
 	ft_strrev.c
 	
-OBJ= $(SRC:.c=.o)
+#OBJ= $(SRC:.c=.o)
+OBJ= *.o 
 HEADER= includes
 FLAGS= -g -Wall -Wextra -Werror
 
