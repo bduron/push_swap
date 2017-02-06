@@ -6,13 +6,13 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/02 10:08:04 by bduron            #+#    #+#             */
-/*   Updated: 2017/02/02 10:20:50 by bduron           ###   ########.fr       */
+/*   Updated: 2017/02/06 12:07:58 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void launch_sort_next(t_list **head_a, t_list **head_b, char *cmd)
+void	launch_sort_next(t_list **head_a, t_list **head_b, char *cmd)
 {
 	if (ft_strcmp(cmd, "rr") == 0)
 	{
@@ -34,7 +34,7 @@ void launch_sort_next(t_list **head_a, t_list **head_b, char *cmd)
 		sort_px(head_b, head_a);
 }
 
-void launch_sort(t_list **head_a, t_list **head_b, char *cmd)
+void	launch_sort(t_list **head_a, t_list **head_b, char *cmd)
 {
 	if (ft_strcmp(cmd, "sa") == 0)
 		sort_sx(head_a);
@@ -49,7 +49,6 @@ void launch_sort(t_list **head_a, t_list **head_b, char *cmd)
 		sort_rx(head_a);
 	else if (ft_strcmp(cmd, "rb") == 0)
 		sort_rx(head_b);
-	else 
+	else
 		launch_sort_next(head_a, head_b, cmd);
 }
-

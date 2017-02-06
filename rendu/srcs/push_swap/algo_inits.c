@@ -6,13 +6,13 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/02 14:08:40 by bduron            #+#    #+#             */
-/*   Updated: 2017/02/02 14:13:23 by bduron           ###   ########.fr       */
+/*   Updated: 2017/02/06 14:35:32 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-t_sort  **init_sorts(int argc, char **argv, int *flag)
+t_sort	**init_sorts(int argc, char **argv, int *flag)
 {
 	t_sort **s;
 
@@ -21,11 +21,10 @@ t_sort  **init_sorts(int argc, char **argv, int *flag)
 	s[1] = init_small(argc, argv, flag);
 	s[2] = init_reverse(argc, argv, flag);
 	s[4] = init_fquar(argc, argv, flag);
-
 	return (s);
 }
 
-t_sort *init_basic(int argc, char **argv, int *flag)
+t_sort	*init_basic(int argc, char **argv, int *flag)
 {
 	t_sort *basic;
 
@@ -42,7 +41,7 @@ t_sort *init_basic(int argc, char **argv, int *flag)
 	return (basic);
 }
 
-t_sort *init_fquar(int argc, char **argv, int *flag)
+t_sort	*init_fquar(int argc, char **argv, int *flag)
 {
 	t_sort *fquar;
 
@@ -64,7 +63,7 @@ t_sort *init_fquar(int argc, char **argv, int *flag)
 	return (fquar);
 }
 
-t_sort *init_reverse(int argc, char **argv, int *flag)
+t_sort	*init_reverse(int argc, char **argv, int *flag)
 {
 	t_sort *reverse;
 
@@ -81,7 +80,7 @@ t_sort *init_reverse(int argc, char **argv, int *flag)
 	return (reverse);
 }
 
-t_sort *init_small(int argc, char **argv, int *flag)
+t_sort	*init_small(int argc, char **argv, int *flag)
 {
 	t_sort *small;
 

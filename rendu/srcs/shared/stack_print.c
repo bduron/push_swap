@@ -6,13 +6,13 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/02 10:27:33 by bduron            #+#    #+#             */
-/*   Updated: 2017/02/06 11:38:00 by bduron           ###   ########.fr       */
+/*   Updated: 2017/02/06 12:19:14 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-int array_max_min(int argc, char **argv)
+int		array_max_min(int argc, char **argv)
 {
 	int max;
 	int min;
@@ -33,7 +33,7 @@ int array_max_min(int argc, char **argv)
 	return (nb_digit(min) >= nb_digit(max)) ? min : max;
 }
 
-int nb_digit(int n)
+int		nb_digit(int n)
 {
 	int len;
 
@@ -46,7 +46,7 @@ int nb_digit(int n)
 	return (len);
 }
 
-size_t lstlen(t_list *list)
+size_t	lstlen(t_list *list)
 {
 	size_t len;
 
@@ -59,12 +59,12 @@ size_t lstlen(t_list *list)
 	return (len);
 }
 
-void print_two(t_list *a, t_list *b, int size)
+void	print_two(t_list *a, t_list *b, int size)
 {
-	size_t len_a;
-	size_t len_b;
-	size_t len_diff;
-	char big_lst;
+	size_t	len_a;
+	size_t	len_b;
+	size_t	len_diff;
+	char	big_lst;
 
 	len_a = (a == NULL) ? 0 : lstlen(a);
 	len_b = (b == NULL) ? 0 : lstlen(b);

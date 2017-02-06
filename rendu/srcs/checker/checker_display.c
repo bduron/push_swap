@@ -6,13 +6,13 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/02 12:36:21 by bduron            #+#    #+#             */
-/*   Updated: 2017/02/06 11:37:57 by bduron           ###   ########.fr       */
+/*   Updated: 2017/02/06 15:35:01 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "push_swap.h" 
+#include "push_swap.h"
 
-void ft_usleep(int time)
+void	ft_usleep(int time)
 {
 	int i;
 	int j;
@@ -26,23 +26,25 @@ void ft_usleep(int time)
 	}
 }
 
-void ft_strsplitdel(char **split, int size)
+void	ft_strsplitdel(char **split, int size)
 {
 	int i;
+
 	i = 0;
 	while (i < size)
 		free(split[i++]);
 	free(split);
 }
 
-void option_n(int *flag, int nb_cmd)
+void	option_n(int *flag, int nb_cmd)
 {
 	if (flag['n'])
-		ft_printf(" [" "\x1B[32m" "%d" "\x1B[0m" " operations for " 
+		ft_printf(" [" "\x1B[32m" "%d" "\x1B[0m" " operations for "
 				"\x1B[32m" "%d" "\x1B[0m" " values]\n\n", nb_cmd, flag[0] - 1);
 }
 
-void option_display(t_list **stack_a, t_list **stack_b, char **argv, int *flag)
+void	option_display(t_list **stack_a, t_list **stack_b,
+		char **argv, int *flag)
 {
 	if (flag['c'])
 	{
@@ -54,14 +56,14 @@ void option_display(t_list **stack_a, t_list **stack_b, char **argv, int *flag)
 	}
 }
 
-void sort_print_stack(t_list **stack_a, t_list **stack_b,
+void	sort_print_stack(t_list **stack_a, t_list **stack_b,
 		char **argv, int *flag)
 {
-	char **cmd_list;
-	int nb_cmd;
-	int i;
+	char	**cmd_list;
+	int		nb_cmd;
+	int		i;
 
-	cmd_list = (char **)malloc(sizeof(char *) * 64000);
+	cmd_list = (char **)malloc(sizeof(char *) * 128000);
 	nb_cmd = get_cmd(cmd_list);
 	i = 0;
 	while (i < nb_cmd)
@@ -78,6 +80,6 @@ void sort_print_stack(t_list **stack_a, t_list **stack_b,
 		}
 	}
 	option_display(stack_a, stack_b, argv, flag);
-    option_n(flag, nb_cmd);
+	option_n(flag, nb_cmd);
 	ft_strsplitdel(cmd_list, nb_cmd);
-}	
+}

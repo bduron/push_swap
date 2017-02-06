@@ -6,19 +6,19 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/02 09:56:55 by bduron            #+#    #+#             */
-/*   Updated: 2017/02/02 10:00:46 by bduron           ###   ########.fr       */
+/*   Updated: 2017/02/06 12:12:05 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void error_exit(void)
+void	error_exit(void)
 {
 	ft_putstr_fd("Error\n", 2);
 	exit(1);
 }
 
-int error_duplicate(int argc, char **argv)
+int		error_duplicate(int argc, char **argv)
 {
 	int i;
 	int j;
@@ -35,7 +35,7 @@ int error_duplicate(int argc, char **argv)
 	return (0);
 }
 
-int error_arg(int argc, char **argv)
+int		error_arg(int argc, char **argv)
 {
 	int i;
 	int j;

@@ -6,48 +6,48 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/02 12:24:20 by bduron            #+#    #+#             */
-/*   Updated: 2017/02/02 17:04:16 by bduron           ###   ########.fr       */
+/*   Updated: 2017/02/06 15:35:24 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-int is_cmd(char *cmd)
+int		is_cmd(char *cmd)
 {
 	int i;
 
 	i = 0;
 	i += (ft_strcmp(cmd, "sa") == 0) ? 1 : 0;
-	i += (ft_strcmp(cmd, "sb")  == 0) ? 1 : 0;
-	i += (ft_strcmp(cmd, "ss")  == 0) ? 1 : 0;
-	i += (ft_strcmp(cmd, "ra")  == 0) ? 1 : 0;
-	i += (ft_strcmp(cmd, "rb")  == 0) ? 1 : 0;
-	i += (ft_strcmp(cmd, "rr")  == 0) ? 1 : 0;
+	i += (ft_strcmp(cmd, "sb") == 0) ? 1 : 0;
+	i += (ft_strcmp(cmd, "ss") == 0) ? 1 : 0;
+	i += (ft_strcmp(cmd, "ra") == 0) ? 1 : 0;
+	i += (ft_strcmp(cmd, "rb") == 0) ? 1 : 0;
+	i += (ft_strcmp(cmd, "rr") == 0) ? 1 : 0;
 	i += (ft_strcmp(cmd, "rra") == 0) ? 1 : 0;
 	i += (ft_strcmp(cmd, "rrb") == 0) ? 1 : 0;
 	i += (ft_strcmp(cmd, "rrr") == 0) ? 1 : 0;
-	i += (ft_strcmp(cmd, "pa")  == 0) ? 1 : 0;
-	i += (ft_strcmp(cmd, "pb")  == 0) ? 1 : 0;
+	i += (ft_strcmp(cmd, "pa") == 0) ? 1 : 0;
+	i += (ft_strcmp(cmd, "pb") == 0) ? 1 : 0;
 	return (i) ? 1 : 0;
 }
 
-int get_cmd(char **cmd_list)
+int		get_cmd(char **cmd_list)
 {
 	int nb_cmd;
 
 	nb_cmd = 0;
 	while (get_next_line(0, &cmd_list[nb_cmd]))
 	{
-		if (is_cmd(cmd_list[nb_cmd]) == 0)
+		if (is_cmd(cmd_list[nb_cmd]) == 0 || nb_cmd > 127900)
 			error_exit();
 		nb_cmd++;
 	}
 	return (nb_cmd);
 }
 
-char **get_flag(int *argc, char **argv, int *flag)
+char	**get_flag(int *argc, char **argv, int *flag)
 {
-	int  i;
+	int	i;
 
 	ft_bzero(flag, sizeof(int) * 127);
 	if (argv[1][0] == '-')

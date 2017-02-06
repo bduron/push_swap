@@ -6,7 +6,7 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/03 17:42:08 by bduron            #+#    #+#             */
-/*   Updated: 2017/02/06 10:28:44 by bduron           ###   ########.fr       */
+/*   Updated: 2017/02/06 12:44:42 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void			ft_putnbr(int n);
 size_t			ft_strlen(const char *s);
 char			*ft_strcpy(char *dst, const char *src);
 char			*ft_strncpy(char *dst, const char *src, size_t len);
-long				ft_atoi(const char *str);
+long			ft_atoi(const char *str);
 int				ft_isalpha(int c);
 int				ft_isdigit(int c);
 int				ft_isalnum(int c);

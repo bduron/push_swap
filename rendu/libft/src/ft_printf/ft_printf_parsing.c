@@ -6,7 +6,7 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/02 10:18:13 by bduron            #+#    #+#             */
-/*   Updated: 2017/02/06 10:57:18 by bduron           ###   ########.fr       */
+/*   Updated: 2017/02/06 12:46:20 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	*get_flags(char *s, t_flags *f)
 		*s == *(s + 1) ? f->mod[(int)ft_toupper(*s++)]++ : f->mod[(int)*s++]++;
 		*s == *(s - 1) ? s++ : 0;
 	}
-	if (is_id(*s)) 
+	if (is_id(*s))
 		f->id = *s;
 	else
 		--s;

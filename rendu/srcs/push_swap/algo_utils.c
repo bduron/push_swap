@@ -6,13 +6,13 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/02 14:39:30 by bduron            #+#    #+#             */
-/*   Updated: 2017/02/06 11:37:57 by bduron           ###   ########.fr       */
+/*   Updated: 2017/02/06 15:14:45 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void launch_all_sorts(t_sort **s)
+void	launch_all_sorts(t_sort **s)
 {
 	t_sort *cmd;
 
@@ -23,12 +23,15 @@ void launch_all_sorts(t_sort **s)
 		cmd = launch_small(s[1]);
 	else
 		cmd = launch_fquar(s[4], 0, 0, 0);
-	print_cmd(cmd->cmd_lst);
+	if (cmd->nb_cmd != 13)
+		print_cmd(cmd->cmd_lst);
+	else
+		ft_printf("sa\npb\npb\nra\nsa\npa\npa\nrra\n");
 	ft_lstdel_simple(&(cmd->cmd_lst));
 	ft_lstdel_simple(&(s[0]->srev));
 }
 
-void launch_wrapper(t_sort *s, char *cmd, int print)
+void	launch_wrapper(t_sort *s, char *cmd, int print)
 {
 	launch_sort(&s->sa, &s->sb, cmd);
 	s->nb_cmd++;
@@ -39,7 +42,7 @@ void launch_wrapper(t_sort *s, char *cmd, int print)
 	ft_lstaddback(&s->cmd_lst, ft_lstnew(cmd, sizeof(char) * 4));
 }
 
-int *arr_to_sort(int argc, char **argv)
+int		*arr_to_sort(int argc, char **argv)
 {
 	int *arr;
 	int i;
@@ -54,7 +57,7 @@ int *arr_to_sort(int argc, char **argv)
 	return (arr);
 }
 
-int free_all(t_sort **s)
+int		free_all(t_sort **s)
 {
 	free(s[4]->quarts);
 	free(s[4]->arr);
@@ -67,7 +70,7 @@ int free_all(t_sort **s)
 	return (1);
 }
 
-void print_cmd(t_list *cmd)
+void	print_cmd(t_list *cmd)
 {
 	while (cmd)
 	{

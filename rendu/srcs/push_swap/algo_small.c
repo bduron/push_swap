@@ -6,13 +6,13 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/02 14:43:41 by bduron            #+#    #+#             */
-/*   Updated: 2017/02/02 16:01:36 by bduron           ###   ########.fr       */
+/*   Updated: 2017/02/06 14:30:19 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void launch_small_next(t_sort *s, int min, int best_cmd)
+void	launch_small_next(t_sort *s, int min, int best_cmd)
 {
 	int next;
 	int max;
@@ -38,7 +38,7 @@ void launch_small_next(t_sort *s, int min, int best_cmd)
 	}
 }
 
-t_sort *launch_small(t_sort *s)
+t_sort	*launch_small(t_sort *s)
 {
 	int min;
 	int best_cmd;
@@ -62,7 +62,7 @@ t_sort *launch_small(t_sort *s)
 	return (s);
 }
 
-t_sort *launch_reverse(t_sort *s)
+t_sort	*launch_reverse(t_sort *s)
 {
 	s->sa = create_stack(s->cargc, s->cargv);
 	s->sb = NULL;
@@ -81,11 +81,11 @@ t_sort *launch_reverse(t_sort *s)
 	return (s);
 }
 
-int find_unsorted(t_sort *s, int last, int i)
+int		find_unsorted(t_sort *s, int last, int i)
 {
-	int last_i;
-	int first;
-	t_list *tmp;
+	int		last_i;
+	int		first;
+	t_list	*tmp;
 
 	last_i = 2000000000;
 	first = *(int *)s->sa->content;

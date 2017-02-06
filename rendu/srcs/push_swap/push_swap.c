@@ -6,7 +6,7 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/11 08:50:53 by bduron            #+#    #+#             */
-/*   Updated: 2017/02/06 11:44:02 by bduron           ###   ########.fr       */
+/*   Updated: 2017/02/06 12:05:18 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 int		main(int argc, char **argv)
 {
-	int flag[127];
-	t_sort **s;
+	int		flag[127];
+	t_sort	**s;
 
 	if (argc == 1)
 		return (1);

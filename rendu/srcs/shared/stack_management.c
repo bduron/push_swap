@@ -6,19 +6,19 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/02 10:39:26 by bduron            #+#    #+#             */
-/*   Updated: 2017/02/02 10:48:40 by bduron           ###   ########.fr       */
+/*   Updated: 2017/02/06 12:18:38 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-t_list *create_stack(int argc, char **argv)
+t_list	*create_stack(int argc, char **argv)
 {
-	t_list *head;
-	int i;
-	int val;
+	t_list	*head;
+	int		i;
+	int		val;
 
-	i =  argc - 1;
+	i = argc - 1;
 	val = ft_atoi(argv[i--]);
 	head = ft_lstnew(&val, sizeof(int));
 	while (i > 0)
@@ -29,7 +29,7 @@ t_list *create_stack(int argc, char **argv)
 	return (head);
 }
 
-int is_sorted(t_list *stack_a, t_list *stack_b)
+int		is_sorted(t_list *stack_a, t_list *stack_b)
 {
 	int last;
 
@@ -47,7 +47,7 @@ int is_sorted(t_list *stack_a, t_list *stack_b)
 	return (1);
 }
 
-void    ft_lstdel_simple(t_list **alst)
+void	ft_lstdel_simple(t_list **alst)
 {
 	t_list *tmp;
 

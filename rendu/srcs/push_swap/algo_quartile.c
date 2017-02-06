@@ -6,13 +6,13 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/02 14:17:17 by bduron            #+#    #+#             */
-/*   Updated: 2017/02/02 15:34:34 by bduron           ###   ########.fr       */
+/*   Updated: 2017/02/06 12:17:01 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-int *find_quartiles(int *arr, int size, int nb)
+int		*find_quartiles(int *arr, int size, int nb)
 {
 	int *quartiles;
 	int i;
@@ -30,7 +30,7 @@ int *find_quartiles(int *arr, int size, int nb)
 	return (quartiles);
 }
 
-void empty_stack_a(t_sort *s, int best_cmd, int next)
+void	empty_stack_a(t_sort *s, int best_cmd, int next)
 {
 	int i;
 
@@ -59,9 +59,8 @@ void empty_stack_a(t_sort *s, int best_cmd, int next)
 	}
 }
 
-t_sort *launch_fquar(t_sort *s, int max, int best_cmd, int next)
+t_sort	*launch_fquar(t_sort *s, int max, int best_cmd, int next)
 {
-
 	s->sa = create_stack(s->cargc, s->cargv);
 	s->sb = NULL;
 	if (!is_sorted(s->sa, s->sb))
@@ -85,7 +84,7 @@ t_sort *launch_fquar(t_sort *s, int max, int best_cmd, int next)
 	return (s);
 }
 
-int quarts_rem(t_list *s, int lower, int upper)
+int		quarts_rem(t_list *s, int lower, int upper)
 {
 	if (!s)
 		return (-1);
@@ -98,7 +97,7 @@ int quarts_rem(t_list *s, int lower, int upper)
 	return (0);
 }
 
-int find_quartile(t_list *s, int lower, int upper, int i)
+int		find_quartile(t_list *s, int lower, int upper, int i)
 {
 	int first[2];
 	int last[2];

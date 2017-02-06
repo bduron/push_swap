@@ -6,13 +6,13 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/02 14:15:36 by bduron            #+#    #+#             */
-/*   Updated: 2017/02/02 14:16:50 by bduron           ###   ########.fr       */
+/*   Updated: 2017/02/06 12:06:17 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "push_swap.h"
 
-void swap(int *a, int *b)
+void	swap(int *a, int *b)
 {
 	int swap;
 
@@ -21,7 +21,7 @@ void swap(int *a, int *b)
 	*b = swap;
 }
 
-int partionning(int *arr, int start, int end)
+int		partionning(int *arr, int start, int end)
 {
 	int pindex;
 	int pivot;
@@ -29,7 +29,7 @@ int partionning(int *arr, int start, int end)
 
 	pindex = start;
 	pivot = arr[end];
-	i = start ;
+	i = start;
 	while (i < end)
 	{
 		if (arr[i] <= pivot)
@@ -43,7 +43,7 @@ int partionning(int *arr, int start, int end)
 	return (pindex);
 }
 
-int *quicksort(int *arr, int start, int end)
+int		*quicksort(int *arr, int start, int end)
 {
 	int pindex;
 
