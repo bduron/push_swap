@@ -21,77 +21,74 @@ LIBFT= -Llibft -lft
 MKDIR= mkdir -p
 RM= rm -rf
 
-SRC_DIR= srcs/
 INC_DIR= includes/
-OBJ_DIR= objs/
 
-SHARED_SRC_BASE= 	shared/command_launcher.c \
-					shared/error_handling.c \
-					shared/sort_commands.c \
-					shared/stack_management.c shared/stack_print.c
+SHARED_SRC= command_launcher.c \
+			error_handling.c \
+			sort_commands.c \
+			stack_management.c \
+			stack_print.c
+PS_SRC= 	algo_inits.c \
+			algo_quartile.c \
+			algo_small.c \
+			algo_utils.c \
+			push_swap.c \
+			quicksort.c \
+			stack_state.c
+CHECKER_SRC= checker.c \
+			checker_display.c \
+			checker_parsing.c	
 
+SHARED_OBJ= $(SHARED_SRC:.c=.o)
+PS_OBJ= $(PS_SRC:.c=.o)
+CHECKER_OBJ= $(CHECKER_SRC:.c=.o)
 
+VPATH= srcs/checker/:srcs/shared/:srcs/push_swap/
 
+########################
+#    Makefile rules    # 
+########################
 
-PS_SRC_BASE= 		push_swap/algo_inits.c \
-					push_swap/algo_quartile.c \
-					push_swap/algo_small.c \
-					push_swap/algo_utils.c \
-					push_swap/push_swap.c \
-					push_swap/quicksort.c \
-					push_swap/stack_state.c
-
-CHECKER_PATH_BASE=	checker/checker.c \
-					checker/checker_display.c checker/checker_parsing	
-
-SHARED_SRC= $(addprefix $(SRC_DIR), $(SHARED_SRC_BASE))
-PS_SRC= $(addprefix $(SRC_DIR), $(PS_SRC_BASE))
-CHECKER_SRC= $(addprefix $(SRC_DIR), $(CHECKER_PATH_BASE))
-
-SHARED_OBJ= $(addprefix $(OBJ_DIR), $(SHARED_SRC_BASE:.c=.o))
-PS_OBJ= $(addprefix $(OBJ_DIR), $(PS_SRC_BASE:.c=.o))
-CHECKER_OBJ= $(addprefix $(OBJ_DIR), $(CHECKER_SRC_BASE:.c=.o))
-
-
-all: libft obj_mkdir $(CHECKER) $(PS)
+all: libft $(CHECKER) $(PS)
 
 libft:
-	make -C libft
-	echo "Compiling Libft"
+	@make -C libft
 
-obj_mkdir:
-	$(MKDIR) $(OBJ_DIR)
-	$(MKDIR) $(OBJ_DIR)/shared
-	$(MKDIR) $(OBJ_DIR)/push_swap
-	$(MKDIR) $(OBJ_DIR)/checker
-
+# Executables 
 
 $(CHECKER): $(CHECKER_OBJ) $(SHARED_OBJ) 
-	$(CC) -o $@ $(CFLAGS) $^ -I $(INC_DIR) $(LIBFT) 
+	@$(CC) -o $@ $(CFLAGS) $^ -I $(INC_DIR) $(LIBFT) 
+	@echo "Compiling [$@]"
 
 $(PS): $(PS_OBJ) $(SHARED_OBJ) 
-	$(CC) -o $@ $(CFLAGS) $^ -I $(INC_DIR) $(LIBFT) 
+	@$(CC) -o $@ $(CFLAGS) $^ -I $(INC_DIR) $(LIBFT) 
+	@echo "Compiling [$@]"
 
-
-$(SHARED_OBJ): $(SHARED_SRC)
-	$(CC) -c $< $(CFALGS) -I $(INC_DIR) 
-
-$(PS_OBJ): $(PS_SRC)
-	$(CC) -c $< $(CFALGS) -I $(INC_DIR) 
+# Object files 
 
 $(CHECKER_OBJ): $(CHECKER_SRC)
-	$(CC) -c $< $(CFALGS) -I $(INC_DIR) 	
+	@$(CC) -c $^ $(CFALGS) -I $(INC_DIR) 	
+	@echo "Compiling [$^]"
 
+$(SHARED_OBJ): $(SHARED_SRC)
+	@$(CC) -c $^ $(CFALGS) -I $(INC_DIR) 
+	@echo "Compiling [$^]"
 
+$(PS_OBJ): $(PS_SRC)
+	@$(CC) -c $^ $(CFALGS) -I $(INC_DIR) 
+	@echo "Compiling [$^]"
+
+# Cleaning rules 
 
 clean:
-	#	@rm -f $(OBJ)
+	@rm -f $(PS_OBJ) $(SHARED_OBJ) $(CHECKER_OBJ)
+	@echo "Cleaning [$(PS_OBJ) $(SHARED_OBJ) $(CHECKER_OBJ)]"	
 
 fclean: clean
 	@rm -rf $(CHECKER) $(PS)
 	@make fclean -C libft
-	@echo "Cleaning..."	
+	@echo "Cleaning [libft checker push_swap]"	
 
 re: fclean all
 
-.PHONY: clean fclean re lib 
+.PHONY: clean fclean re libft 
