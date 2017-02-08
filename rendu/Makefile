@@ -6,7 +6,7 @@
 #    By: bduron <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/02/07 13:02:54 by bduron            #+#    #+#              #
-#    Updated: 2017/02/07 13:57:24 by bduron           ###   ########.fr        #
+#    Updated: 2017/02/08 16:56:29 by bduron           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,8 +14,7 @@ CHECKER= checker
 PS= push_swap
 
 CC= gcc
-CFLAGS= -Wall -Wextra -Werror 
-DEBUG= -g
+CFLAGS= -Wall -Wextra -Werror -g -fsanitize=address
 LIBFT= -Llibft -lft 
 
 MKDIR= mkdir -p
@@ -67,15 +66,15 @@ $(PS): $(PS_OBJ) $(SHARED_OBJ)
 # Object files 
 
 $(CHECKER_OBJ): $(CHECKER_SRC)
-	@$(CC) -c $^ $(CFALGS) -I $(INC_DIR) 	
+	@$(CC) -c $^ $(CFLAGS) -I $(INC_DIR) 	
 	@echo "Compiling [$^]"
 
 $(SHARED_OBJ): $(SHARED_SRC)
-	@$(CC) -c $^ $(CFALGS) -I $(INC_DIR) 
+	@$(CC) -c $^ $(CFLAGS) -I $(INC_DIR) 
 	@echo "Compiling [$^]"
 
 $(PS_OBJ): $(PS_SRC)
-	@$(CC) -c $^ $(CFALGS) -I $(INC_DIR) 
+	@$(CC) -c $^ $(CFLAGS) -I $(INC_DIR) 
 	@echo "Compiling [$^]"
 
 # Cleaning rules 

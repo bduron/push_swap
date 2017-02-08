@@ -6,7 +6,7 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/02 14:08:40 by bduron            #+#    #+#             */
-/*   Updated: 2017/02/06 14:35:32 by bduron           ###   ########.fr       */
+/*   Updated: 2017/02/08 16:27:03 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,13 @@ t_sort	**init_sorts(int argc, char **argv, int *flag)
 
 	s = (t_sort **)malloc(sizeof(t_sort *) * 5);
 	s[0] = init_basic(argc, argv, flag);
-	s[1] = init_small(argc, argv, flag);
-	s[2] = init_reverse(argc, argv, flag);
-	s[4] = init_fquar(argc, argv, flag);
+	if (argc - 1 < 30)
+	{
+		s[1] = init_small(argc, argv, flag);
+		s[2] = init_reverse(argc, argv, flag);
+	}
+	if (argc - 1 >= 30) 
+		s[4] = init_fquar(argc, argv, flag);
 	return (s);
 }
 

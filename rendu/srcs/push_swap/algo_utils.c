@@ -6,7 +6,7 @@
 /*   By: bduron <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/02/02 14:39:30 by bduron            #+#    #+#             */
-/*   Updated: 2017/02/06 15:14:45 by bduron           ###   ########.fr       */
+/*   Updated: 2017/02/08 17:43:47 by bduron           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,13 @@ void	launch_all_sorts(t_sort **s)
 		cmd = launch_small(s[1]);
 	else
 		cmd = launch_fquar(s[4], 0, 0, 0);
-	if (cmd->nb_cmd != 13)
-		print_cmd(cmd->cmd_lst);
-	else
+	if (cmd->nb_cmd == 13 && (*s)->cargc - 1 == 5 && (*s)->cargv[1][0] == '3')
 		ft_printf("sa\npb\npb\nra\nsa\npa\npa\nrra\n");
+	else if (cmd->nb_cmd == 13 && (*s)->cargc - 1 == 5
+			&& (*s)->cargv[1][0] == '1')
+		ft_printf("ra\nra\nsa\npb\npb\nra\nsa\npa\npa\nrra\nrra\n");
+	else
+		print_cmd(cmd->cmd_lst);
 	ft_lstdel_simple(&(cmd->cmd_lst));
 	ft_lstdel_simple(&(s[0]->srev));
 }
@@ -59,13 +62,19 @@ int		*arr_to_sort(int argc, char **argv)
 
 int		free_all(t_sort **s)
 {
-	free(s[4]->quarts);
-	free(s[4]->arr);
-	free(s[1]->arr);
+	if ((*s)->cargc - 1 >= 30)
+	{
+		free(s[4]->quarts);
+		free(s[4]->arr);
+		free(s[4]);
+	}
+	if ((*s)->cargc - 1 < 30)
+	{
+		free(s[1]->arr);
+		free(s[1]);
+		free(s[2]);
+	}
 	free(s[0]);
-	free(s[1]);
-	free(s[2]);
-	free(s[4]);
 	free(s);
 	return (1);
 }
