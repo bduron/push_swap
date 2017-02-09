@@ -39,12 +39,14 @@ int		error_arg(int argc, char **argv)
 {
 	int i;
 	int j;
-
+	
+	if (argv[0][0] == '-' && !argv[0][1])
+		return (1);
 	i = 1;
 	while (i < argc)
 	{
 		j = 0;
-		if (argv[i][j] == '-')
+		if (argv[i][j] == '-' && argv[i][j + 1] != '\0') //test 
 			j++;
 		while (argv[i][j])
 			if (ft_isdigit(argv[i][j++]) == 0)

@@ -14,7 +14,7 @@ CHECKER= checker
 PS= push_swap
 
 CC= gcc
-CFLAGS= -Wall -Wextra -Werror -g -fsanitize=address
+CFLAGS= -Wall -Wextra -Werror
 LIBFT= -Llibft -lft 
 
 MKDIR= mkdir -p

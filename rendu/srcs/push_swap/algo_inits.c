@@ -62,7 +62,7 @@ t_sort	*init_fquar(int argc, char **argv, int *flag)
 	fquar->arr = arr_to_sort(argc, argv);
 	quicksort(fquar->arr, 0, argc - 2);
 	fquar->nb_quarts = (argc - 1 < 250) ?
-		(argc - 1) / 11 - 1 : (argc - 1) / 28 - 1;
+		(argc - 1) / 11 /*- 1*/ : (argc - 1) / 28 /*- 1*/;
 	fquar->quarts = find_quartiles(fquar->arr, argc - 1, fquar->nb_quarts);
 	return (fquar);
 }

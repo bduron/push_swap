@@ -50,7 +50,7 @@ char	**get_flag(int *argc, char **argv, int *flag)
 	int	i;
 
 	ft_bzero(flag, sizeof(int) * 127);
-	if (argv[1][0] == '-')
+	if (argv[1][0] == '-' && !ft_isdigit(argv[1][1]))
 	{
 		i = 1;
 		while (argv[1][i])
@@ -67,6 +67,8 @@ char	**get_flag(int *argc, char **argv, int *flag)
 			}
 			i++;
 		}
+		if (*argc < 3)
+			exit(1);
 		*argc -= 1;
 		return (argv + 1);
 	}

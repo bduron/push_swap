@@ -29,5 +29,6 @@ int		main(int argc, char **argv)
 	sort_print_stack(&stack_a, &stack_b, argv, flag);
 	is_sorted(stack_a, stack_b) ? ft_printf("OK\n") : ft_printf("KO\n");
 	ft_lstdel_simple(&stack_a);
+	ft_lstdel_simple(&stack_b);
 	return (0);
 }

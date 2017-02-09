@@ -1,0 +1,66 @@
+#!/bin/bash
+
+RED="\033[31m"
+RST="\033[0m"
+
+echo "OK" > test
+
+#FIVE_PERMUTATIONS=`ruby -e "a = [1,2,3,4,5]; puts a.permutation.to_a.join('')" | sed -e "s/.\{5\}/&\n/g"`
+#echo $FIVE_PERMUTATIONS
+#for ARG in FIVE_PERMUTATIONS
+
+while grep -q "OK" test
+do
+	ARG=`ruby -e "puts (1..$1).to_a.shuffle.join('  ')"` 	
+	PS=`./push_swap $ARG`
+	NB_CMD=`echo $PS | wc -w`
+	RSLT=`./push_swap $ARG | ./checker $ARG`
+	NB_VAL=$1
+	ERROR=0
+
+	if [ $NB_VAL -eq 5 ] && [ $NB_CMD -gt 12 ]
+	then
+		echo "KO" > test
+		echo -e "[$RED ERROR $RST] : More than 12 ops to sort 5 values ($NB_CMD ops, $NB_VAL val)"	 
+		echo -e "[$RED ERROR $RST] : Values to sort | $ARG"
+		echo -n -e "[$RED ERROR $RST] : Your commands  | "
+		echo $PS
+		ERROR=1	 
+	elif [ $NB_VAL -eq 3 ] && [ $NB_CMD -gt 3 ]
+	then
+		echo "KO" > test
+		echo -e "[$RED ERROR $RST] : More than 3 ops to sort 3 values ($NB_CMD ops, $NB_VAL val)"	 
+		echo -e "[$RED ERROR $RST] : Values to sort | $ARG"
+		echo -n -e "[$RED ERROR $RST] : Your commands  | "
+		echo $PS
+		ERROR=1	 
+	else
+		echo $RSLT > test
+		echo "[$RSLT] : $NB_CMD ops, $NB_VAL val"	 
+	fi	
+done
+
+if grep -q "KO" test && [ $ERROR -eq 0 ]
+then
+		echo -e "[$RED KO $RST] : You didn't sort the stack ($NB_CMD ops, $NB_VAL val)"	 
+		echo -e "[$RED KO $RST] : Values to sort | $ARG"
+		echo -n -e "[$RED KO $RST] : Your commands  | "
+		echo $PS 
+fi	
+	
+
+
+###!/bin/bash
+##
+##echo "OK" > test
+##
+##while grep -q "OK" test
+##do
+##	echo -n "OK "
+##	
+##	ARG=`ruby -e "puts (1..$1).to_a.shuffle.join('  ')"`; ./push_swap $ARG | ./checker -n $ARG > test
+##	grep operation test
+##done
+
+
+	
